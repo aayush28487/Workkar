@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useWorkkar } from '../context/WorkkarContext';
+import { useLanguage } from '../context/LanguageContext';
 
 // 1. Withdraw Funds Modal Component
 export function WithdrawModal({ isOpen, onClose }) {
   const { wallet, withdrawFunds } = useWorkkar();
+  const { t } = useLanguage();
   const [amount, setAmount] = useState('');
   const [account, setAccount] = useState('');
   const [status, setStatus] = useState('idle'); // 'idle', 'processing', 'success'
@@ -15,12 +17,12 @@ export function WithdrawModal({ isOpen, onClose }) {
     const withdrawAmount = parseFloat(amount);
     
     if (isNaN(withdrawAmount) || withdrawAmount <= 0) {
-      alert("Please enter a valid amount.");
+      alert(t('modals.invalidAmount'));
       return;
     }
 
     if (withdrawAmount > wallet.balance) {
-      alert("Insufficient wallet balance.");
+      alert(t('modals.insufficientBalance'));
       return;
     }
 
@@ -70,7 +72,7 @@ export function WithdrawModal({ isOpen, onClose }) {
               <div className="flex justify-between items-center border-b border-outline-variant/20 pb-4 mb-4">
                 <h3 className="font-headline-md text-headline-md text-on-surface font-bold flex items-center gap-2">
                   <span className="material-symbols-outlined text-primary">account_balance_wallet</span>
-                  Withdraw Funds
+                  {t('modals.withdrawModalTitle')}
                 </h3>
                 <button onClick={reset} className="text-on-surface-variant hover:text-on-surface transition-colors p-1.5 rounded-full hover:bg-surface-container-low focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-blue-455" aria-label="Close modal">
                   <span className="material-symbols-outlined">close</span>
@@ -78,13 +80,13 @@ export function WithdrawModal({ isOpen, onClose }) {
               </div>
 
               <div className="bg-surface-container-low p-4 rounded-xl mb-4 text-center border border-outline-variant/30">
-                <span className="text-[11px] font-bold text-on-surface-variant uppercase tracking-widest block mb-1">Available Balance</span>
+                <span className="text-[11px] font-bold text-on-surface-variant uppercase tracking-widest block mb-1">{t('modals.availableBalance')}</span>
                 <span className="font-display-lg text-display-lg text-primary font-bold">${wallet.balance.toFixed(2)}</span>
               </div>
 
               <form onSubmit={handleWithdraw} className="flex flex-col gap-4">
                 <div className="flex flex-col gap-1.5">
-                  <label className="font-semibold text-xs text-on-surface-variant">Amount to Withdraw ($)</label>
+                  <label className="font-semibold text-xs text-on-surface-variant">{t('modals.amountToWithdraw')}</label>
                   <input
                     required
                     type="number"
@@ -93,19 +95,19 @@ export function WithdrawModal({ isOpen, onClose }) {
                     max={wallet.balance}
                     value={amount}
                     onChange={(e) => setAmount(e.target.value)}
-                    placeholder="Enter amount (Min $10.00)"
+                    placeholder={t('modals.amountPlaceholder')}
                     className="w-full bg-surface border border-outline-variant/50 rounded-lg px-3 py-2 text-on-surface focus:outline-none focus:border-primary dark:focus:border-primary focus:ring-1 focus:ring-primary dark:focus:ring-primary transition-colors text-sm"
                   />
                 </div>
 
                 <div className="flex flex-col gap-1.5">
-                  <label className="font-semibold text-xs text-on-surface-variant">Destination Account (Bank/UPI)</label>
+                  <label className="font-semibold text-xs text-on-surface-variant">{t('modals.bankAccountPrompt')}</label>
                   <input
                     required
                     type="text"
                     value={account}
                     onChange={(e) => setAccount(e.target.value)}
-                    placeholder="e.g. Bank Account or routing address"
+                    placeholder={t('modals.bankAccountPlaceholder')}
                     className="w-full bg-surface border border-outline-variant/50 rounded-lg px-3 py-2 text-on-surface focus:outline-none focus:border-primary dark:focus:border-primary focus:ring-1 focus:ring-primary dark:focus:ring-primary transition-colors text-sm"
                   />
                 </div>
@@ -116,13 +118,13 @@ export function WithdrawModal({ isOpen, onClose }) {
                     onClick={reset}
                     className="flex-1 py-3 border border-outline text-on-surface rounded-lg font-bold text-xs hover:bg-surface-container-low transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-blue-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900"
                   >
-                    Cancel
+                    {t('common.cancel')}
                   </button>
                   <button
                     type="submit"
                     className="flex-1 py-3 bg-primary text-on-primary rounded-lg font-bold text-xs hover:bg-primary/90 transition-all shadow-sm hover:shadow active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-blue-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 border-none"
                   >
-                    Withdraw
+                    {t('modals.confirmWithdrawBtn')}
                   </button>
                 </div>
               </form>
@@ -132,9 +134,9 @@ export function WithdrawModal({ isOpen, onClose }) {
           {status === 'processing' && (
             <div className="py-12 flex flex-col items-center justify-center text-center gap-4">
               <div className="w-16 h-16 border-4 border-primary/20 border-t-primary rounded-full animate-spin"></div>
-              <h3 className="font-headline-md text-headline-md text-on-surface font-bold">Processing Withdrawal</h3>
+              <h3 className="font-headline-md text-headline-md text-on-surface font-bold">{t('modals.withdrawProcessing')}</h3>
               <p className="font-body-md text-body-md text-on-surface-variant max-w-xs">
-                Verifying bank credentials and processing your payout request...
+                {t('activeJob.emergencySupport')}
               </p>
             </div>
           )}
@@ -148,15 +150,15 @@ export function WithdrawModal({ isOpen, onClose }) {
               <div className="w-16 h-16 bg-emerald-100 dark:bg-emerald-950/80 text-emerald-650 dark:text-emerald-300 rounded-full flex items-center justify-center shadow-inner border border-emerald-500/20">
                 <span className="material-symbols-outlined text-4xl fill">check_circle</span>
               </div>
-              <h3 className="font-headline-md text-headline-md text-on-surface font-bold">Withdrawal Complete!</h3>
+              <h3 className="font-headline-md text-headline-md text-on-surface font-bold">{t('common.success')}</h3>
               <p className="font-body-md text-body-md text-on-surface-variant max-w-xs mb-4">
-                We've routed **${parseFloat(amount).toFixed(2)}** to your registered payout account successfully.
+                {t('modals.withdrawSuccess', { amount: parseFloat(amount).toFixed(2) })}
               </p>
               <button
                 onClick={reset}
                 className="w-full py-3 bg-primary text-on-primary rounded-lg font-bold text-xs hover:bg-primary/90 transition-all shadow-sm hover:shadow active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-blue-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 border-none"
               >
-                Done
+                {t('common.close')}
               </button>
             </motion.div>
           )}
@@ -169,11 +171,13 @@ export function WithdrawModal({ isOpen, onClose }) {
 // 2. Service Detail Modal Component
 export function ServiceModal({ service, isOpen, onClose }) {
   const { workers } = useWorkkar();
+  const { t, tService, tServiceDesc } = useLanguage();
   
   if (!isOpen || !service) return null;
 
   // Filter workers that specialize in this skill category
   const activeWorkers = workers.filter(w => w.skill.toLowerCase() === service.id.toLowerCase() && w.availability === 'Available');
+  const serviceName = tService(service.name);
 
   return (
     <AnimatePresence>
@@ -197,7 +201,7 @@ export function ServiceModal({ service, isOpen, onClose }) {
           <div className="flex justify-between items-center border-b border-outline-variant/20 pb-4 mb-4">
             <h3 className="font-headline-md text-headline-md text-on-surface font-bold flex items-center gap-2">
               <span className={`material-symbols-outlined text-primary text-2xl`}>{service.icon}</span>
-              {service.name} Services
+              {t('modals.serviceModalTitle', { service: serviceName })}
             </h3>
             <button onClick={onClose} className="text-on-surface-variant hover:text-on-surface p-1.5 rounded-full hover:bg-surface-container-low transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-blue-455" aria-label="Close modal">
               <span className="material-symbols-outlined">close</span>
@@ -205,18 +209,18 @@ export function ServiceModal({ service, isOpen, onClose }) {
           </div>
 
           <div className="mb-6">
-            <h4 className="font-semibold text-xs text-on-surface-variant uppercase tracking-wider mb-1">Service Description</h4>
+            <h4 className="font-semibold text-xs text-on-surface-variant uppercase tracking-wider mb-1">{t('workerDetails.aboutWorker')}</h4>
             <p className="font-body-md text-sm text-on-surface-variant leading-relaxed">
-              Find verified, high-quality, and background-checked {service.name.toLowerCase()} professionals. Ready for immediate dispatch or appointment booking at standard hourly wage rates.
+              {t('modals.serviceModalDesc', { service: serviceName })}
             </p>
           </div>
 
           <div>
-            <h4 className="font-semibold text-xs text-on-surface-variant uppercase tracking-wider mb-3">Available {service.name}s Nearby</h4>
+            <h4 className="font-semibold text-xs text-on-surface-variant uppercase tracking-wider mb-3">{t('servicesPage.viewWorkers')}</h4>
             {activeWorkers.length === 0 ? (
               <div className="p-6 bg-surface-container-low border border-outline-variant/30 rounded-xl text-center text-on-surface-variant text-sm">
                 <span className="material-symbols-outlined text-3xl text-outline mb-2 block">person_search</span>
-                No {service.name.toLowerCase()}s are available at this moment. Check back soon!
+                {t('workersPage.noWorkersFound')}
               </div>
             ) : (
               <div className="flex flex-col gap-2 max-h-56 overflow-y-auto pr-1">
@@ -232,17 +236,17 @@ export function ServiceModal({ service, isOpen, onClose }) {
                       )}
                       <div>
                         <span className="font-bold text-sm block text-on-surface">{worker.name}</span>
-                        <span className="text-[11px] text-on-surface-variant">{worker.experience} yrs experience • ⭐ {worker.rating}</span>
+                        <span className="text-[11px] text-on-surface-variant">{worker.experience} {t('common.yrsExp')} • ⭐ {worker.rating}</span>
                       </div>
                     </div>
                     <div className="text-right flex items-center gap-3">
-                      <span className="font-bold text-primary text-sm">${worker.rate}/hr</span>
+                      <span className="font-bold text-primary text-sm">${worker.rate}{t('common.perHr')}</span>
                       <Link
                         to={`/worker-details/${worker.id}`}
                         onClick={onClose}
                         className="bg-primary text-on-primary px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-primary/90 transition-all shadow-sm active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-blue-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 border-none"
                       >
-                        Book
+                        {t('workersPage.bookNow')}
                       </Link>
                     </div>
                   </div>

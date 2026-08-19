@@ -2,18 +2,21 @@ import React, { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useWorkkar } from '../context/WorkkarContext';
+import { useLanguage } from '../context/LanguageContext';
+import LanguageSelector from './LanguageSelector';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [showPortalMenu, setShowPortalMenu] = useState(false);
   const { incomingAlert, darkMode, toggleDarkMode, user, logout } = useWorkkar();
+  const { t } = useLanguage();
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
   const navLinks = [
-    { name: 'Home', path: '/' },
-    { name: 'Services', path: '/services' },
-    { name: 'Workers', path: '/workers' },
+    { name: t('nav.home'), path: '/' },
+    { name: t('nav.services'), path: '/services' },
+    { name: t('nav.workers'), path: '/workers' },
   ];
 
   return (
@@ -48,13 +51,18 @@ export default function Navbar() {
         </nav>
 
         {/* Action controls / dropdown selector */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5">
+          {/* Language Selector Dropdown */}
+          <div className="hidden md:block">
+            <LanguageSelector />
+          </div>
+
           {/* Theme Toggle Button */}
           <button
             onClick={toggleDarkMode}
             className="hidden md:flex items-center justify-center w-10 h-10 rounded-full bg-surface-container-low dark:bg-surface-container-high text-on-surface-variant hover:text-primary dark:text-on-surface-variant dark:hover:text-white border border-outline-variant/30 hover:shadow-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-blue-400"
-            aria-label="Toggle Dark Mode"
-            title="Toggle Light/Dark Theme"
+            aria-label={t('nav.toggleTheme')}
+            title={t('nav.toggleTheme')}
           >
             <span className="material-symbols-outlined text-[20px] font-bold">
               {darkMode ? 'light_mode' : 'dark_mode'}
@@ -71,7 +79,7 @@ export default function Navbar() {
                 <div className="w-6 h-6 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold text-[10px]">
                   {user.textAvatar || (user.name ? user.name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2) : 'WK')}
                 </div>
-                <span className="truncate max-w-[100px]">{user.name ? user.name.split(' ')[0] : 'Partner'}</span>
+                <span className="truncate max-w-[100px]">{user.name ? user.name.split(' ')[0] : t('nav.partner')}</span>
                 <span className="material-symbols-outlined text-[16px]">arrow_drop_down</span>
                 {user.notifications && user.notifications.some(n => !n.read) && (
                   <span className="absolute top-1.5 right-1.5 flex h-2 w-2">
@@ -99,7 +107,7 @@ export default function Navbar() {
                       className="absolute right-0 mt-2 w-56 bg-surface-container-lowest dark:bg-surface-container-low border border-outline-variant/30 rounded-xl shadow-xl z-20 py-2"
                     >
                       <div className="px-4 py-2 border-b border-outline-variant/20 mb-1">
-                        <p className="text-xs font-bold text-on-surface truncate">{user.name || 'Partner'}</p>
+                        <p className="text-xs font-bold text-on-surface truncate">{user.name || t('nav.partner')}</p>
                         <p className="text-[10px] text-on-surface-variant truncate">{user.email}</p>
                         <span className="mt-1 inline-block text-[8px] font-bold tracking-wider bg-primary-container text-on-primary-container px-2 py-0.5 rounded uppercase">
                           {user.role}
@@ -112,7 +120,7 @@ export default function Navbar() {
                         className="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-on-surface dark:text-on-surface hover:bg-surface-container-low dark:hover:bg-surface-container-high transition-colors"
                       >
                         <span className="material-symbols-outlined text-[18px]">storefront</span>
-                        Client Website
+                        {t('nav.clientSite')}
                       </Link>
 
                       {['customer', 'admin', 'supreme-admin'].includes(user.role) && (
@@ -123,7 +131,7 @@ export default function Navbar() {
                         >
                           <span className="flex items-center gap-2">
                             <span className="material-symbols-outlined text-[18px] text-primary">dashboard</span>
-                            Customer Dashboard
+                            {t('customerDashboard.tabActiveBookings')}
                           </span>
                           {user.notifications && user.notifications.some(n => !n.read) && (
                             <span className="h-2 w-2 rounded-full bg-error animate-pulse"></span>
@@ -139,7 +147,7 @@ export default function Navbar() {
                         >
                           <span className="flex items-center gap-2">
                             <span className="material-symbols-outlined text-[18px] text-primary">engineering</span>
-                            Worker Companion
+                            {t('workerDashboard.portalTitle')}
                           </span>
                           {incomingAlert && (
                             <span className="bg-error-container text-on-error-container text-[8px] font-bold px-1.5 py-0.5 rounded uppercase">New offer</span>
@@ -154,7 +162,7 @@ export default function Navbar() {
                           className="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-on-surface dark:text-on-surface hover:bg-surface-container-low dark:hover:bg-surface-container-high transition-colors"
                         >
                           <span className="material-symbols-outlined text-[18px] text-secondary">admin_panel_settings</span>
-                          Coordinator Panel
+                          {t('admin.opsTitle')}
                         </Link>
                       )}
 
@@ -165,7 +173,7 @@ export default function Navbar() {
                           className="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-on-surface dark:text-on-surface hover:bg-surface-container-low dark:hover:bg-surface-container-high transition-colors"
                         >
                           <span className="material-symbols-outlined text-[18px] text-secondary">local_police</span>
-                          Supreme Command
+                          {t('admin.supremeTitle')}
                         </Link>
                       )}
 
@@ -177,7 +185,7 @@ export default function Navbar() {
                         className="w-full flex items-center gap-2 px-4 py-2 text-xs font-bold text-error hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors border-t border-outline-variant/10 mt-1"
                       >
                         <span className="material-symbols-outlined text-[18px]">logout</span>
-                        Log Out
+                        {t('nav.logout')}
                       </button>
                     </motion.div>
                   </>
@@ -190,14 +198,14 @@ export default function Navbar() {
                 to="/worker/login"
                 className="hidden md:flex items-center gap-1.5 font-bold text-xs tracking-wider uppercase border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 px-4 py-2.5 rounded-full transition-all active:scale-95 duration-200"
               >
-                Worker Portal
+                {t('nav.partnerPortal')}
               </Link>
               <Link
                 to="/login"
                 className="hidden md:flex items-center gap-1.5 font-bold text-xs tracking-wider uppercase bg-primary text-on-primary hover:bg-primary/90 dark:bg-primary dark:text-white dark:hover:bg-primary/80 px-5 py-2.5 rounded-full transition-all active:scale-95 duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 border-none shadow-sm hover:shadow"
               >
                 <span className="material-symbols-outlined text-[16px]">login</span>
-                Sign In
+                {t('nav.signIn')}
               </Link>
             </div>
           )}
@@ -207,7 +215,7 @@ export default function Navbar() {
               to="/worker/dashboard"
               className="font-bold text-label-md bg-primary text-on-primary px-5 py-2.5 rounded-full shadow-sm hover:shadow-md hover:bg-primary/95 transition-all duration-200 active:scale-95 text-center flex items-center justify-center gap-1.5"
             >
-              Worker App
+              {t('nav.dashboard')}
             </Link>
           )}
 
@@ -215,6 +223,7 @@ export default function Navbar() {
           <button
             onClick={toggleMenu}
             className="md:hidden text-on-surface-variant p-2 hover:bg-surface-container rounded-full transition-colors"
+            aria-label="Toggle Navigation Menu"
           >
             <span className="material-symbols-outlined">{isOpen ? 'close' : 'menu'}</span>
           </button>
@@ -237,34 +246,41 @@ export default function Navbar() {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'tween', duration: 0.25 }}
-              className="fixed right-0 top-0 h-full w-72 bg-surface-container-lowest shadow-2xl z-50 flex flex-col p-6 border-l border-outline-variant/20"
+              className="fixed right-0 top-0 h-full w-80 bg-surface-container-lowest shadow-2xl z-50 flex flex-col p-6 border-l border-outline-variant/20 overflow-y-auto"
             >
-              <div className="flex justify-between items-center mb-8">
+              <div className="flex justify-between items-center mb-6">
                 <span className="font-bold text-headline-sm text-primary flex items-center gap-2">
                   <span className="material-symbols-outlined fill text-primary">engineering</span>
-                  WORKKAR Menu
+                  WORKKAR
                 </span>
                 <button
                   onClick={toggleMenu}
                   className="text-on-surface-variant p-2 hover:bg-surface-container rounded-full transition-colors"
+                  aria-label="Close menu"
                 >
                   <span className="material-symbols-outlined">close</span>
                 </button>
               </div>
 
-              <nav className="flex flex-col gap-5 mb-8">
+              {/* Mobile Language Selector */}
+              <div className="mb-6">
+                <LanguageSelector isMobile={true} />
+              </div>
+
+              <nav className="flex flex-col gap-4 mb-6">
                 {navLinks.map((link) => (
                   <NavLink
                     key={link.path}
                     to={link.path}
                     onClick={toggleMenu}
                     className={({ isActive }) =>
-                      `font-bold text-lg transition-colors py-1 ${
+                      `font-bold text-base transition-colors py-1 flex items-center justify-between ${
                         isActive ? 'text-primary' : 'text-on-surface-variant'
                       }`
                     }
                   >
-                    {link.name}
+                    <span>{link.name}</span>
+                    <span className="material-symbols-outlined text-[18px]">chevron_right</span>
                   </NavLink>
                 ))}
               </nav>
@@ -273,7 +289,7 @@ export default function Navbar() {
                 {user ? (
                   <>
                     <div className="px-2 py-1 mb-2">
-                      <p className="text-sm font-bold text-on-surface truncate">{user.name || 'Partner'}</p>
+                      <p className="text-sm font-bold text-on-surface truncate">{user.name || t('nav.partner')}</p>
                       <p className="text-xs text-on-surface-variant truncate">{user.email}</p>
                     </div>
 
@@ -283,7 +299,7 @@ export default function Navbar() {
                       className="flex items-center gap-2 p-3 bg-surface-container-low hover:bg-surface-container rounded-xl text-sm font-semibold transition-colors"
                     >
                       <span className="material-symbols-outlined text-[20px]">storefront</span>
-                      Client Website
+                      {t('nav.clientSite')}
                     </Link>
 
                     {['customer', 'admin', 'supreme-admin'].includes(user.role) && (
@@ -294,7 +310,7 @@ export default function Navbar() {
                       >
                         <span className="flex items-center gap-2">
                           <span className="material-symbols-outlined text-[20px] text-primary">dashboard</span>
-                          Customer Dashboard
+                          {t('customerDashboard.tabActiveBookings')}
                         </span>
                         {user.notifications && user.notifications.some(n => !n.read) && (
                           <span className="bg-error text-white text-[8px] font-bold px-1.5 py-0.5 rounded">New</span>
@@ -310,7 +326,7 @@ export default function Navbar() {
                       >
                         <span className="flex items-center gap-2">
                           <span className="material-symbols-outlined text-[20px] text-primary">engineering</span>
-                          Worker Companion
+                          {t('workerDashboard.portalTitle')}
                         </span>
                         {incomingAlert && (
                           <span className="bg-error text-white text-[8px] font-bold px-1.5 py-0.5 rounded">New</span>
@@ -325,7 +341,7 @@ export default function Navbar() {
                         className="flex items-center gap-2 p-3 bg-surface-container-low hover:bg-surface-container rounded-xl text-sm font-semibold transition-colors"
                       >
                         <span className="material-symbols-outlined text-[20px] text-secondary">admin_panel_settings</span>
-                        Coordinator Panel
+                        {t('admin.opsTitle')}
                       </Link>
                     )}
 
@@ -336,7 +352,7 @@ export default function Navbar() {
                         className="flex items-center gap-2 p-3 bg-surface-container-low hover:bg-surface-container rounded-xl text-sm font-semibold transition-colors"
                       >
                         <span className="material-symbols-outlined text-[20px] text-secondary">local_police</span>
-                        Supreme Command
+                        {t('admin.supremeTitle')}
                       </Link>
                     )}
 
@@ -348,7 +364,7 @@ export default function Navbar() {
                       className="w-full flex items-center gap-2 p-3 bg-red-50 dark:bg-red-950/20 text-error hover:bg-red-100 rounded-xl text-sm font-bold transition-colors mt-2"
                     >
                       <span className="material-symbols-outlined text-[20px]">logout</span>
-                      Log Out
+                      {t('nav.logout')}
                     </button>
                   </>
                 ) : (
@@ -358,7 +374,7 @@ export default function Navbar() {
                       onClick={toggleMenu}
                       className="flex items-center justify-center gap-2 p-3 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl text-sm font-bold transition-colors"
                     >
-                      Worker Portal
+                      {t('nav.partnerPortal')}
                     </Link>
                     <Link
                       to="/login"
@@ -366,7 +382,7 @@ export default function Navbar() {
                       className="flex items-center justify-center gap-2 p-3 bg-primary text-on-primary hover:bg-primary/90 rounded-xl text-sm font-bold transition-colors"
                     >
                       <span className="material-symbols-outlined text-[20px]">login</span>
-                      Sign In
+                      {t('nav.signIn')}
                     </Link>
                   </div>
                 )}
@@ -378,4 +394,3 @@ export default function Navbar() {
     </header>
   );
 }
-

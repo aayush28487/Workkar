@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function SearchBar({
   searchQuery,
@@ -7,6 +8,8 @@ export default function SearchBar({
   setLocationQuery,
   onSearch
 }) {
+  const { t } = useLanguage();
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (onSearch) onSearch();
@@ -23,7 +26,7 @@ export default function SearchBar({
           value={locationQuery}
           onChange={(e) => setLocationQuery(e.target.value)}
           className="w-full bg-transparent border-none focus:ring-0 text-body-md font-body-md text-on-surface placeholder:text-outline/50 outline-none p-0"
-          placeholder="Location (e.g. Springfield)"
+          placeholder={t('searchBar.locationPlaceholder')}
           type="text"
         />
       </div>
@@ -33,7 +36,7 @@ export default function SearchBar({
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="w-full bg-transparent border-none focus:ring-0 text-body-md font-body-md text-on-surface placeholder:text-outline/50 outline-none p-0"
-          placeholder="Service (e.g. Carpenter, Sarah)"
+          placeholder={t('searchBar.servicePlaceholder')}
           type="text"
         />
       </div>
@@ -41,7 +44,7 @@ export default function SearchBar({
         type="submit"
         className="bg-primary text-on-primary px-8 py-3 rounded-lg font-label-md text-label-md hover:bg-primary/95 transition-all active:scale-95 shadow-md hover:shadow-lg flex items-center justify-center font-bold"
       >
-        Search
+        {t('searchBar.searchBtn')}
       </button>
     </form>
   );

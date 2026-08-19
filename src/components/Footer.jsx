@@ -1,7 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function Footer() {
+  const { t } = useLanguage();
+
   return (
     <footer className="bg-surface-container-high dark:bg-inverse-surface border-t border-outline-variant/30 w-full mt-auto">
       <div className="flex flex-col md:flex-row justify-between items-center px-margin-mobile md:px-margin-desktop py-stack-lg gap-stack-md max-w-container-max mx-auto">
@@ -10,14 +13,24 @@ export default function Footer() {
           WORKKAR
         </Link>
         <div className="flex flex-wrap justify-center gap-6">
-          <Link to="/services" className="font-label-md text-label-md text-on-surface-variant dark:text-outline-variant hover:text-secondary dark:hover:text-secondary-fixed-dim transition-colors duration-200">Services</Link>
-          <a href="#" className="font-label-md text-label-md text-on-surface-variant dark:text-outline-variant hover:text-secondary dark:hover:text-secondary-fixed-dim transition-colors duration-200">Terms of Service</a>
-          <a href="#" className="font-label-md text-label-md text-on-surface-variant dark:text-outline-variant hover:text-secondary dark:hover:text-secondary-fixed-dim transition-colors duration-200">Privacy Policy</a>
-          <a href="#" className="font-label-md text-label-md text-on-surface-variant dark:text-outline-variant hover:text-secondary dark:hover:text-secondary-fixed-dim transition-colors duration-200">Contact Us</a>
-          <a href="#" className="font-label-md text-label-md text-on-surface-variant dark:text-outline-variant hover:text-secondary dark:hover:text-secondary-fixed-dim transition-colors duration-200">FAQ</a>
+          <Link to="/services" className="font-label-md text-label-md text-on-surface-variant dark:text-outline-variant hover:text-secondary dark:hover:text-secondary-fixed-dim transition-colors duration-200">
+            {t('footer.services')}
+          </Link>
+          <a href="#" className="font-label-md text-label-md text-on-surface-variant dark:text-outline-variant hover:text-secondary dark:hover:text-secondary-fixed-dim transition-colors duration-200">
+            {t('footer.terms')}
+          </a>
+          <a href="#" className="font-label-md text-label-md text-on-surface-variant dark:text-outline-variant hover:text-secondary dark:hover:text-secondary-fixed-dim transition-colors duration-200">
+            {t('footer.privacy')}
+          </a>
+          <a href="#" className="font-label-md text-label-md text-on-surface-variant dark:text-outline-variant hover:text-secondary dark:hover:text-secondary-fixed-dim transition-colors duration-200">
+            {t('footer.contact')}
+          </a>
+          <a href="#" className="font-label-md text-label-md text-on-surface-variant dark:text-outline-variant hover:text-secondary dark:hover:text-secondary-fixed-dim transition-colors duration-200">
+            {t('footer.faq')}
+          </a>
         </div>
         <div className="font-body-md text-body-md text-on-surface-variant dark:text-outline-variant text-center md:text-right text-xs">
-          © 2024 WORKKAR. Connecting skill with opportunity.
+          {t('footer.copyright')}
         </div>
       </div>
     </footer>

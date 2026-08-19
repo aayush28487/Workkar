@@ -1,19 +1,26 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useWorkkar } from '../context/WorkkarContext';
+import { useLanguage } from '../context/LanguageContext';
 import ServiceCard from '../components/ServiceCard';
 import { ServiceModal } from '../components/Modals';
 
 export default function Services() {
   const { services } = useWorkkar();
+  const { t, tService, tServiceDesc } = useLanguage();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedService, setSelectedService] = useState(null);
 
-  // Filter services by search query
-  const filteredServices = services.filter((service) =>
-    service.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    service.description.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Filter services by search query (supports both English and translated Hindi names/descriptions)
+  const filteredServices = services.filter((service) => {
+    const q = searchQuery.toLowerCase();
+    const enName = service.name.toLowerCase();
+    const enDesc = service.description.toLowerCase();
+    const trName = tService(service.name).toLowerCase();
+    const trDesc = tServiceDesc(service.name, service.description).toLowerCase();
+
+    return enName.includes(q) || enDesc.includes(q) || trName.includes(q) || trDesc.includes(q);
+  });
 
   return (
     <div className="bg-background min-h-screen py-12">
@@ -22,10 +29,10 @@ export default function Services() {
         {/* Header Section */}
         <div className="text-center max-w-xl mx-auto flex flex-col gap-3">
           <h1 className="font-display-lg text-display-lg text-on-surface font-extrabold tracking-tight">
-            Our Service Categories
+            {t('servicesPage.title')}
           </h1>
           <p className="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
-            Find the perfect daily wage trade professional for residential installations, repairs, or manual labor tasks.
+            {t('servicesPage.subtitle')}
           </p>
         </div>
 
@@ -38,7 +45,7 @@ export default function Services() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full bg-surface-container-lowest border border-outline-variant/60 rounded-xl pl-10 pr-4 py-3 text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors text-sm placeholder:text-outline/50"
-            placeholder="Search service types..."
+            placeholder={t('servicesPage.searchPlaceholder')}
             type="text"
           />
           {searchQuery && (
@@ -63,8 +70,8 @@ export default function Services() {
               <span className="material-symbols-outlined text-4xl text-outline mb-2 block">
                 category_search
               </span>
-              <p className="font-bold text-sm">No service matches found.</p>
-              <p className="text-xs text-outline mt-1">Try expanding your search parameters.</p>
+              <p className="font-bold text-sm">{t('servicesPage.noMatches')}</p>
+              <p className="text-xs text-outline mt-1">{t('servicesPage.expandSearch')}</p>
             </motion.div>
           ) : (
             <motion.div

@@ -1,9 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function WorkerCard({ worker }) {
   const { id, name, skill, skillTitle, experience, rating, rate, availability, avatar, textAvatar, verified } = worker;
+  const { t, tSkill, tAvailability } = useLanguage();
 
   // Set status pill color styles
   let statusClass = 'bg-slate-100 text-slate-800 dark:bg-slate-900/80 dark:text-slate-300 dark:border dark:border-slate-800/40';
@@ -16,6 +18,8 @@ export default function WorkerCard({ worker }) {
     statusClass = 'bg-orange-100 text-orange-800 dark:bg-orange-950/80 dark:text-orange-300 dark:border dark:border-orange-800/40';
     dotColor = 'bg-secondary-container';
   }
+
+  const translatedSkill = skillTitle ? tSkill(skillTitle) : `${tSkill(skill)} ${t('skills.Specialist')}`;
 
   return (
     <motion.div
@@ -44,18 +48,18 @@ export default function WorkerCard({ worker }) {
               <h3 className="font-title-md text-title-md text-on-surface flex items-center gap-1 font-bold">
                 {name}
                 {verified && (
-                  <span className="material-symbols-outlined text-green-600 text-[18px] fill" title="Verified Professional">
+                  <span className="material-symbols-outlined text-green-600 text-[18px] fill" title={t('common.verified')}>
                     verified
                   </span>
                 )}
               </h3>
-              <p className="font-label-md text-label-md text-on-surface-variant font-medium">{skillTitle || `${skill} Specialist`}</p>
+              <p className="font-label-md text-label-md text-on-surface-variant font-medium">{translatedSkill}</p>
             </div>
           </div>
           <div className="bg-surface-container-high px-2.5 py-1 rounded-full flex items-center gap-1 shadow-sm">
             <span className="material-symbols-outlined text-secondary-container text-[14px] fill">star</span>
             <span className="font-label-md text-label-md text-on-surface font-bold">
-              {rating ? rating.toFixed(1) : 'New'}
+              {rating ? rating.toFixed(1) : t('common.new')}
             </span>
           </div>
         </div>
@@ -63,23 +67,23 @@ export default function WorkerCard({ worker }) {
         <div className="flex justify-between items-center mb-4 text-xs">
           <span className="font-body-md text-body-md text-on-surface-variant flex items-center gap-1">
             <span className="material-symbols-outlined text-outline text-[16px]">work</span>
-            {experience} yrs exp
+            {experience} {t('common.yrsExp')}
           </span>
           <span className="font-title-md text-title-md text-primary font-bold">
-            ${rate}/hr
+            ${rate}{t('common.perHr')}
           </span>
         </div>
       </div>
 
       <div className="flex items-center gap-2 mt-2">
         <span className={`${statusClass} text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider`}>
-          {availability}
+          {tAvailability(availability)}
         </span>
         <Link
           to={`/worker-details/${id}`}
           className="flex-grow bg-primary-container hover:bg-primary hover:text-on-primary text-on-primary-container font-bold text-xs py-2.5 rounded-lg text-center transition-all duration-200 hover-lift active:scale-98 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-blue-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900"
         >
-          Book Now
+          {t('workersPage.bookNow')}
         </Link>
       </div>
     </motion.div>

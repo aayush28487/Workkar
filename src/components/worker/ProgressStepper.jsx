@@ -1,12 +1,15 @@
 import React from 'react';
 import { Check } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function ProgressStepper({ currentStep = 1 }) {
+  const { t } = useLanguage();
+
   const steps = [
-    { number: 1, label: 'Register' },
-    { number: 2, label: 'Permissions' },
-    { number: 3, label: 'Profile Details' },
-    { number: 4, label: 'Verification' },
+    { number: 1, label: t('nav.register') },
+    { number: 2, label: t('workerAuth.permissionsTitle').split(' ')[0] || 'Permissions' },
+    { number: 3, label: t('workerAuth.profileSetupTitle').split(' ')[0] || 'Profile' },
+    { number: 4, label: t('common.verified') },
   ];
 
   return (
@@ -52,7 +55,7 @@ export default function ProgressStepper({ currentStep = 1 }) {
                       currentStep > step.number
                         ? '100%'
                         : currentStep === step.number
-                        ? '0%' // it starts filling as you transition
+                        ? '0%'
                         : '0%',
                   }}
                 />

@@ -1,8 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function ServiceCard({ service, onClick }) {
   const { name, description, icon, color, bg } = service;
+  const { tService, tServiceDesc } = useLanguage();
 
   // Determine text-color and bg-color mappings
   let iconColor = 'text-primary';
@@ -31,10 +33,10 @@ export default function ServiceCard({ service, onClick }) {
         </span>
       </motion.div>
       <h3 className="font-title-md text-title-md text-on-surface mb-1 font-bold group-hover:text-primary transition-colors">
-        {name}
+        {tService(name)}
       </h3>
       <p className="font-label-md text-label-md text-on-surface-variant line-clamp-2">
-        {description}
+        {tServiceDesc(name, description)}
       </p>
     </motion.div>
   );

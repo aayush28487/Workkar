@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useWorkkar } from '../context/WorkkarContext';
+import { useLanguage } from '../context/LanguageContext';
 import DashboardCard from '../components/DashboardCard';
 import { JobPerformanceChart } from '../components/Charts';
 
@@ -10,6 +11,7 @@ export default function WorkerDashboard() {
     earningsTrend,
     toggleWorkerAvailability
   } = useWorkkar();
+  const { t, tAvailability, tSkill } = useLanguage();
 
   if (!user) {
     return (
@@ -32,35 +34,34 @@ export default function WorkerDashboard() {
             <span className="material-symbols-outlined text-6xl animate-pulse">pending_actions</span>
           </div>
           <h2 className="font-display-lg text-headline-lg font-extrabold text-on-surface">
-            Verification Pending Approval
+            {t('workerAuth.verificationPendingTitle')}
           </h2>
           <p className="font-body-md text-on-surface-variant text-sm max-w-md mx-auto leading-relaxed">
-            Your worker companion application is under review by the platform coordinator. 
-            Worker-specific tools and dispatches will unlock once approved.
+            {t('workerAuth.verificationPendingSubtitle')}
           </p>
 
           <div className="bg-surface p-6 rounded-2xl border border-outline-variant/30 text-left max-w-lg mx-auto space-y-3">
-            <h3 className="font-bold text-xs uppercase tracking-wider text-primary">Onboarding Metadata</h3>
+            <h3 className="font-bold text-xs uppercase tracking-wider text-primary">{t('workerAuth.profileSetupTitle')}</h3>
             <div className="grid grid-cols-2 gap-3 text-xs">
               <div>
-                <p className="text-on-surface-variant">Name</p>
+                <p className="text-on-surface-variant">{t('common.name')}</p>
                 <p className="font-semibold text-on-surface">{user.name}</p>
               </div>
               <div>
-                <p className="text-on-surface-variant">Trade Skill</p>
-                <p className="font-semibold text-on-surface">{user.skill} ({user.experience} yrs exp)</p>
+                <p className="text-on-surface-variant">{t('workerAuth.tradeLabel')}</p>
+                <p className="font-semibold text-on-surface">{tSkill(user.skill)} ({user.experience} {t('common.yrsExp')})</p>
               </div>
               <div className="col-span-2">
-                <p className="text-on-surface-variant">Uploaded Document</p>
+                <p className="text-on-surface-variant">{t('workerAuth.uploadDocTitle')}</p>
                 <p className="font-mono text-[11px] text-primary truncate bg-surface-container px-2.5 py-1 rounded-lg mt-0.5 select-all">
-                  {user.verificationDocument || 'No document attached'}
+                  {user.verificationDocument || t('common.noData')}
                 </p>
               </div>
             </div>
           </div>
 
           <p className="text-xs text-on-surface-variant animate-pulse">
-            Checking status in real-time...
+            {t('common.loading')}
           </p>
         </motion.div>
       </div>
@@ -80,11 +81,10 @@ export default function WorkerDashboard() {
             <span className="material-symbols-outlined text-6xl">gpp_bad</span>
           </div>
           <h2 className="font-display-lg text-headline-lg font-extrabold text-error">
-            Account Suspended
+            {t('common.inactive')}
           </h2>
           <p className="font-body-md text-on-surface-variant text-sm leading-relaxed">
-            Your trade account has been temporarily suspended by an operations coordinator. 
-            If you believe this is an error, please reach out to operations support.
+            {t('workerAuth.contactSupport')}
           </p>
         </motion.div>
       </div>
@@ -100,18 +100,18 @@ export default function WorkerDashboard() {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-stack-md border-b border-outline-variant/30 pb-stack-md">
           <div>
             <h1 className="font-display-lg text-3xl md:text-display-lg text-on-surface font-extrabold tracking-tight">
-              Welcome back, {user.name.split(' ')[0]}
+              {t('workerDashboard.welcome', { name: user.name.split(' ')[0] })}
             </h1>
             <p className="font-body-lg text-body-lg text-on-surface-variant">
-              Professional {user.skill} Companion Hub
+              {tSkill(user.skill)} {t('workerDashboard.portalTitle')}
             </p>
           </div>
           
           {/* Availability Status controls */}
           <div className="flex items-center gap-3 bg-surface-container-low border border-outline-variant/40 px-5 py-2.5 rounded-2xl shadow-sm">
             <div className="text-left">
-              <p className="text-[10px] uppercase font-bold text-outline-variant">Dispatch Status</p>
-              <p className="font-bold text-xs text-on-surface">{user.availability}</p>
+              <p className="text-[10px] uppercase font-bold text-outline-variant">{t('workerDashboard.onlineToggle')}</p>
+              <p className="font-bold text-xs text-on-surface">{tAvailability(user.availability)}</p>
             </div>
             <label className="relative inline-flex items-center cursor-pointer scale-95 rounded-full focus-within:ring-2 focus-within:ring-primary">
               <input
@@ -132,38 +132,38 @@ export default function WorkerDashboard() {
         <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
           <DashboardCard
             icon="payments"
-            title="Wallet Balance"
+            title={t('workerEarnings.walletBalance')}
             value={`$${user.wallet?.balance?.toFixed(2) || '0.00'}`}
-            trend="Available"
+            trend={t('common.available')}
             trendType="positive"
-            footerLabel="Ready for withdrawal"
+            footerLabel={t('workerEarnings.withdrawBtn')}
             largeIcon="payments"
           />
           <DashboardCard
             icon="event"
-            title="Weekly Earnings"
+            title={t('workerDashboard.statsTodayEarnings')}
             value={`$${user.wallet?.weekly?.toFixed(2) || '0.00'}`}
-            trend="This week"
+            trend={t('common.active')}
             trendType="neutral"
-            footerLabel="Updated live"
+            footerLabel={t('workerDashboard.earningsSummary')}
             largeIcon="event"
           />
           <DashboardCard
             icon="work_outline"
-            title="Job Earnings"
-            value={`$${user.wallet?.jobEarnings?.toFixed(2) || '0.00'}`}
-            trend="Base rates"
+            title={t('workerDashboard.statsCompletedJobs')}
+            value={user.wallet?.completedCount || 12}
+            trend={t('common.completed')}
             trendType="neutral"
-            footerLabel="Contract totals"
+            footerLabel={t('workerDashboard.portalTitle')}
             largeIcon="work_outline"
           />
           <DashboardCard
             icon="monetization_on"
-            title="Tips Received"
-            value={`$${user.wallet?.tips?.toFixed(2) || '0.00'}`}
-            trend="Customer tips"
+            title={t('workerDashboard.statsRating')}
+            value={user.rating ? user.rating.toFixed(1) : '5.0'}
+            trend="⭐ 5.0"
             trendType="positive"
-            footerLabel="100% goes to you"
+            footerLabel={t('common.verified')}
             largeIcon="monetization_on"
           />
         </section>
@@ -175,7 +175,7 @@ export default function WorkerDashboard() {
           <div className="lg:col-span-2">
             <section className="bg-surface-container-lowest rounded-xl border border-outline-variant/30 ambient-shadow-base p-6 flex flex-col gap-4">
               <div className="flex justify-between items-center border-b border-outline-variant/20 pb-3">
-                <h2 className="font-headline-md text-lg font-bold text-on-surface">Weekly Performance Trend</h2>
+                <h2 className="font-headline-md text-lg font-bold text-on-surface">{t('workerDashboard.earningsSummary')}</h2>
               </div>
               <div className="h-64 w-full relative">
                 <JobPerformanceChart data={earningsTrend} />
@@ -188,31 +188,31 @@ export default function WorkerDashboard() {
             <section className="bg-surface-container-lowest rounded-xl border border-outline-variant/30 ambient-shadow-base p-6 space-y-6 h-full flex flex-col justify-between">
               <div>
                 <h2 className="font-headline-md text-lg font-bold text-on-surface border-b border-outline-variant/20 pb-3 mb-4">
-                  Profile Details
+                  {t('workerAuth.profileSetupTitle')}
                 </h2>
                 
                 <div className="space-y-4 text-xs">
                   <div>
-                    <label className="text-on-surface-variant font-bold">Verification Document</label>
+                    <label className="text-on-surface-variant font-bold">{t('workerAuth.uploadDocTitle')}</label>
                     <div className="bg-surface-container px-3 py-2 rounded-xl border border-outline-variant/20 flex items-center gap-2 mt-1">
                       <span className="material-symbols-outlined text-primary text-[18px]">verified_user</span>
-                      <span className="font-mono text-on-surface truncate select-all">{user.verificationDocument}</span>
+                      <span className="font-mono text-on-surface truncate select-all">{user.verificationDocument || t('common.verified')}</span>
                     </div>
                   </div>
 
                   <div>
-                    <label className="text-on-surface-variant font-bold">Bio Description</label>
+                    <label className="text-on-surface-variant font-bold">{t('workerDetails.aboutWorker')}</label>
                     <p className="text-on-surface mt-1 leading-relaxed bg-surface-container px-3 py-3 rounded-xl border border-outline-variant/20">
-                      {user.description || 'No description added yet.'}
+                      {user.description || t('workerAuth.registerSubtitle')}
                     </p>
                   </div>
                 </div>
               </div>
 
               <div className="bg-surface-container px-4 py-4 rounded-xl border border-outline-variant/20 mt-4">
-                <h4 className="font-bold text-xs text-primary mb-1">Active Job Companion</h4>
+                <h4 className="font-bold text-xs text-primary mb-1">{t('activeJob.title')}</h4>
                 <p className="text-[10px] text-on-surface-variant leading-relaxed">
-                  Go to <a href="/worker/active-job" className="text-primary hover:underline font-bold">Applications & Active Job</a> to view navigation route coordinates and complete job steps.
+                  <a href="/worker/active-job" className="text-primary hover:underline font-bold">{t('workerDashboard.goToActiveJob')}</a>
                 </p>
               </div>
             </section>

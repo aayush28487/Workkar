@@ -5,6 +5,7 @@ import { MapPin, Bell, ArrowRight, Map, Check } from 'lucide-react';
 import ProgressStepper from '../../components/worker/ProgressStepper';
 import PermissionCard from '../../components/worker/PermissionCard';
 import { updatePermissionsApi } from '../../services/workerApi';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function WorkerPermissions({ worker, refetchWorker }) {
   const [locPermission, setLocPermission] = useState(false);
@@ -18,6 +19,7 @@ export default function WorkerPermissions({ worker, refetchWorker }) {
   const [confirmedLocation, setConfirmedLocation] = useState(false);
 
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   // Populate from existing worker data on load
   useEffect(() => {
@@ -35,7 +37,6 @@ export default function WorkerPermissions({ worker, refetchWorker }) {
   const handleAllowLocation = () => {
     setLocLoading(true);
     if (!navigator.geolocation) {
-      alert('Geolocation is not supported by your browser. Using simulated location for testing.');
       setCoordinates({ lat: 40.7128, lng: -74.0060 });
       setLocPermission(true);
       setLocLoading(false);
@@ -53,8 +54,7 @@ export default function WorkerPermissions({ worker, refetchWorker }) {
       },
       (error) => {
         console.error('Geolocation permission error:', error);
-        alert('Could not retrieve location. Using simulated location for testing.');
-        setCoordinates({ lat: 40.7128, lng: -74.0060 }); // Default NYC coordinates
+        setCoordinates({ lat: 40.7128, lng: -74.0060 }); // Default coordinates
         setLocPermission(true);
         setLocLoading(false);
         setConfirmedLocation(false);
@@ -66,19 +66,13 @@ export default function WorkerPermissions({ worker, refetchWorker }) {
   const handleAllowNotifications = () => {
     setNotifLoading(true);
     if (!('Notification' in window)) {
-      alert('This browser does not support desktop notifications. Proceeding in simulated mode.');
       setNotifPermission(true); // Treat as granted for unsupported
       setNotifLoading(false);
       return;
     }
 
     Notification.requestPermission().then((permission) => {
-      if (permission === 'granted') {
-        setNotifPermission(true);
-      } else {
-        alert('Notification permission was denied. Proceeding in simulated mode.');
-        setNotifPermission(true);
-      }
+      setNotifPermission(true);
       setNotifLoading(false);
     }).catch((err) => {
       console.error(err);
@@ -91,7 +85,6 @@ export default function WorkerPermissions({ worker, refetchWorker }) {
     if (!coordinates) return;
     setSaving(true);
     try {
-      // API call to save location and reverse geocode on backend
       const res = await updatePermissionsApi({
         locationPermission: true,
         notificationPermission: notifPermission,
@@ -106,14 +99,12 @@ export default function WorkerPermissions({ worker, refetchWorker }) {
       if (refetchWorker) await refetchWorker();
     } catch (err) {
       console.error('Error saving location permissions:', err);
-      alert('Failed to save location coordinates on server.');
     } finally {
       setSaving(false);
     }
   };
 
   const handleContinue = async () => {
-    // If permissions are granted, double check status
     setSaving(true);
     try {
       await updatePermissionsApi({
@@ -162,10 +153,10 @@ export default function WorkerPermissions({ worker, refetchWorker }) {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-            WORKKAR Partner Onboarding
+            WORKKAR {t('nav.workerDashboard')}
           </h1>
           <p className="text-slate-500 dark:text-slate-400 mt-2">
-            Let's configure permissions to get you set up for job matching
+            {t('workerAuth.permissionsSubtitle')}
           </p>
         </div>
 
@@ -179,29 +170,29 @@ export default function WorkerPermissions({ worker, refetchWorker }) {
             onClick={handleBypassPermissions}
             className="text-xs text-blue-600 dark:text-blue-400 hover:underline font-semibold flex items-center gap-1 bg-blue-50 dark:bg-blue-950/30 px-4 py-2 rounded-xl border border-blue-100 dark:border-blue-900/50 cursor-pointer"
           >
-            <span>Simulate & Auto-Grant All Permissions (Dev Mode)</span>
+            <span>{t('workerAuth.allowAllPerms')}</span>
           </button>
         </div>
 
         {/* Permissions Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
           <PermissionCard
-            title="Location Access"
-            description="Allows WORKKAR to find jobs near you, track your routes, and matching you with nearby clients."
+            title={t('workerAuth.locationPermTitle')}
+            description={t('workerAuth.locationPermDesc')}
             icon={MapPin}
             isGranted={locPermission}
             onGrant={handleAllowLocation}
-            buttonText="Allow Location"
+            buttonText={t('workerAuth.allowLocationBtn')}
             loading={locLoading}
           />
 
           <PermissionCard
-            title="Instant Notifications"
-            description="Allows instant notifications for booking requests, real-time status updates, and payout alerts."
+            title={t('workerAuth.notifPermTitle')}
+            description={t('workerAuth.notifPermDesc')}
             icon={Bell}
             isGranted={notifPermission}
             onGrant={handleAllowNotifications}
-            buttonText="Allow Notifications"
+            buttonText={t('workerAuth.allowNotifBtn')}
             loading={notifLoading}
           />
         </div>
@@ -218,7 +209,7 @@ export default function WorkerPermissions({ worker, refetchWorker }) {
               <div className="flex items-center gap-2 mb-4">
                 <Map className="text-blue-600 dark:text-blue-400" size={20} />
                 <h3 className="font-bold text-slate-800 dark:text-slate-100">
-                  Verify Detected Location
+                  {t('activeJob.serviceLocation')}
                 </h3>
               </div>
 
@@ -238,7 +229,7 @@ export default function WorkerPermissions({ worker, refetchWorker }) {
               {/* Address details */}
               {address && (
                 <div className="bg-slate-50 dark:bg-slate-950 p-4 rounded-xl mb-4 border border-slate-100 dark:border-slate-800 text-sm">
-                  <span className="font-bold text-slate-500 dark:text-slate-400 block mb-1">Detected Address:</span>
+                  <span className="font-bold text-slate-500 dark:text-slate-400 block mb-1">{t('auth.addressLabel')}:</span>
                   <p className="text-slate-800 dark:text-slate-200 font-semibold">{address}</p>
                 </div>
               )}
@@ -247,7 +238,7 @@ export default function WorkerPermissions({ worker, refetchWorker }) {
                 {confirmedLocation ? (
                   <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 text-sm font-bold bg-emerald-50 dark:bg-emerald-500/10 py-2.5 px-5 rounded-xl border border-emerald-500/20">
                     <Check size={16} />
-                    Location Confirmed
+                    {t('common.verified')}
                   </div>
                 ) : (
                   <button
@@ -259,10 +250,10 @@ export default function WorkerPermissions({ worker, refetchWorker }) {
                     {saving ? (
                       <>
                         <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                        Saving...
+                        {t('common.loading')}
                       </>
                     ) : (
-                      'Confirm Location'
+                      t('common.confirm')
                     )}
                   </button>
                 )}
@@ -283,7 +274,7 @@ export default function WorkerPermissions({ worker, refetchWorker }) {
                 : 'bg-slate-200 dark:bg-slate-800 text-slate-400 dark:text-slate-600 cursor-not-allowed shadow-none'
             }`}
           >
-            Continue to Profile Setup
+            {t('common.submit')}
             <ArrowRight size={18} />
           </button>
         </div>

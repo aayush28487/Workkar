@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useWorkkar } from '../context/WorkkarContext';
+import { useLanguage } from '../context/LanguageContext';
 import WorkerCard from '../components/WorkerCard';
 
 export default function Workers() {
   const { workers, services } = useWorkkar();
+  const { t, tService, tSkill } = useLanguage();
   const location = useLocation();
 
   // Filter States
@@ -30,10 +32,12 @@ export default function Workers() {
 
   // Combined Filters Logic
   const filteredWorkers = workers.filter(worker => {
-    // 1. Keyword search (filters by name or skill)
+    const q = searchQuery.toLowerCase();
+    // 1. Keyword search (filters by name, skill in EN and HI)
     const matchesSearch = 
-      worker.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      worker.skill.toLowerCase().includes(searchQuery.toLowerCase());
+      worker.name.toLowerCase().includes(q) ||
+      worker.skill.toLowerCase().includes(q) ||
+      tSkill(worker.skill).toLowerCase().includes(q);
 
     // 2. Skill Category filter
     const matchesSkill = selectedSkill === 'All' || worker.skill.toLowerCase() === selectedSkill.toLowerCase();
@@ -49,7 +53,8 @@ export default function Workers() {
     const matchesLocation = !locationQuery || 
       (worker.description && worker.description.toLowerCase().includes(locationQuery.toLowerCase())) ||
       locationQuery.toLowerCase().includes("springfield") || 
-      locationQuery.toLowerCase().includes("san francisco");
+      locationQuery.toLowerCase().includes("san francisco") ||
+      locationQuery.toLowerCase().includes("delhi");
 
     return matchesSearch && matchesSkill && matchesRating && matchesLocation;
   });
@@ -68,10 +73,10 @@ export default function Workers() {
         {/* Header Title */}
         <div className="border-b border-outline-variant/20 pb-6">
           <h1 className="font-display-lg text-display-lg text-on-surface font-extrabold tracking-tight">
-            Browse Daily Wage Workers
+            {t('workersPage.title')}
           </h1>
           <p className="font-body-lg text-body-lg text-on-surface-variant mt-1">
-            Instantly connect with certified tradespeople ready for immediate task deployment.
+            {t('workersPage.subtitle')}
           </p>
         </div>
 
@@ -80,7 +85,7 @@ export default function Workers() {
           
           {/* Keyword Search */}
           <div className="flex flex-col gap-1.5">
-            <label className="font-label-md text-label-md text-on-surface-variant">Search by Name / Skill</label>
+            <label className="font-label-md text-label-md text-on-surface-variant">{t('workersPage.searchLabel')}</label>
             <div className="relative">
               <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-outline material-symbols-outlined text-[18px]">
                 search
@@ -89,7 +94,7 @@ export default function Workers() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full bg-surface border border-outline-variant rounded-lg pl-9 pr-3 py-2 text-on-surface focus:outline-none focus:border-primary text-xs"
-                placeholder="e.g. Marcus, plumber"
+                placeholder={t('workersPage.searchPlaceholder')}
                 type="text"
               />
             </div>
@@ -97,30 +102,31 @@ export default function Workers() {
 
           {/* Skill Category Selector */}
           <div className="flex flex-col gap-1.5">
-            <label className="font-label-md text-label-md text-on-surface-variant">Trade Skill</label>
+            <label className="font-label-md text-label-md text-on-surface-variant">{t('workersPage.skillLabel')}</label>
             <select
               value={selectedSkill}
               onChange={(e) => setSelectedSkill(e.target.value)}
               className="w-full bg-surface border border-outline-variant rounded-lg px-3 py-2 text-on-surface focus:outline-none focus:border-primary text-xs"
             >
-              <option value="All">All Trades</option>
+              <option value="All">{t('workersPage.allSkills')}</option>
               {services.map(s => (
-                <option key={s.id} value={s.id}>{s.name}</option>
+                <option key={s.id} value={s.id}>{tService(s.name)}</option>
               ))}
             </select>
           </div>
 
           {/* Minimum Rating Selector */}
           <div className="flex flex-col gap-1.5">
-            <label className="font-label-md text-label-md text-on-surface-variant">Minimum Rating</label>
+            <label className="font-label-md text-label-md text-on-surface-variant">{t('workersPage.ratingLabel')}</label>
             <select
               value={minRating}
               onChange={(e) => setMinRating(e.target.value)}
               className="w-full bg-surface border border-outline-variant rounded-lg px-3 py-2 text-on-surface focus:outline-none focus:border-primary text-xs"
             >
-              <option value="All">All Ratings</option>
-              <option value="4.8">⭐⭐⭐⭐⭐ 4.8+</option>
-              <option value="4.5">⭐⭐⭐⭐ 4.5+</option>
+              <option value="All">{t('workersPage.anyRating')}</option>
+              <option value="4.8">⭐⭐⭐⭐⭐ {t('workersPage.fourEightPlus')}</option>
+              <option value="4.5">⭐⭐⭐⭐ {t('workersPage.fourFivePlus')}</option>
+              <option value="4.0">⭐⭐⭐ {t('workersPage.fourPlus')}</option>
             </select>
           </div>
 
@@ -130,7 +136,7 @@ export default function Workers() {
               onClick={resetFilters}
               className="w-full py-2.5 border border-outline-variant/60 hover:bg-surface-container text-on-surface-variant hover:text-on-surface rounded-lg font-label-md text-label-md transition-colors font-bold text-center active:scale-98"
             >
-              Clear Filters
+              {t('workersPage.resetFilters')}
             </button>
           </div>
 
@@ -139,11 +145,11 @@ export default function Workers() {
         {/* Workers Results Grid */}
         <div className="mt-4">
           <div className="flex justify-between items-center mb-4 text-xs font-semibold text-on-surface-variant">
-            <span>Showing {filteredWorkers.length} matching workers</span>
+            <span>{t('workersPage.showingResults', { count: filteredWorkers.length })}</span>
             {locationQuery && (
               <span className="flex items-center gap-0.5 text-primary">
                 <span className="material-symbols-outlined text-[14px]">location_on</span>
-                Near: {locationQuery}
+                {t('common.location')}: {locationQuery}
               </span>
             )}
           </div>
@@ -159,8 +165,8 @@ export default function Workers() {
                 <span className="material-symbols-outlined text-4xl text-outline mb-2 block">
                   person_search
                 </span>
-                <p className="font-bold text-sm">No matching professionals found.</p>
-                <p className="text-xs text-outline mt-1">Try resetting the filters or broadening your search queries.</p>
+                <p className="font-bold text-sm">{t('workersPage.noWorkersFound')}</p>
+                <p className="text-xs text-outline mt-1">{t('workersPage.noWorkersSubtitle')}</p>
               </motion.div>
             ) : (
               <motion.div

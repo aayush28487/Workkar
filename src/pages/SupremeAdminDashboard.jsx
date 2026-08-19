@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useWorkkar } from '../context/WorkkarContext';
+import { useLanguage } from '../context/LanguageContext';
 import DashboardCard from '../components/DashboardCard';
 
 export default function SupremeAdminDashboard() {
@@ -28,6 +29,7 @@ export default function SupremeAdminDashboard() {
     fetchAnalytics,
     addNotification
   } = useWorkkar();
+  const { t, tRole, tStatus, tSkill } = useLanguage();
 
   const [activeTab, setActiveTab] = useState('roles'); // roles, moderation, logs
 
@@ -56,11 +58,11 @@ export default function SupremeAdminDashboard() {
           <div className="flex items-center gap-2">
             <span className="material-symbols-outlined text-primary text-3xl">local_police</span>
             <h2 className="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface font-extrabold leading-none">
-              Supreme Command
+              {t('supremeAdmin.welcome')}
             </h2>
           </div>
           <p className="font-body-md text-sm text-on-surface-variant mt-1.5">
-            Full hierarchy overview, platform analytics, role modifications, and system-wide audit logging.
+            {t('supremeAdmin.subtitle')}
           </p>
         </div>
       </div>
@@ -69,21 +71,21 @@ export default function SupremeAdminDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-stack-md">
         <DashboardCard
           icon="shield_person"
-          title="Platform Admins"
+          title={t('supremeAdmin.tabAdmins')}
           value={adminCount}
           trend="Role Promoted"
           trendType="neutral"
-          footerLabel="Active Coordinators"
+          footerLabel={t('supremeAdmin.tabAdmins')}
           largeIcon="shield_person"
         />
         <DashboardCard
           icon="group"
-          title="Registered Clients"
+          title={t('supremeAdmin.tabCustomers')}
           value={customerCount}
-          trend="Customers"
+          trend={t('nav.findWorkers')}
           trendType="neutral"
-          footerLabel="Platform buyers"
-          footerLinkText="View Directory"
+          footerLabel={t('supremeAdmin.tabCustomers')}
+          footerLinkText={t('adminDashboard.viewDetails')}
           footerLinkAction={() => {
             setViewingList('clients');
             setListSearchTerm('');
@@ -93,12 +95,12 @@ export default function SupremeAdminDashboard() {
         />
         <DashboardCard
           icon="engineering"
-          title="Verified Workers"
+          title={t('supremeAdmin.tabWorkers')}
           value={workerCount}
-          trend="Professionals"
+          trend={t('common.verified')}
           trendType="neutral"
-          footerLabel="Active Providers"
-          footerLinkText="View Directory"
+          footerLabel={t('supremeAdmin.tabWorkers')}
+          footerLinkText={t('adminDashboard.viewDetails')}
           footerLinkAction={() => {
             setViewingList('workers');
             setListSearchTerm('');
@@ -109,11 +111,11 @@ export default function SupremeAdminDashboard() {
         <DashboardCard
           icon="pending_actions"
           iconBg="bg-error-container text-on-error-container"
-          title="Pending Queue"
+          title={t('adminDashboard.tabVerifications')}
           value={pendingApprovals.length}
           trend={pendingApprovals.length > 0 ? "Action Required" : "Cleared"}
           trendType={pendingApprovals.length > 0 ? "negative" : "neutral"}
-          footerLabel="Pending registrations"
+          footerLabel={t('common.pending')}
           largeIcon="pending_actions"
         />
       </div>
@@ -126,17 +128,17 @@ export default function SupremeAdminDashboard() {
           <section className="bg-surface-container-lowest rounded-xl border border-outline-variant/30 ambient-shadow-base overflow-hidden flex flex-col h-full">
             <div className="p-stack-md border-b border-outline-variant/30 flex justify-between items-center bg-surface/50">
               <h3 className="font-title-md text-sm text-on-surface font-bold uppercase tracking-wider">
-                Worker Verification Queue
+                {t('adminDashboard.tabVerifications')}
               </h3>
             </div>
             <div className="overflow-x-auto flex-grow">
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="bg-surface border-b border-outline-variant/20 text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">
-                    <th className="p-3">Worker Name</th>
-                    <th className="p-3">Trade/Skill</th>
-                    <th className="p-3">Submission</th>
-                    <th className="p-3 text-right">Actions</th>
+                    <th className="p-3">{t('common.worker')}</th>
+                    <th className="p-3">{t('workersPage.skillLabel')}</th>
+                    <th className="p-3">{t('common.date')}</th>
+                    <th className="p-3 text-right">{t('common.actions')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-outline-variant/10 text-xs">
@@ -146,8 +148,8 @@ export default function SupremeAdminDashboard() {
                         <span className="material-symbols-outlined text-4xl text-outline mb-2 block fill text-emerald-600">
                           check_circle
                         </span>
-                        <p className="font-bold">Queue Empty</p>
-                        <p className="text-xs text-outline mt-0.5">All registered workers verified.</p>
+                        <p className="font-bold">{t('common.verified')}</p>
+                        <p className="text-xs text-outline mt-0.5">{t('common.noData')}</p>
                       </td>
                     </tr>
                   ) : (
@@ -159,27 +161,27 @@ export default function SupremeAdminDashboard() {
                           </div>
                           <span className="font-bold text-on-surface">{worker.name}</span>
                         </td>
-                        <td className="p-3 text-on-surface-variant">{worker.skill}</td>
+                        <td className="p-3 text-on-surface-variant">{tSkill(worker.skill)}</td>
                         <td className="p-3 text-on-surface-variant">{worker.time}</td>
                         <td className="p-3 text-right flex justify-end gap-1.5">
                           <button 
                             onClick={() => setSelectedWorker(worker)}
                             className="text-primary hover:bg-primary-container hover:text-on-primary-container dark:text-blue-400 dark:hover:bg-blue-950/50 p-1.5 rounded-full transition-colors flex items-center justify-center cursor-pointer" 
-                            title="Review Profile Details & Documents"
+                            title={t('adminDashboard.viewDetails')}
                           >
                             <span className="material-symbols-outlined text-[18px]">visibility</span>
                           </button>
                           <button 
                             onClick={() => approveWorker(worker.id)}
-                            className="text-emerald-600 hover:bg-emerald-50 dark:text-emerald-400 dark:hover:bg-emerald-950/40 p-1.5 rounded-full transition-colors flex items-center justify-center" 
-                            title="Approve Worker"
+                            className="text-emerald-600 hover:bg-emerald-50 dark:text-emerald-400 dark:hover:bg-emerald-950/40 p-1.5 rounded-full transition-colors flex items-center justify-center cursor-pointer" 
+                            title={t('adminDashboard.approveBtn')}
                           >
                             <span className="material-symbols-outlined text-[18px] fill">check_circle</span>
                           </button>
                           <button 
                             onClick={() => rejectWorker(worker.id)}
-                            className="text-error hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-950/40 p-1.5 rounded-full transition-colors flex items-center justify-center" 
-                            title="Reject & Delete Registration"
+                            className="text-error hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-950/40 p-1.5 rounded-full transition-colors flex items-center justify-center cursor-pointer" 
+                            title={t('adminDashboard.rejectBtn')}
                           >
                             <span className="material-symbols-outlined text-[18px] fill">cancel</span>
                           </button>
@@ -199,12 +201,12 @@ export default function SupremeAdminDashboard() {
             <div>
               <div className="p-stack-md border-b border-outline-variant/30 bg-surface/50">
                 <h3 className="font-title-md text-sm text-on-surface font-bold uppercase tracking-wider">
-                  Active Dispatches
+                  {t('adminDashboard.tabDispatches')}
                 </h3>
               </div>
               <div className="p-4 flex flex-col gap-3 max-h-[280px] overflow-y-auto pr-1">
                 {assignments.length === 0 ? (
-                  <p className="text-xs text-on-surface-variant text-center py-6">No active dispatches.</p>
+                  <p className="text-xs text-on-surface-variant text-center py-6">{t('common.noData')}</p>
                 ) : (
                   assignments.map((job) => (
                     <div key={job.id} className="flex items-start gap-3 p-3 bg-surface rounded-xl border border-outline-variant/10">
@@ -213,10 +215,10 @@ export default function SupremeAdminDashboard() {
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="font-bold text-xs text-on-surface truncate">{job.title}</p>
-                        <p className="text-[10px] text-on-surface-variant truncate">Assigned to: {job.worker}</p>
+                        <p className="text-[10px] text-on-surface-variant truncate">{t('common.worker')}: {job.worker}</p>
                       </div>
                       <span className="text-[9px] font-bold px-2 py-0.5 rounded-full uppercase bg-primary-container text-on-primary-container">
-                        {job.status}
+                        {tStatus(job.status)}
                       </span>
                     </div>
                   ))
@@ -224,7 +226,7 @@ export default function SupremeAdminDashboard() {
               </div>
             </div>
             <div className="p-3 border-t border-outline-variant/30 text-center bg-surface/30">
-              <span className="text-[10px] text-on-surface-variant font-medium">Platform dispatcher running</span>
+              <span className="text-[10px] text-on-surface-variant font-medium">{t('supremeAdmin.tabSystemAudit')}</span>
             </div>
           </section>
         </div>
@@ -235,27 +237,27 @@ export default function SupremeAdminDashboard() {
       <div className="border-b border-outline-variant/30 pb-3 flex gap-4 mt-6">
         <button
           onClick={() => setActiveTab('roles')}
-          className={`pb-2 text-xs uppercase font-bold tracking-wider border-b-2 transition-all ${
+          className={`pb-2 text-xs uppercase font-bold tracking-wider border-b-2 transition-all cursor-pointer ${
             activeTab === 'roles' ? 'border-primary text-primary font-black' : 'border-transparent text-on-surface-variant'
           }`}
         >
-          Role Management
+          {t('supremeAdmin.tabSystemAudit')}
         </button>
         <button
           onClick={() => setActiveTab('moderation')}
-          className={`pb-2 text-xs uppercase font-bold tracking-wider border-b-2 transition-all ${
+          className={`pb-2 text-xs uppercase font-bold tracking-wider border-b-2 transition-all cursor-pointer ${
             activeTab === 'moderation' ? 'border-primary text-primary font-black' : 'border-transparent text-on-surface-variant'
           }`}
         >
-          Bans & User Management
+          {t('adminDashboard.tabUsers')}
         </button>
         <button
           onClick={() => setActiveTab('logs')}
-          className={`pb-2 text-xs uppercase font-bold tracking-wider border-b-2 transition-all ${
+          className={`pb-2 text-xs uppercase font-bold tracking-wider border-b-2 transition-all cursor-pointer ${
             activeTab === 'logs' ? 'border-primary text-primary font-black' : 'border-transparent text-on-surface-variant'
           }`}
         >
-          System Audit Logs
+          {t('supremeAdmin.tabSystemAudit')}
         </button>
       </div>
 
@@ -269,18 +271,18 @@ export default function SupremeAdminDashboard() {
           >
             <div className="p-4 bg-surface/50 border-b border-outline-variant/20 flex justify-between items-center">
               <div>
-                <h3 className="font-bold text-xs uppercase tracking-wider text-on-surface">Promotions & Demotions</h3>
-                <p className="text-[10px] text-on-surface-variant">Only Customers can be promoted to Admin. Admins can be demoted back to Customer.</p>
+                <h3 className="font-bold text-xs uppercase tracking-wider text-on-surface">{t('supremeAdmin.promoteToAdmin')}</h3>
+                <p className="text-[10px] text-on-surface-variant">{t('supremeAdmin.subtitle')}</p>
               </div>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse text-xs">
                 <thead>
                   <tr className="bg-surface border-b border-outline-variant/20 text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">
-                    <th className="p-3">User</th>
-                    <th className="p-3">Email</th>
-                    <th className="p-3">Role</th>
-                    <th className="p-3 text-right">Role Actions</th>
+                    <th className="p-3">{t('common.name')}</th>
+                    <th className="p-3">{t('auth.emailLabel')}</th>
+                    <th className="p-3">{t('common.role')}</th>
+                    <th className="p-3 text-right">{t('common.actions')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-outline-variant/10">
@@ -292,23 +294,23 @@ export default function SupremeAdminDashboard() {
                         <span className={`font-semibold uppercase text-[9px] tracking-wider px-2 py-0.5 rounded ${
                           u.role === 'admin' ? 'bg-indigo-100 text-indigo-800 dark:bg-indigo-950/80 dark:text-indigo-300' : 'bg-slate-100 text-slate-800 dark:bg-slate-800'
                         }`}>
-                          {u.role}
+                          {tRole(u.role)}
                         </span>
                       </td>
                       <td className="p-3 text-right">
                         {u.role === 'customer' ? (
                           <button
                             onClick={() => promoteUser(u._id)}
-                            className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-[10px] uppercase px-3 py-1 rounded transition-colors"
+                            className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-[10px] uppercase px-3 py-1 rounded transition-colors cursor-pointer"
                           >
-                            Promote to Admin
+                            {t('supremeAdmin.promoteToAdmin')}
                           </button>
                         ) : (
                           <button
                             onClick={() => demoteUser(u._id)}
-                            className="bg-orange-600 hover:bg-orange-700 text-white font-bold text-[10px] uppercase px-3 py-1 rounded transition-colors"
+                            className="bg-orange-600 hover:bg-orange-700 text-white font-bold text-[10px] uppercase px-3 py-1 rounded transition-colors cursor-pointer"
                           >
-                            Demote to Client
+                            {t('supremeAdmin.demoteToCustomer')}
                           </button>
                         )}
                       </td>
@@ -327,18 +329,18 @@ export default function SupremeAdminDashboard() {
             className="bg-surface-container-lowest rounded-xl border border-outline-variant/30 ambient-shadow-base overflow-hidden"
           >
             <div className="p-4 bg-surface/50 border-b border-outline-variant/20">
-              <h3 className="font-bold text-xs uppercase tracking-wider text-on-surface">Ban & Account Management</h3>
-              <p className="text-[10px] text-on-surface-variant">Suspend, Ban, or permanently remove accounts. Restore accounts to reactivate access.</p>
+              <h3 className="font-bold text-xs uppercase tracking-wider text-on-surface">{t('adminDashboard.tabUsers')}</h3>
+              <p className="text-[10px] text-on-surface-variant">{t('supremeAdmin.subtitle')}</p>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse text-xs">
                 <thead>
                   <tr className="bg-surface border-b border-outline-variant/20 text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">
-                    <th className="p-3">User</th>
-                    <th className="p-3">Email</th>
-                    <th className="p-3">Role</th>
-                    <th className="p-3">Status</th>
-                    <th className="p-3 text-right">Moderation Actions</th>
+                    <th className="p-3">{t('common.name')}</th>
+                    <th className="p-3">{t('auth.emailLabel')}</th>
+                    <th className="p-3">{t('common.role')}</th>
+                    <th className="p-3">{t('common.status')}</th>
+                    <th className="p-3 text-right">{t('common.actions')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-outline-variant/10">
@@ -353,11 +355,11 @@ export default function SupremeAdminDashboard() {
                         <td className="p-3 font-bold text-on-surface">{u.name}</td>
                         <td className="p-3 text-on-surface-variant">{u.email}</td>
                         <td className="p-3">
-                          <span className="font-semibold uppercase text-[9px] bg-surface-container px-2 py-0.5 rounded">{u.role}</span>
+                          <span className="font-semibold uppercase text-[9px] bg-surface-container px-2 py-0.5 rounded">{tRole(u.role)}</span>
                         </td>
                         <td className="p-3">
                           <span className={`font-bold uppercase text-[8px] px-1.5 py-0.5 rounded tracking-wide ${badgeColor}`}>
-                            {u.status}
+                            {tStatus(u.status)}
                           </span>
                         </td>
                         <td className="p-3 text-right space-x-1.5">
@@ -387,37 +389,37 @@ export default function SupremeAdminDashboard() {
                               }}
                               className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-[10px] uppercase px-3 py-1 rounded transition-colors active:scale-95 mr-2 cursor-pointer inline-block"
                             >
-                              View Profile
+                              {t('adminDashboard.viewDetails')}
                             </button>
                           )}
                           {u.status === 'active' || u.status === 'pending' ? (
                             <>
                               <button
                                 onClick={() => suspendUser(u._id)}
-                                className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold text-[10px] uppercase px-2.5 py-1 rounded"
+                                className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold text-[10px] uppercase px-2.5 py-1 rounded cursor-pointer"
                               >
-                                Suspend
+                                {t('supremeAdmin.suspendUser')}
                               </button>
                               <button
                                 onClick={() => banUser(u._id)}
-                                className="bg-red-500 hover:bg-red-600 text-white font-bold text-[10px] uppercase px-2.5 py-1 rounded"
+                                className="bg-red-500 hover:bg-red-600 text-white font-bold text-[10px] uppercase px-2.5 py-1 rounded cursor-pointer"
                               >
-                                Ban
+                                {t('supremeAdmin.banUser')}
                               </button>
                             </>
                           ) : (
                             <button
                               onClick={() => restoreUser(u._id)}
-                              className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[10px] uppercase px-2.5 py-1 rounded"
+                              className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[10px] uppercase px-2.5 py-1 rounded cursor-pointer"
                             >
-                              Restore Active
+                              {t('supremeAdmin.restoreUser')}
                             </button>
                           )}
                           <button
                             onClick={() => deleteUser(u._id)}
-                            className="bg-slate-600 hover:bg-slate-700 text-white font-bold text-[10px] uppercase px-2.5 py-1 rounded"
+                            className="bg-slate-600 hover:bg-slate-700 text-white font-bold text-[10px] uppercase px-2.5 py-1 rounded cursor-pointer"
                           >
-                            Remove
+                            {t('common.delete')}
                           </button>
                         </td>
                       </tr>
@@ -436,12 +438,12 @@ export default function SupremeAdminDashboard() {
             className="bg-surface-container-lowest rounded-xl border border-outline-variant/30 ambient-shadow-base overflow-hidden"
           >
             <div className="p-4 bg-surface/50 border-b border-outline-variant/20">
-              <h3 className="font-bold text-xs uppercase tracking-wider text-on-surface">System Audit Trails</h3>
-              <p className="text-[10px] text-on-surface-variant">Immutable logs recording actions of all administrators.</p>
+              <h3 className="font-bold text-xs uppercase tracking-wider text-on-surface">{t('supremeAdmin.tabSystemAudit')}</h3>
+              <p className="text-[10px] text-on-surface-variant">{t('supremeAdmin.subtitle')}</p>
             </div>
             <div className="p-4 max-h-[400px] overflow-y-auto space-y-3">
               {auditLogs.length === 0 ? (
-                <p className="text-xs text-on-surface-variant text-center py-6">No audit records logged yet.</p>
+                <p className="text-xs text-on-surface-variant text-center py-6">{t('common.noData')}</p>
               ) : (
                 auditLogs.map((log) => (
                   <div key={log._id} className="p-3 bg-surface rounded-xl border border-outline-variant/10 text-xs flex justify-between items-start gap-4">
@@ -491,7 +493,7 @@ export default function SupremeAdminDashboard() {
                     {selectedWorker.name}
                   </h3>
                   <span className="inline-block text-[10px] font-extrabold uppercase bg-blue-100 dark:bg-slate-800/80 text-blue-700 dark:text-blue-400 px-2.5 py-1.5 rounded-full mt-1.5">
-                    {selectedWorker.skill}
+                    {tSkill(selectedWorker.skill)}
                   </span>
                 </div>
               </div>
@@ -509,89 +511,28 @@ export default function SupremeAdminDashboard() {
               {/* Profile Details Grid */}
               <div className="grid grid-cols-2 gap-4 text-xs">
                 <div>
-                  <span className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider block">Email Address</span>
+                  <span className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider block">{t('auth.emailLabel')}</span>
                   <span className="font-semibold text-slate-800 dark:text-slate-200 block text-sm mt-0.5 select-all">{selectedWorker.email}</span>
                 </div>
                 <div>
-                  <span className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider block">Mobile Number</span>
+                  <span className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider block">{t('auth.phoneLabel')}</span>
                   <span className="font-semibold text-slate-800 dark:text-slate-200 block text-sm mt-0.5 select-all">{selectedWorker.mobile}</span>
                 </div>
                 <div>
-                  <span className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider block font-bold">Age / Gender</span>
-                  <span className="font-semibold text-slate-800 dark:text-slate-200 block text-sm mt-0.5">
-                    {selectedWorker.age ? `${selectedWorker.age} years` : 'Not specified'} / {selectedWorker.gender || 'Not specified'}
-                  </span>
+                  <span className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider block font-bold">{t('workerAuth.experienceLabel')}</span>
+                  <span className="font-semibold text-slate-800 dark:text-slate-200 block text-sm mt-0.5">{selectedWorker.experience} {t('common.yrsExp')}</span>
                 </div>
                 <div>
-                  <span className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider block font-bold">Profession Category</span>
-                  <span className="font-semibold text-slate-800 dark:text-slate-200 block text-sm mt-0.5">{selectedWorker.profession || selectedWorker.skill}</span>
-                </div>
-                <div>
-                  <span className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider block font-bold">Experience Time</span>
-                  <span className="font-semibold text-slate-800 dark:text-slate-200 block text-sm mt-0.5">{selectedWorker.experience} Years</span>
-                </div>
-                <div>
-                  <span className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider block font-bold">Hourly Rate</span>
-                  <span className="font-semibold text-slate-800 dark:text-slate-200 block text-sm mt-0.5">${selectedWorker.rate}/hr</span>
+                  <span className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider block font-bold">{t('workerAuth.hourlyRateLabel')}</span>
+                  <span className="font-semibold text-slate-800 dark:text-slate-200 block text-sm mt-0.5">${selectedWorker.rate}{t('common.perHr')}</span>
                 </div>
                 <div className="col-span-2">
-                  <span className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider block font-bold">Verified Location Coordinates</span>
+                  <span className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider block font-bold">{t('auth.addressLabel')}</span>
                   <span className="font-semibold text-slate-800 dark:text-slate-200 block text-sm mt-0.5">{selectedWorker.formattedAddress}</span>
                 </div>
                 <div className="col-span-2">
-                  <span className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider block font-bold">About / Bio</span>
-                  <p className="font-semibold text-slate-800 dark:text-slate-200 text-sm mt-0.5 leading-relaxed whitespace-pre-wrap">{selectedWorker.description || 'No description provided.'}</p>
-                </div>
-              </div>
-
-              {/* Uploaded Documents */}
-              <div className="border-t border-slate-100 dark:border-slate-800/80 pt-6 space-y-4">
-                <h4 className="font-bold text-xs uppercase text-slate-400 dark:text-slate-500 tracking-wider">
-                  Uploaded Identity Credentials
-                </h4>
-
-                <div className="grid grid-cols-2 gap-4">
-                  {/* Aadhaar Card Box */}
-                  <div className="border border-slate-100 dark:border-slate-800 p-4 rounded-2xl bg-slate-50/50 dark:bg-slate-950/30 flex flex-col justify-between">
-                    <div>
-                      <h5 className="font-bold text-slate-700 dark:text-slate-350 text-sm">Aadhaar Card</h5>
-                      <p className="text-[10px] text-slate-400 mt-1">Worker's primary identification document scan.</p>
-                    </div>
-                    {selectedWorker.aadhaarCard ? (
-                      <a
-                        href={`http://localhost:5000${selectedWorker.aadhaarCard}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="mt-4 py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl text-center shadow transition-all flex items-center justify-center gap-1.5 cursor-pointer"
-                      >
-                        <span className="material-symbols-outlined text-[16px]">open_in_new</span>
-                        Open Aadhaar
-                      </a>
-                    ) : (
-                      <span className="text-xs font-semibold text-red-500 dark:text-red-400 mt-4 block">No Document Uploaded</span>
-                    )}
-                  </div>
-
-                  {/* PAN Card Box */}
-                  <div className="border border-slate-150 dark:border-slate-800 p-4 rounded-2xl bg-slate-50/50 dark:bg-slate-950/30 flex flex-col justify-between">
-                    <div>
-                      <h5 className="font-bold text-slate-700 dark:text-slate-350 text-sm">PAN Card</h5>
-                      <p className="text-[10px] text-slate-400 mt-1">Tax identification and business compliance scan.</p>
-                    </div>
-                    {selectedWorker.panCard ? (
-                      <a
-                        href={`http://localhost:5000${selectedWorker.panCard}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="mt-4 py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl text-center shadow transition-all flex items-center justify-center gap-1.5 cursor-pointer"
-                      >
-                        <span className="material-symbols-outlined text-[16px]">open_in_new</span>
-                        Open PAN Card
-                      </a>
-                    ) : (
-                      <span className="text-xs font-semibold text-red-500 dark:text-red-400 mt-4 block">No Document Uploaded</span>
-                    )}
-                  </div>
+                  <span className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider block font-bold">{t('workerDetails.aboutWorker')}</span>
+                  <p className="font-semibold text-slate-800 dark:text-slate-200 text-sm mt-0.5 leading-relaxed whitespace-pre-wrap">{selectedWorker.description || t('workerAuth.registerSubtitle')}</p>
                 </div>
               </div>
             </div>
@@ -603,7 +544,7 @@ export default function SupremeAdminDashboard() {
                 onClick={() => setSelectedWorker(null)}
                 className="py-2.5 px-4 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 font-bold rounded-xl transition-all cursor-pointer"
               >
-                Close
+                {t('common.close')}
               </button>
 
               <button
@@ -615,7 +556,7 @@ export default function SupremeAdminDashboard() {
                 className="py-2.5 px-4 bg-red-50 dark:bg-red-500/10 hover:bg-red-100 text-red-650 dark:text-red-400 border border-red-500/25 font-bold rounded-xl transition-all flex items-center gap-1.5 cursor-pointer"
               >
                 <span className="material-symbols-outlined text-[16px] fill">cancel</span>
-                Reject & Delete
+                {t('adminDashboard.rejectBtn')}
               </button>
 
               <button
@@ -627,7 +568,7 @@ export default function SupremeAdminDashboard() {
                 className="py-2.5 px-5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow transition-all flex items-center gap-1.5 cursor-pointer"
               >
                 <span className="material-symbols-outlined text-[16px] fill">check_circle</span>
-                Approve Partner
+                {t('adminDashboard.approveBtn')}
               </button>
             </div>
           </motion.div>
@@ -649,11 +590,8 @@ export default function SupremeAdminDashboard() {
                   <span className="material-symbols-outlined text-primary">
                     {viewingList === 'clients' ? 'group' : 'engineering'}
                   </span>
-                  {viewingList === 'clients' ? 'Registered Clients Directory' : 'Verified Workers Directory'}
+                  {viewingList === 'clients' ? t('supremeAdmin.tabCustomers') : t('supremeAdmin.tabWorkers')}
                 </h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                  {viewingList === 'clients' ? 'Browse all registered client accounts on the platform.' : 'Browse and manage verified service providers.'}
-                </p>
               </div>
               <button
                 onClick={() => setViewingList(null)}
@@ -676,7 +614,7 @@ export default function SupremeAdminDashboard() {
                     </div>
                     <input
                       type="text"
-                      placeholder={viewingList === 'clients' ? "Search clients by name or email..." : "Search workers by name, email, or skill..."}
+                      placeholder={t('workersPage.searchPlaceholder')}
                       value={listSearchTerm}
                       onChange={(e) => setListSearchTerm(e.target.value)}
                       className="block w-full pl-9 pr-3 py-2.5 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-blue-500 text-xs text-slate-900 dark:text-white transition-all"
@@ -691,7 +629,6 @@ export default function SupremeAdminDashboard() {
                       if (viewingList === 'clients') {
                         return u.role === 'customer';
                       } else {
-                        // Verified workers only (exclude pending/unapproved ones)
                         return u.role === 'worker' && u.status !== 'pending' && u.status !== 'rejected';
                       }
                     }).filter(u => {
@@ -706,7 +643,7 @@ export default function SupremeAdminDashboard() {
                       return (
                         <div className="text-center py-12 text-slate-400 text-xs">
                           <span className="material-symbols-outlined text-3xl mb-1 block">search_off</span>
-                          No directory records found.
+                          {t('common.noData')}
                         </div>
                       );
                     }
@@ -739,7 +676,7 @@ export default function SupremeAdminDashboard() {
                           
                           {viewingList === 'workers' && (
                             <span className="text-[9px] font-bold bg-surface-container-high px-2 py-0.5 rounded text-on-surface-variant truncate max-w-[80px]">
-                              {item.skill || item.profession}
+                              {tSkill(item.skill || item.profession)}
                             </span>
                           )}
                         </div>
@@ -778,7 +715,7 @@ export default function SupremeAdminDashboard() {
                         <h4 className="text-lg font-black text-slate-800 dark:text-slate-100">{selectedListItem.name}</h4>
                         <div className="flex items-center gap-2 mt-1.5">
                           <span className="text-[10px] font-extrabold uppercase bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 px-2 py-0.5 rounded">
-                            {selectedListItem.role}
+                            {tRole(selectedListItem.role)}
                           </span>
                           <span className={`text-[9px] font-bold uppercase px-2 py-0.5 rounded ${
                             selectedListItem.status === 'active' 
@@ -787,7 +724,7 @@ export default function SupremeAdminDashboard() {
                               ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-950/80 dark:text-yellow-300'
                               : 'bg-red-100 text-red-800 dark:bg-red-950/80 dark:text-red-300'
                           }`}>
-                            {selectedListItem.status}
+                            {tStatus(selectedListItem.status)}
                           </span>
                         </div>
                       </div>
@@ -796,86 +733,36 @@ export default function SupremeAdminDashboard() {
                     {/* Profile Fields Grid */}
                     <div className="grid grid-cols-2 gap-4 text-xs text-left">
                       <div>
-                        <span className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider block">Email Address</span>
+                        <span className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider block">{t('auth.emailLabel')}</span>
                         <span className="font-semibold text-slate-800 dark:text-slate-200 block mt-0.5 select-all">{selectedListItem.email}</span>
                       </div>
                       <div>
-                        <span className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider block">Mobile Number</span>
+                        <span className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider block">{t('auth.phoneLabel')}</span>
                         <span className="font-semibold text-slate-800 dark:text-slate-200 block mt-0.5 select-all">{selectedListItem.mobile || selectedListItem.phone || 'N/A'}</span>
                       </div>
                       
                       {viewingList === 'workers' && (
                         <>
                           <div>
-                            <span className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider block">Age / Gender</span>
+                            <span className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider block">{t('workerAuth.experienceLabel')}</span>
                             <span className="font-semibold text-slate-800 dark:text-slate-200 block mt-0.5">
-                              {selectedListItem.age ? `${selectedListItem.age} years` : 'Not specified'} / {selectedListItem.gender || 'Not specified'}
+                              {selectedListItem.experience || 0} {t('common.yrsExp')}
                             </span>
                           </div>
                           <div>
-                            <span className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider block">Profession Category</span>
+                            <span className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider block">{t('workersPage.skillLabel')}</span>
                             <span className="font-semibold text-slate-800 dark:text-slate-200 block mt-0.5">
-                              {selectedListItem.profession || selectedListItem.skill || 'Technician'}
+                              {tSkill(selectedListItem.profession || selectedListItem.skill || 'Technician')}
                             </span>
                           </div>
                         </>
                       )}
 
                       <div className="col-span-2">
-                        <span className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider block">Location Address</span>
+                        <span className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider block">{t('auth.addressLabel')}</span>
                         <span className="font-semibold text-slate-800 dark:text-slate-200 block mt-0.5">{selectedListItem.formattedAddress || selectedListItem.address || 'N/A'}</span>
                       </div>
                     </div>
-
-                    {/* Document Scans (Workers only) */}
-                    {viewingList === 'workers' && (
-                      <div className="border-t border-slate-100 dark:border-slate-800/80 pt-5 space-y-4">
-                        <h5 className="font-bold text-xs uppercase text-slate-400 dark:text-slate-500 tracking-wider text-left">
-                          Identity Documents Scans
-                        </h5>
-                        <div className="grid grid-cols-2 gap-4">
-                          <div className="border border-slate-100 dark:border-slate-800 p-4 rounded-xl bg-slate-50/50 dark:bg-slate-950/30 flex flex-col justify-between">
-                            <span className="font-bold text-slate-700 dark:text-slate-350 text-xs text-left block">Aadhaar Card</span>
-                            {selectedListItem.aadhaarCard || selectedListItem.verificationDocument ? (
-                              <a
-                                href={
-                                  (selectedListItem.aadhaarCard || selectedListItem.verificationDocument).startsWith('http')
-                                    ? (selectedListItem.aadhaarCard || selectedListItem.verificationDocument)
-                                    : `http://localhost:5000${selectedListItem.aadhaarCard || selectedListItem.verificationDocument}`
-                                }
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="mt-3 py-1.5 px-3 bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-bold rounded-lg text-center shadow transition-all flex items-center justify-center gap-1 cursor-pointer"
-                              >
-                                Open Aadhaar
-                              </a>
-                            ) : (
-                              <span className="text-[10px] font-semibold text-red-500 mt-3 block text-left">No Document Scan</span>
-                            )}
-                          </div>
-                          
-                          <div className="border border-slate-100 dark:border-slate-800 p-4 rounded-xl bg-slate-50/50 dark:bg-slate-950/30 flex flex-col justify-between">
-                            <span className="font-bold text-slate-700 dark:text-slate-350 text-xs text-left block">PAN Card</span>
-                            {selectedListItem.panCard ? (
-                              <a
-                                href={
-                                  selectedListItem.panCard.startsWith('http')
-                                    ? selectedListItem.panCard
-                                    : `http://localhost:5000${selectedListItem.panCard}`
-                                }
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="mt-3 py-1.5 px-3 bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-bold rounded-lg text-center shadow transition-all flex items-center justify-center gap-1 cursor-pointer"
-                              >
-                                Open PAN Card
-                              </a>
-                            ) : (
-                              <span className="text-[10px] font-semibold text-red-500 mt-3 block text-left">No Document Scan</span>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    )}
 
                     {/* Moderation Controls inside Directory */}
                     <div className="border-t border-slate-100 dark:border-slate-800/80 pt-5 flex justify-end gap-2">
@@ -884,12 +771,11 @@ export default function SupremeAdminDashboard() {
                           type="button"
                           onClick={async () => {
                             await suspendUser(selectedListItem._id);
-                            // Refresh local selected state
                             setSelectedListItem(prev => ({ ...prev, status: 'suspended' }));
                           }}
                           className="py-2 px-4 bg-yellow-500 hover:bg-yellow-600 text-white text-xs font-bold rounded-xl transition-all cursor-pointer"
                         >
-                          Suspend Account
+                          {t('supremeAdmin.suspendUser')}
                         </button>
                       ) : selectedListItem.status === 'suspended' ? (
                         <button
@@ -900,29 +786,16 @@ export default function SupremeAdminDashboard() {
                           }}
                           className="py-2 px-4 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl transition-all cursor-pointer"
                         >
-                          Restore Account
+                          {t('supremeAdmin.restoreUser')}
                         </button>
                       ) : null}
-                      
-                      <button
-                        type="button"
-                        onClick={async () => {
-                          if (confirm(`Are you sure you want to permanently delete the profile of ${selectedListItem.name}?`)) {
-                            await deleteUser(selectedListItem._id);
-                            setSelectedListItem(null);
-                          }
-                        }}
-                        className="py-2 px-4 border border-red-500/30 text-red-650 hover:bg-red-50 dark:hover:bg-red-950/20 text-xs font-bold rounded-xl transition-all cursor-pointer"
-                      >
-                        Delete Profile
-                      </button>
                     </div>
 
                   </div>
                 ) : (
                   <div className="flex-1 flex flex-col items-center justify-center text-slate-400">
                     <span className="material-symbols-outlined text-5xl mb-2 text-slate-300 dark:text-slate-700">account_circle</span>
-                    <p className="text-xs font-medium">Select an account from the left directory list to view full profile details and document records.</p>
+                    <p className="text-xs font-medium">{t('adminDashboard.viewDetails')}</p>
                   </div>
                 )}
               </div>

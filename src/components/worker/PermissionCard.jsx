@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, ShieldAlert } from 'lucide-react';
+import { Check } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function PermissionCard({
   title,
@@ -11,6 +12,8 @@ export default function PermissionCard({
   buttonText,
   loading = false,
 }) {
+  const { t } = useLanguage();
+
   return (
     <motion.div
       whileHover={{ y: -4, transition: { duration: 0.2 } }}
@@ -42,7 +45,7 @@ export default function PermissionCard({
                   exit={{ scale: 0 }}
                   className="bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider"
                 >
-                  Granted
+                  {t('common.active')}
                 </motion.span>
               )}
             </AnimatePresence>
@@ -57,7 +60,7 @@ export default function PermissionCard({
         {isGranted ? (
           <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 text-sm font-bold bg-emerald-50 dark:bg-emerald-500/10 py-2 px-4 rounded-xl border border-emerald-500/15">
             <Check size={16} />
-            Permission Active
+            {t('common.verified')}
           </div>
         ) : (
           <button
@@ -69,7 +72,7 @@ export default function PermissionCard({
             {loading ? (
               <>
                 <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                Requesting...
+                {t('common.loading')}
               </>
             ) : (
               <>

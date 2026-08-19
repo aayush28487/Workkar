@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useWorkkar } from '../context/WorkkarContext';
+import { useLanguage } from '../context/LanguageContext';
 
 export default function WorkerDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { workers, bookWorker } = useWorkkar();
+  const { t, tSkill, tAvailability } = useLanguage();
 
   // Find worker details
   const worker = workers.find(w => w.id === id);
@@ -22,9 +24,9 @@ export default function WorkerDetails() {
     return (
       <div className="py-20 text-center text-on-surface-variant bg-background min-h-screen">
         <span className="material-symbols-outlined text-4xl mb-2">error</span>
-        <h2 className="font-bold text-lg">Worker Not Found</h2>
+        <h2 className="font-bold text-lg">{t('workersPage.noWorkersFound')}</h2>
         <button onClick={() => navigate('/workers')} className="mt-4 text-primary hover:underline font-semibold text-xs">
-          Back to Directory
+          {t('workerDetails.backToWorkers')}
         </button>
       </div>
     );
@@ -50,6 +52,8 @@ export default function WorkerDetails() {
     }
   };
 
+  const translatedSkill = worker.skillTitle ? tSkill(worker.skillTitle) : `${tSkill(worker.skill)} ${t('skills.Specialist')}`;
+
   return (
     <div className="bg-background min-h-screen py-12">
       <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop grid grid-cols-1 lg:grid-cols-12 gap-gutter">
@@ -63,7 +67,7 @@ export default function WorkerDetails() {
             className="flex items-center gap-1 text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-white transition-colors text-xs font-bold self-start active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-blue-400 rounded px-2 py-1"
           >
             <span className="material-symbols-outlined text-[16px]">arrow_back</span>
-            Back to Directory
+            {t('workerDetails.backToWorkers')}
           </button>
 
           {/* Profile Card details */}
@@ -87,7 +91,7 @@ export default function WorkerDetails() {
                     {worker.name}
                   </h1>
                   {worker.verified && (
-                    <span className="material-symbols-outlined text-green-600 text-[20px] fill" title="Verified Worker">
+                    <span className="material-symbols-outlined text-green-600 text-[20px] fill" title={t('workerDetails.verifiedBadge')}>
                       verified
                     </span>
                   )}
@@ -96,32 +100,34 @@ export default function WorkerDetails() {
                       ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 dark:border dark:border-emerald-800/40' 
                       : 'bg-orange-100 text-orange-800 dark:bg-orange-950/80 dark:text-orange-300 dark:border dark:border-orange-800/40'
                   }`}>
-                    {worker.availability}
+                    {tAvailability(worker.availability)}
                   </span>
                 </div>
                 
                 <p className="font-title-md text-title-md text-on-surface-variant font-medium">
-                  {worker.skillTitle || `${worker.skill} Specialist`}
+                  {translatedSkill}
                 </p>
                 
                 <div className="flex items-center gap-4 flex-wrap text-xs font-semibold text-on-surface-variant mt-2">
                   <span className="flex items-center gap-1 bg-surface-container-high px-2.5 py-1 rounded-full">
                     <span className="material-symbols-outlined text-[14px] text-secondary-container fill">star</span>
-                    {worker.rating ? worker.rating.toFixed(1) : 'New'} Rating
+                    {worker.rating ? worker.rating.toFixed(1) : t('common.new')} {t('common.rating')}
                   </span>
                   <span className="flex items-center gap-1 bg-surface-container-high px-2.5 py-1 rounded-full">
                     <span className="material-symbols-outlined text-[14px] text-outline">work</span>
-                    {worker.experience} Years Experience
+                    {t('workerDetails.experienceYears', { count: worker.experience })}
                   </span>
                   <span className="flex items-center gap-1 bg-surface-container-high px-2.5 py-1 rounded-full text-primary font-bold">
-                    ${worker.rate}/Hour Rate
+                    ${worker.rate}{t('common.perHr')}
                   </span>
                 </div>
               </div>
             </div>
 
             <div className="border-t border-outline-variant/20 pt-6 mt-6">
-              <h3 className="font-bold text-sm text-on-surface uppercase tracking-wider mb-2">About {worker.name.split(' ')[0]}</h3>
+              <h3 className="font-bold text-sm text-on-surface uppercase tracking-wider mb-2">
+                {t('workerDetails.aboutWorker')}
+              </h3>
               <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
                 {worker.description}
               </p>
@@ -131,13 +137,13 @@ export default function WorkerDetails() {
           {/* Reviews List */}
           <section className="bg-surface-container-lowest rounded-xl border border-outline-variant/30 ambient-shadow-base p-6">
             <h3 className="font-bold text-sm text-on-surface uppercase tracking-wider mb-4 border-b border-outline-variant/20 pb-3">
-              Customer Reviews ({worker.reviews.length})
+              {t('workerDetails.customerReviews')} ({worker.reviews.length})
             </h3>
             
             {worker.reviews.length === 0 ? (
               <div className="p-8 text-center text-on-surface-variant text-sm">
                 <span className="material-symbols-outlined text-3xl text-outline mb-1 block">chat_bubble_outline</span>
-                No reviews yet for this worker. Be the first to book and rate!
+                {t('workerDetails.noReviewsYet')}
               </div>
             ) : (
               <div className="flex flex-col gap-4">
@@ -179,40 +185,34 @@ export default function WorkerDetails() {
                 <div className="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center">
                   <span className="material-symbols-outlined text-3xl fill">check_circle</span>
                 </div>
-                <h3 className="font-bold text-headline-sm text-on-surface">Booking Successful!</h3>
+                <h3 className="font-bold text-headline-sm text-on-surface">{t('modals.bookingSuccess')}</h3>
                 <p className="font-body-md text-body-md text-on-surface-variant text-xs px-2 leading-relaxed">
-                  Your booking request has been dispatched. {worker.name} has received a live alert notification on their app.
+                  {t('modals.bookWorkerSubtitle')}
                 </p>
                 <div className="flex flex-col gap-2 w-full mt-4">
                   <button
                     onClick={() => navigate('/dashboard')}
                     className="w-full py-2.5 bg-primary text-on-primary rounded-lg font-label-md text-label-md hover:bg-primary/95 transition-all font-bold text-sm shadow active:scale-95 cursor-pointer"
                   >
-                    Track Request on Dashboard
-                  </button>
-                  <button
-                    onClick={() => navigate('/worker/dashboard')}
-                    className="w-full py-2 border border-outline-variant/60 text-on-surface-variant hover:bg-surface-container rounded-lg font-bold text-xs transition-colors cursor-pointer"
-                  >
-                    Open Worker Companion (Demo)
+                    {t('customerDashboard.tabActiveBookings')}
                   </button>
                   <button
                     onClick={() => setIsBooked(false)}
                     className="w-full py-2 border border-outline text-on-surface rounded-lg font-label-md text-label-md hover:bg-surface-container transition-colors text-xs cursor-pointer"
                   >
-                    Book Again
+                    {t('customerDashboard.rebook')}
                   </button>
                 </div>
               </motion.div>
             ) : (
               <>
                 <h3 className="font-bold text-sm text-on-surface uppercase tracking-wider mb-4 border-b border-outline-variant/20 pb-3">
-                  Book Service
+                  {t('modals.bookWorkerTitle', { name: worker.name })}
                 </h3>
 
                 <form onSubmit={handleBookingSubmit} className="flex flex-col gap-4">
                   <div className="flex flex-col gap-1">
-                    <label className="font-semibold text-xs text-on-surface-variant">Scheduled Date</label>
+                    <label className="font-semibold text-xs text-on-surface-variant">{t('modals.serviceDate')}</label>
                     <input 
                       required
                       value={bookingDate}
@@ -223,7 +223,7 @@ export default function WorkerDetails() {
                   </div>
 
                   <div className="flex flex-col gap-1">
-                    <label className="font-semibold text-xs text-on-surface-variant">Preferred Time</label>
+                    <label className="font-semibold text-xs text-on-surface-variant">{t('modals.serviceTime')}</label>
                     <input 
                       required
                       value={bookingTime}
@@ -234,25 +234,25 @@ export default function WorkerDetails() {
                   </div>
 
                   <div className="flex flex-col gap-1">
-                    <label className="font-semibold text-xs text-on-surface-variant">Service Address</label>
+                    <label className="font-semibold text-xs text-on-surface-variant">{t('modals.serviceAddress')}</label>
                     <input 
                       required
                       value={bookingAddress}
                       onChange={(e) => setBookingAddress(e.target.value)}
-                      placeholder="e.g. 1428 Elm Street, Springfield"
+                      placeholder={t('auth.addressPlaceholder')}
                       type="text" 
                       className="w-full bg-surface border border-outline-variant/60 rounded-lg px-3 py-2 text-on-surface focus:outline-none focus:border-primary text-xs"
                     />
                   </div>
 
                   <div className="flex flex-col gap-1">
-                    <label className="font-semibold text-xs text-on-surface-variant">Task Description</label>
+                    <label className="font-semibold text-xs text-on-surface-variant">{t('modals.jobDetails')}</label>
                     <textarea 
                       required
                       rows={3}
                       value={bookingDesc}
                       onChange={(e) => setBookingDesc(e.target.value)}
-                      placeholder="Describe the job (e.g., install new living room shelves)..."
+                      placeholder={t('modals.jobDetailsPlaceholder')}
                       className="w-full bg-surface border border-outline-variant/60 rounded-lg px-3 py-2 text-on-surface focus:outline-none focus:border-primary text-xs resize-none"
                     />
                   </div>
@@ -264,7 +264,7 @@ export default function WorkerDetails() {
                       worker.availability === 'Offline' ? 'opacity-40 cursor-not-allowed' : 'hover:bg-primary/90'
                     }`}
                   >
-                    {worker.availability === 'Offline' ? 'Worker Offline' : 'Confirm Instant Booking'}
+                    {worker.availability === 'Offline' ? t('common.offline') : t('modals.confirmBookingBtn')}
                   </button>
                 </form>
               </>

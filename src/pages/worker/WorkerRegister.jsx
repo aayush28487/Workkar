@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Mail, Phone, Lock, UserPlus, Eye, EyeOff } from 'lucide-react';
 import { registerWorkerApi } from '../../services/workerApi';
 import { useWorkkar } from '../../context/WorkkarContext';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function WorkerRegister() {
   const [email, setEmail] = useState('');
@@ -18,29 +19,30 @@ export default function WorkerRegister() {
 
   const navigate = useNavigate();
   const { setWorkerToken } = useWorkkar();
+  const { t } = useLanguage();
 
   const validate = () => {
     const errors = {};
     if (!email) {
-      errors.email = 'Email is required';
+      errors.email = t('auth.emailLabel') + ' ' + t('common.loading');
     } else if (!/\S+@\S+\.\S+/.test(email)) {
-      errors.email = 'Please enter a valid email address';
+      errors.email = t('auth.emailPlaceholder');
     }
 
     if (!mobile) {
-      errors.mobile = 'Mobile number is required';
+      errors.mobile = t('auth.phoneLabel');
     } else if (!/^\d{10}$/.test(mobile)) {
-      errors.mobile = 'Mobile number must be exactly 10 digits';
+      errors.mobile = t('auth.phonePlaceholder');
     }
 
     if (!password) {
-      errors.password = 'Password is required';
+      errors.password = t('auth.passwordLabel');
     } else if (password.length < 8) {
-      errors.password = 'Password must be at least 8 characters long';
+      errors.password = t('auth.passwordPlaceholder');
     }
 
     if (password !== confirmPassword) {
-      errors.confirmPassword = 'Passwords do not match';
+      errors.confirmPassword = t('auth.passwordPlaceholder');
     }
 
     setFieldErrors(errors);
@@ -71,7 +73,7 @@ export default function WorkerRegister() {
         setFieldErrors(err.response.data.errors);
       } else {
         setGeneralError(
-          err.response?.data?.message || 'Registration failed. Please try again.'
+          err.response?.data?.message || t('auth.invalidCredentials')
         );
       }
     } finally {
@@ -91,10 +93,10 @@ export default function WorkerRegister() {
             W
           </div>
           <h2 className="text-center text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-            Register as a Partner
+            {t('workerAuth.registerTitle')}
           </h2>
           <p className="mt-2 text-center text-sm text-slate-500 dark:text-slate-400">
-            Join WORKKAR network and get nearby service requests
+            {t('workerAuth.registerSubtitle')}
           </p>
         </motion.div>
       </div>
@@ -120,7 +122,7 @@ export default function WorkerRegister() {
             {/* Email */}
             <div>
               <label className="block text-sm font-bold text-slate-700 dark:text-slate-300">
-                Email Address
+                {t('auth.emailLabel')}
               </label>
               <div className="mt-1.5 relative rounded-xl shadow-sm">
                 <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 dark:text-slate-500">
@@ -129,7 +131,7 @@ export default function WorkerRegister() {
                 <input
                   type="email"
                   required
-                  placeholder="name@example.com"
+                  placeholder={t('auth.emailPlaceholder')}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className={`block w-full pl-10 pr-3 py-3 border ${
@@ -149,7 +151,7 @@ export default function WorkerRegister() {
             {/* Mobile Number */}
             <div>
               <label className="block text-sm font-bold text-slate-700 dark:text-slate-300">
-                Mobile Number
+                {t('auth.phoneLabel')}
               </label>
               <div className="mt-1.5 relative rounded-xl shadow-sm">
                 <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 dark:text-slate-500">
@@ -158,7 +160,7 @@ export default function WorkerRegister() {
                 <input
                   type="tel"
                   required
-                  placeholder="10-digit mobile number"
+                  placeholder={t('auth.phonePlaceholder')}
                   value={mobile}
                   onChange={(e) => setMobile(e.target.value)}
                   className={`block w-full pl-10 pr-3 py-3 border ${
@@ -178,7 +180,7 @@ export default function WorkerRegister() {
             {/* Password */}
             <div>
               <label className="block text-sm font-bold text-slate-700 dark:text-slate-300">
-                Password
+                {t('auth.passwordLabel')}
               </label>
               <div className="mt-1.5 relative rounded-xl shadow-sm">
                 <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 dark:text-slate-500">
@@ -187,7 +189,7 @@ export default function WorkerRegister() {
                 <input
                   type={showPassword ? 'text' : 'password'}
                   required
-                  placeholder="Minimum 8 characters"
+                  placeholder={t('auth.passwordPlaceholder')}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className={`block w-full pl-10 pr-10 py-3 border ${
@@ -214,7 +216,7 @@ export default function WorkerRegister() {
             {/* Confirm Password */}
             <div>
               <label className="block text-sm font-bold text-slate-700 dark:text-slate-300">
-                Confirm Password
+                {t('auth.passwordLabel')} ({t('common.confirm')})
               </label>
               <div className="mt-1.5 relative rounded-xl shadow-sm">
                 <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 dark:text-slate-500">
@@ -223,7 +225,7 @@ export default function WorkerRegister() {
                 <input
                   type={showConfirmPassword ? 'text' : 'password'}
                   required
-                  placeholder="Re-enter password"
+                  placeholder={t('auth.passwordPlaceholder')}
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   className={`block w-full pl-10 pr-10 py-3 border ${
@@ -259,12 +261,12 @@ export default function WorkerRegister() {
                 {loading ? (
                   <>
                     <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    Creating account...
+                    {t('common.loading')}
                   </>
                 ) : (
                   <>
                     <UserPlus size={18} />
-                    Register
+                    {t('auth.registerSubmit')}
                   </>
                 )}
               </motion.button>
@@ -278,7 +280,7 @@ export default function WorkerRegister() {
               </div>
               <div className="relative flex justify-center text-xs">
                 <span className="px-3 bg-white dark:bg-slate-900 text-slate-500 dark:text-slate-400 font-semibold">
-                  Already have an account?
+                  {t('auth.hasAccount')}
                 </span>
               </div>
             </div>
@@ -288,7 +290,7 @@ export default function WorkerRegister() {
                 to="/worker/login"
                 className="inline-flex items-center justify-center px-4 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors w-full"
               >
-                Sign In Instead
+                {t('auth.loginSubmit')}
               </Link>
             </div>
           </div>

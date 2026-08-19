@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useWorkkar } from '../context/WorkkarContext';
+import { useLanguage } from '../context/LanguageContext';
 import DashboardCard from '../components/DashboardCard';
 
 export default function AdminDashboard() {
@@ -19,6 +20,7 @@ export default function AdminDashboard() {
     analytics,
     addNotification
   } = useWorkkar();
+  const { t, tRole, tStatus, tSkill } = useLanguage();
 
   useEffect(() => {
     fetchDbUsers();
@@ -41,10 +43,10 @@ export default function AdminDashboard() {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-stack-md">
         <div>
           <h2 className="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface font-extrabold leading-none">
-            Welcome back, Coordinator
+            {t('adminDashboard.welcome')}
           </h2>
           <p className="font-body-md text-sm text-on-surface-variant mt-1.5">
-            Here is what is happening with the WORKKAR platform dispatch pipeline today.
+            {t('adminDashboard.subtitle')}
           </p>
         </div>
       </div>
@@ -53,7 +55,7 @@ export default function AdminDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-stack-md">
         <DashboardCard
           icon="payments"
-          title="Total Revenue"
+          title={t('adminDashboard.statsTotalRevenue')}
           value={totalRevenue}
           trend="+12.5%"
           trendType="positive"
@@ -62,7 +64,7 @@ export default function AdminDashboard() {
         />
         <DashboardCard
           icon="work_history"
-          title="Job Requests"
+          title={t('adminDashboard.statsActiveBookings')}
           value={jobRequests}
           trend="+5.2%"
           trendType="positive"
@@ -71,21 +73,21 @@ export default function AdminDashboard() {
         />
         <DashboardCard
           icon="engineering"
-          title="Active Workers"
+          title={t('adminDashboard.statsTotalWorkers')}
           value={activeWorkersCount}
-          trend="Online"
+          trend={t('common.online')}
           trendType="neutral"
-          footerLabel="Available for dispatch"
+          footerLabel={t('common.available')}
           largeIcon="engineering"
         />
         <DashboardCard
           icon="pending_actions"
           iconBg="bg-error-container text-on-error-container"
-          title="Verifications"
+          title={t('adminDashboard.tabVerifications')}
           value={pendingApprovalsCount}
           trend={pendingApprovalsCount > 0 ? "Action Required" : "All Clear"}
           trendType={pendingApprovalsCount > 0 ? "negative" : "neutral"}
-          footerLabel="Pending registrations"
+          footerLabel={t('common.pending')}
           largeIcon="pending_actions"
         />
       </div>
@@ -99,7 +101,7 @@ export default function AdminDashboard() {
             
             <div className="p-stack-md border-b border-outline-variant/30 flex justify-between items-center bg-surface/50">
               <h3 className="font-title-md text-sm text-on-surface font-bold uppercase tracking-wider">
-                Worker Verification Queue
+                {t('adminDashboard.tabVerifications')}
               </h3>
             </div>
 
@@ -107,10 +109,10 @@ export default function AdminDashboard() {
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="bg-surface border-b border-outline-variant/20 text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">
-                    <th className="p-3">Worker Name</th>
-                    <th className="p-3">Trade/Skill</th>
-                    <th className="p-3">Submission</th>
-                    <th className="p-3 text-right">Actions</th>
+                    <th className="p-3">{t('common.worker')}</th>
+                    <th className="p-3">{t('workersPage.skillLabel')}</th>
+                    <th className="p-3">{t('common.date')}</th>
+                    <th className="p-3 text-right">{t('common.actions')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-outline-variant/10">
@@ -120,8 +122,8 @@ export default function AdminDashboard() {
                         <span className="material-symbols-outlined text-4xl text-outline mb-2 block fill text-emerald-600">
                           check_circle
                         </span>
-                        <p className="font-bold">Queue Empty</p>
-                        <p className="text-xs text-outline mt-0.5">All registered workers are verified.</p>
+                        <p className="font-bold">{t('common.verified')}</p>
+                        <p className="text-xs text-outline mt-0.5">{t('common.noData')}</p>
                       </td>
                     </tr>
                   ) : (
@@ -136,27 +138,27 @@ export default function AdminDashboard() {
                           </div>
                           <span className="font-bold text-on-surface">{worker.name}</span>
                         </td>
-                        <td className="p-3 text-on-surface-variant">{worker.skill}</td>
+                        <td className="p-3 text-on-surface-variant">{tSkill(worker.skill)}</td>
                         <td className="p-3 text-on-surface-variant">{worker.time}</td>
                         <td className="p-3 text-right flex justify-end gap-1.5">
                           <button 
                             onClick={() => setSelectedWorker(worker)}
                             className="text-primary hover:bg-primary-container hover:text-on-primary-container dark:text-blue-400 dark:hover:bg-blue-950/50 p-1.5 rounded-full transition-colors flex items-center justify-center cursor-pointer" 
-                            title="Review Uploaded Documents"
+                            title={t('adminDashboard.viewDetails')}
                           >
                             <span className="material-symbols-outlined text-[18px]">visibility</span>
                           </button>
                           <button 
                             onClick={() => approveWorker(worker.id)}
-                            className="text-emerald-600 hover:bg-emerald-50 dark:text-emerald-400 dark:hover:bg-emerald-950/40 p-1.5 rounded-full transition-colors flex items-center justify-center" 
-                            title="Approve Worker"
+                            className="text-emerald-600 hover:bg-emerald-50 dark:text-emerald-400 dark:hover:bg-emerald-950/40 p-1.5 rounded-full transition-colors flex items-center justify-center cursor-pointer" 
+                            title={t('adminDashboard.approveBtn')}
                           >
                             <span className="material-symbols-outlined text-[18px] fill">check_circle</span>
                           </button>
                           <button 
                             onClick={() => rejectWorker(worker.id)}
-                            className="text-error hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-950/40 p-1.5 rounded-full transition-colors flex items-center justify-center" 
-                            title="Reject & Delete Registration"
+                            className="text-error hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-950/40 p-1.5 rounded-full transition-colors flex items-center justify-center cursor-pointer" 
+                            title={t('adminDashboard.rejectBtn')}
                           >
                             <span className="material-symbols-outlined text-[18px] fill">cancel</span>
                           </button>
@@ -177,13 +179,13 @@ export default function AdminDashboard() {
             <div>
               <div className="p-stack-md border-b border-outline-variant/30 flex justify-between items-center bg-surface/50">
                 <h3 className="font-title-md text-sm text-on-surface font-bold uppercase tracking-wider">
-                  Recent Dispatches
+                  {t('adminDashboard.tabDispatches')}
                 </h3>
               </div>
 
               <div className="p-4 flex flex-col gap-3 max-h-[360px] overflow-y-auto pr-1">
                 {assignments.length === 0 ? (
-                  <p className="text-xs text-on-surface-variant text-center py-6">No active dispatches right now.</p>
+                  <p className="text-xs text-on-surface-variant text-center py-6">{t('common.noData')}</p>
                 ) : (
                   assignments.map((job) => {
                     let statusStyle = 'bg-slate-100 text-slate-800 dark:bg-slate-900/80 dark:text-slate-300 dark:border dark:border-slate-800/40';
@@ -203,10 +205,10 @@ export default function AdminDashboard() {
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="font-bold text-xs text-on-surface truncate">{job.title}</p>
-                          <p className="text-[10px] text-on-surface-variant mt-0.5 truncate">Assigned to: {job.worker}</p>
+                          <p className="text-[10px] text-on-surface-variant mt-0.5 truncate">{t('common.worker')}: {job.worker}</p>
                         </div>
                         <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap uppercase tracking-wider ${statusStyle}`}>
-                          {job.status}
+                          {tStatus(job.status)}
                         </span>
                       </div>
                     );
@@ -218,9 +220,9 @@ export default function AdminDashboard() {
             <div className="p-3 border-t border-outline-variant/30 text-center bg-surface/30">
               <button 
                 onClick={() => addNotification("Dispatch logs database query is synced.", 'success')}
-                className="text-primary hover:text-primary/90 hover:underline dark:text-blue-400 dark:hover:text-blue-300 font-bold text-xs transition-colors w-full"
+                className="text-primary hover:text-primary/90 hover:underline dark:text-blue-400 dark:hover:text-blue-300 font-bold text-xs transition-colors w-full cursor-pointer"
               >
-                View Full Dispatch History
+                {t('adminDashboard.tabDispatches')}
               </button>
             </div>
 
@@ -234,7 +236,7 @@ export default function AdminDashboard() {
         
         <div className="p-stack-md border-b border-outline-variant/30 bg-surface/50">
           <h3 className="font-title-md text-sm text-on-surface font-bold uppercase tracking-wider">
-            User Management & Moderation
+            {t('adminDashboard.tabUsers')}
           </h3>
         </div>
 
@@ -242,18 +244,18 @@ export default function AdminDashboard() {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-surface border-b border-outline-variant/20 text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">
-                <th className="p-3">User</th>
-                <th className="p-3">Email</th>
-                <th className="p-3">Role</th>
-                <th className="p-3">Status</th>
-                <th className="p-3 text-right">Moderation Actions</th>
+                <th className="p-3">{t('common.name')}</th>
+                <th className="p-3">{t('auth.emailLabel')}</th>
+                <th className="p-3">{t('common.role')}</th>
+                <th className="p-3">{t('common.status')}</th>
+                <th className="p-3 text-right">{t('common.actions')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-outline-variant/10 text-xs">
               {moderationUsers.length === 0 ? (
                 <tr>
                   <td colSpan="5" className="p-12 text-center text-on-surface-variant text-sm">
-                    No users registered.
+                    {t('common.noData')}
                   </td>
                 </tr>
               ) : (
@@ -273,12 +275,12 @@ export default function AdminDashboard() {
                       <td className="p-3 text-on-surface-variant">{u.email}</td>
                       <td className="p-3">
                         <span className="font-semibold uppercase text-[9px] tracking-wider bg-surface-container-high px-2 py-0.5 rounded">
-                          {u.role}
+                          {tRole(u.role)}
                         </span>
                       </td>
                       <td className="p-3">
                         <span className={`font-bold uppercase text-[8px] px-1.5 py-0.5 rounded tracking-wide ${statusBadgeColor}`}>
-                          {u.status}
+                          {tStatus(u.status)}
                         </span>
                       </td>
                       <td className="p-3 text-right">
@@ -308,7 +310,7 @@ export default function AdminDashboard() {
                             }}
                             className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-[10px] uppercase px-3 py-1 rounded transition-colors active:scale-95 mr-2 cursor-pointer"
                           >
-                            View Profile
+                            {t('adminDashboard.viewDetails')}
                           </button>
                         )}
                         {u.status === 'active' ? (
@@ -316,14 +318,14 @@ export default function AdminDashboard() {
                             onClick={() => suspendUser(u._id)}
                             className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold text-[10px] uppercase px-3 py-1 rounded transition-colors active:scale-95 cursor-pointer"
                           >
-                            Suspend
+                            {t('supremeAdmin.suspendUser')}
                           </button>
                         ) : u.status === 'suspended' ? (
                           <button
                             onClick={() => restoreUser(u._id)}
                             className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[10px] uppercase px-3 py-1 rounded transition-colors active:scale-95 cursor-pointer"
                           >
-                            Restore
+                            {t('supremeAdmin.restoreUser')}
                           </button>
                         ) : (
                           <span className="text-on-surface-variant font-medium text-[10px]">Restricted</span>
@@ -367,7 +369,7 @@ export default function AdminDashboard() {
                     {selectedWorker.name}
                   </h3>
                   <span className="inline-block text-[10px] font-extrabold uppercase bg-blue-100 dark:bg-slate-800/80 text-blue-700 dark:text-blue-400 px-2.5 py-1.5 rounded-full mt-1.5">
-                    {selectedWorker.skill}
+                    {tSkill(selectedWorker.skill)}
                   </span>
                 </div>
               </div>
@@ -385,89 +387,28 @@ export default function AdminDashboard() {
               {/* Profile Details Grid */}
               <div className="grid grid-cols-2 gap-4 text-xs">
                 <div>
-                  <span className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider block">Email Address</span>
+                  <span className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider block">{t('auth.emailLabel')}</span>
                   <span className="font-semibold text-slate-800 dark:text-slate-200 block text-sm mt-0.5 select-all">{selectedWorker.email}</span>
                 </div>
                 <div>
-                  <span className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider block">Mobile Number</span>
+                  <span className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider block">{t('auth.phoneLabel')}</span>
                   <span className="font-semibold text-slate-800 dark:text-slate-200 block text-sm mt-0.5 select-all">{selectedWorker.mobile}</span>
                 </div>
                 <div>
-                  <span className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider block font-bold">Age / Gender</span>
-                  <span className="font-semibold text-slate-800 dark:text-slate-200 block text-sm mt-0.5">
-                    {selectedWorker.age ? `${selectedWorker.age} years` : 'Not specified'} / {selectedWorker.gender || 'Not specified'}
-                  </span>
+                  <span className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider block font-bold">{t('workerAuth.experienceLabel')}</span>
+                  <span className="font-semibold text-slate-800 dark:text-slate-200 block text-sm mt-0.5">{selectedWorker.experience} {t('common.yrsExp')}</span>
                 </div>
                 <div>
-                  <span className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider block font-bold">Profession Category</span>
-                  <span className="font-semibold text-slate-800 dark:text-slate-200 block text-sm mt-0.5">{selectedWorker.profession || selectedWorker.skill}</span>
-                </div>
-                <div>
-                  <span className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider block font-bold">Experience Time</span>
-                  <span className="font-semibold text-slate-800 dark:text-slate-200 block text-sm mt-0.5">{selectedWorker.experience} Years</span>
-                </div>
-                <div>
-                  <span className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider block font-bold">Hourly Rate</span>
-                  <span className="font-semibold text-slate-800 dark:text-slate-200 block text-sm mt-0.5">${selectedWorker.rate}/hr</span>
+                  <span className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider block font-bold">{t('workerAuth.hourlyRateLabel')}</span>
+                  <span className="font-semibold text-slate-800 dark:text-slate-200 block text-sm mt-0.5">${selectedWorker.rate}{t('common.perHr')}</span>
                 </div>
                 <div className="col-span-2">
-                  <span className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider block font-bold">Verified Location Coordinates</span>
+                  <span className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider block font-bold">{t('auth.addressLabel')}</span>
                   <span className="font-semibold text-slate-800 dark:text-slate-200 block text-sm mt-0.5">{selectedWorker.formattedAddress}</span>
                 </div>
                 <div className="col-span-2">
-                  <span className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider block font-bold">About / Bio</span>
-                  <p className="font-semibold text-slate-800 dark:text-slate-200 text-sm mt-0.5 leading-relaxed whitespace-pre-wrap">{selectedWorker.description || 'No description provided.'}</p>
-                </div>
-              </div>
-
-              {/* Uploaded Documents */}
-              <div className="border-t border-slate-100 dark:border-slate-800/80 pt-6 space-y-4">
-                <h4 className="font-bold text-xs uppercase text-slate-400 dark:text-slate-500 tracking-wider">
-                  Uploaded Identity Credentials
-                </h4>
-
-                <div className="grid grid-cols-2 gap-4">
-                  {/* Aadhaar Card Box */}
-                  <div className="border border-slate-100 dark:border-slate-800 p-4 rounded-2xl bg-slate-50/50 dark:bg-slate-950/30 flex flex-col justify-between">
-                    <div>
-                      <h5 className="font-bold text-slate-700 dark:text-slate-350 text-sm">Aadhaar Card</h5>
-                      <p className="text-[10px] text-slate-400 mt-1">Worker's primary identification document scan.</p>
-                    </div>
-                    {selectedWorker.aadhaarCard ? (
-                      <a
-                        href={`http://localhost:5000${selectedWorker.aadhaarCard}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="mt-4 py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl text-center shadow transition-all flex items-center justify-center gap-1.5 cursor-pointer"
-                      >
-                        <span className="material-symbols-outlined text-[16px]">open_in_new</span>
-                        Open Aadhaar
-                      </a>
-                    ) : (
-                      <span className="text-xs font-semibold text-red-500 dark:text-red-400 mt-4 block">No Document Uploaded</span>
-                    )}
-                  </div>
-
-                  {/* PAN Card Box */}
-                  <div className="border border-slate-100 dark:border-slate-800 p-4 rounded-2xl bg-slate-50/50 dark:bg-slate-950/30 flex flex-col justify-between">
-                    <div>
-                      <h5 className="font-bold text-slate-700 dark:text-slate-350 text-sm">PAN Card</h5>
-                      <p className="text-[10px] text-slate-400 mt-1">Tax identification and business compliance scan.</p>
-                    </div>
-                    {selectedWorker.panCard ? (
-                      <a
-                        href={`http://localhost:5000${selectedWorker.panCard}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="mt-4 py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl text-center shadow transition-all flex items-center justify-center gap-1.5 cursor-pointer"
-                      >
-                        <span className="material-symbols-outlined text-[16px]">open_in_new</span>
-                        Open PAN Card
-                      </a>
-                    ) : (
-                      <span className="text-xs font-semibold text-red-500 dark:text-red-400 mt-4 block">No Document Uploaded</span>
-                    )}
-                  </div>
+                  <span className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider block font-bold">{t('workerDetails.aboutWorker')}</span>
+                  <p className="font-semibold text-slate-800 dark:text-slate-200 text-sm mt-0.5 leading-relaxed whitespace-pre-wrap">{selectedWorker.description || t('workerAuth.registerSubtitle')}</p>
                 </div>
               </div>
             </div>
@@ -479,7 +420,7 @@ export default function AdminDashboard() {
                 onClick={() => setSelectedWorker(null)}
                 className="py-2.5 px-4 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 font-bold rounded-xl transition-all cursor-pointer"
               >
-                Close
+                {t('common.close')}
               </button>
 
               <button
@@ -491,7 +432,7 @@ export default function AdminDashboard() {
                 className="py-2.5 px-4 bg-red-50 dark:bg-red-500/10 hover:bg-red-100 text-red-650 dark:text-red-400 border border-red-500/25 font-bold rounded-xl transition-all flex items-center gap-1.5 cursor-pointer"
               >
                 <span className="material-symbols-outlined text-[16px] fill">cancel</span>
-                Reject & Delete
+                {t('adminDashboard.rejectBtn')}
               </button>
 
               <button
@@ -503,7 +444,7 @@ export default function AdminDashboard() {
                 className="py-2.5 px-5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow transition-all flex items-center gap-1.5 cursor-pointer"
               >
                 <span className="material-symbols-outlined text-[16px] fill">check_circle</span>
-                Approve Partner
+                {t('adminDashboard.approveBtn')}
               </button>
             </div>
           </motion.div>

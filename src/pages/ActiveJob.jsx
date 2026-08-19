@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useWorkkar } from '../context/WorkkarContext';
+import { useLanguage } from '../context/LanguageContext';
 import ChatBox from '../components/ChatBox';
 
 export default function ActiveJob() {
@@ -16,6 +17,7 @@ export default function ActiveJob() {
     toggleWorkerAvailability,
     addNotification
   } = useWorkkar();
+  const { t, tStatus, tAvailability, tSkill } = useLanguage();
 
   // Incoming offer timer countdown state
   const [countdown, setCountdown] = useState(105); // 1 minute 45 seconds
@@ -39,7 +41,7 @@ export default function ActiveJob() {
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [incomingAlert]);
+  }, [incomingAlert, declineJobOffer]);
 
   const formatCountdown = (sec) => {
     const mins = Math.floor(sec / 60);
@@ -76,7 +78,7 @@ export default function ActiveJob() {
                 {iconContent}
               </div>
               <h4 className={`font-title-md text-title-md ${labelStyle}`}>{step.label}</h4>
-              <p className="font-body-md text-xs text-on-surface-variant">{isActive && activeJob.step === 2 ? 'Estimated arrival: 09:15 AM' : step.description}</p>
+              <p className="font-body-md text-xs text-on-surface-variant">{isActive && activeJob.step === 2 ? t('activeJob.statusSteps.onWay') : step.description}</p>
             </div>
           );
         })}
@@ -111,7 +113,7 @@ export default function ActiveJob() {
                   </div>
                   
                   <div className="text-right">
-                    <span className="block text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-0.5">Est. Earnings</span>
+                    <span className="block text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-0.5">{t('activeJob.paymentSummary')}</span>
                     <span className="font-headline-lg text-headline-lg text-primary font-bold">${incomingAlert.total}</span>
                   </div>
                 </div>
@@ -123,10 +125,10 @@ export default function ActiveJob() {
                       <span className="material-symbols-outlined">electrical_services</span>
                     </div>
                     <div>
-                      <h2 className="font-headline-md text-headline-md text-on-surface font-extrabold">{incomingAlert.skill}</h2>
+                      <h2 className="font-headline-md text-headline-md text-on-surface font-extrabold">{tSkill(incomingAlert.skill)}</h2>
                       <p className="font-body-md text-sm text-on-surface-variant flex items-center gap-1 mt-0.5">
                         <span className="material-symbols-outlined text-[16px]">person</span>
-                        Customer: {incomingAlert.customerName}
+                        {t('common.customer')}: {incomingAlert.customerName}
                       </p>
                     </div>
                   </div>
@@ -145,7 +147,7 @@ export default function ActiveJob() {
                     <div className="flex items-start gap-2">
                       <span className="material-symbols-outlined text-primary mt-0.5">location_on</span>
                       <div>
-                        <p className="font-title-md text-title-md text-on-surface font-semibold">Job Address</p>
+                        <p className="font-title-md text-title-md text-on-surface font-semibold">{t('activeJob.serviceLocation')}</p>
                         <p className="font-body-md text-xs text-on-surface-variant">{incomingAlert.address}</p>
                       </div>
                     </div>
@@ -155,14 +157,14 @@ export default function ActiveJob() {
                   {/* Estimates Grid */}
                   <div className="grid grid-cols-2 gap-4">
                     <div className="bg-surface/80 p-3 rounded-lg border border-outline-variant/30 flex flex-col justify-center shadow-sm">
-                      <span className="block text-[10px] font-bold text-on-surface-variant uppercase tracking-wider mb-1">Travel Time</span>
+                      <span className="block text-[10px] font-bold text-on-surface-variant uppercase tracking-wider mb-1">{t('activeJob.timerLabel')}</span>
                       <span className="font-title-md text-sm text-on-surface flex items-center gap-1 font-bold">
                         <span className="material-symbols-outlined text-[16px] text-primary">directions_car</span>
                         ~15 mins
                       </span>
                     </div>
                     <div className="bg-surface/80 p-3 rounded-lg border border-outline-variant/30 flex flex-col justify-center shadow-sm">
-                      <span className="block text-[10px] font-bold text-on-surface-variant uppercase tracking-wider mb-1">Est. Job Time</span>
+                      <span className="block text-[10px] font-bold text-on-surface-variant uppercase tracking-wider mb-1">{t('activeJob.timerLabel')}</span>
                       <span className="font-title-md text-sm text-on-surface flex items-center gap-1 font-bold">
                         <span className="material-symbols-outlined text-[16px] text-primary">build</span>
                         1.5 hrs
@@ -178,14 +180,14 @@ export default function ActiveJob() {
                     className="flex-1 py-3 border border-outline text-on-surface hover:bg-surface-container-low font-bold text-xs rounded-lg flex items-center justify-center gap-1 active:scale-98 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-blue-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900"
                   >
                     <span className="material-symbols-outlined text-[18px]">close</span>
-                    Decline
+                    {t('workerDashboard.declineBtn')}
                   </button>
                   <button
                     onClick={acceptJobOffer}
                     className="flex-1 py-3 bg-primary text-on-primary font-bold text-xs rounded-lg flex items-center justify-center gap-1 shadow hover:bg-primary/90 active:scale-98 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-blue-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 border-none"
                   >
                     <span className="material-symbols-outlined text-[18px] fill">check</span>
-                    Accept Offer
+                    {t('workerDashboard.acceptBtn')}
                   </button>
                 </div>
               </div>
@@ -208,14 +210,14 @@ export default function ActiveJob() {
                 <div className="flex items-center justify-between">
                   <div>
                     <h1 className="font-headline-lg text-2xl md:text-headline-md text-on-surface font-extrabold">
-                      Active Job {activeJob.id}
+                      {t('activeJob.jobId', { id: activeJob.id })}
                     </h1>
-                    <p className="font-body-md text-sm text-on-surface-variant mt-0.5">{activeJob.skill}</p>
+                    <p className="font-body-md text-sm text-on-surface-variant mt-0.5">{tSkill(activeJob.skill)}</p>
                   </div>
                   
                   <div className="bg-surface-container-high text-primary px-3 py-1 rounded-full font-label-md text-xs flex items-center gap-1.5 border border-primary/15 font-semibold">
                     <span className={`w-2 h-2 rounded-full bg-primary ${activeJob.step !== 4 ? 'animate-pulse' : ''}`}></span>
-                    {activeJob.status}
+                    {tStatus(activeJob.status)}
                   </div>
                 </div>
 
@@ -244,7 +246,7 @@ export default function ActiveJob() {
                 <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/30 shadow-sm p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div className="flex items-center gap-4">
                     <img
-                      alt="Alex Mercer"
+                      alt="Customer Avatar"
                       className="w-14 h-14 rounded-full object-cover border border-outline-variant/20 shadow-sm"
                       src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMLkQEkNAOqmwWe1yJclJp4Asb4IEHwH32A2gjyVYQYtyJWL-nBZvyK-uLD5f26R--aPYyj5zU4LGLNFu1rfHhH-7Mosw7EuAweDfvVUw4qaC4yXLMBE3H1uUWH_vrozhitHpWDJuuEr-kTQz43lokuX4g9SKJj3U64Mnirt5JL9HhgmjJ1dZfNLHq6sNlCBcuDG0AFUSpZJD5k2uv_HZR3VXT7EP2nJcIWENmATqTrZzr6qyW5L20nRU6h36LTi94tWeoTwQitImv"
                     />
@@ -260,7 +262,8 @@ export default function ActiveJob() {
                   <div className="flex gap-2">
                     <button 
                       onClick={() => addNotification(`Calling customer ${activeJob.customerName}...`, 'success')}
-                      className="bg-surface-container-high hover:bg-surface-variant text-primary p-2.5 rounded-lg flex items-center justify-center transition-colors border border-outline-variant/10 shadow-sm"
+                      className="bg-surface-container-high hover:bg-surface-variant text-primary p-2.5 rounded-lg flex items-center justify-center transition-colors border border-outline-variant/10 shadow-sm cursor-pointer"
+                      title={t('activeJob.contactCustomer')}
                     >
                       <span className="material-symbols-outlined text-[20px]">call</span>
                     </button>
@@ -282,7 +285,7 @@ export default function ActiveJob() {
                 {/* Timeline Card */}
                 <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/30 shadow-sm p-5 flex flex-col">
                   <h3 className="font-title-md text-on-surface font-bold border-b border-outline-variant/20 pb-3 mb-5 uppercase tracking-wider text-xs">
-                    Job Timeline
+                    {t('activeJob.title')}
                   </h3>
                   {renderTimeline()}
                 </div>
@@ -290,20 +293,16 @@ export default function ActiveJob() {
                 {/* Bill Card Details */}
                 <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/30 shadow-sm p-5 flex flex-col gap-3">
                   <h3 className="font-title-md text-on-surface font-bold border-b border-outline-variant/20 pb-3 mb-2 uppercase tracking-wider text-xs">
-                    Bill Details
+                    {t('activeJob.paymentSummary')}
                   </h3>
                   
                   <div className="flex justify-between items-center text-on-surface-variant font-body-md text-xs">
-                    <span>Base Service Fee</span>
+                    <span>{t('workerAuth.hourlyRateLabel')}</span>
                     <span>${activeJob.base.toFixed(2)}</span>
-                  </div>
-                  <div className="flex justify-between items-center text-on-surface-variant font-body-md text-xs">
-                    <span>Taxes & Fees</span>
-                    <span>${activeJob.tax.toFixed(2)}</span>
                   </div>
                   
                   <div className="border-t border-outline-variant/20 pt-3 mt-2 flex justify-between items-center">
-                    <span className="font-bold text-on-surface text-sm">Total Est. Earnings</span>
+                    <span className="font-bold text-on-surface text-sm">{t('workerEarnings.walletBalance')}</span>
                     <span className="font-headline-md text-primary font-extrabold">${activeJob.total.toFixed(2)}</span>
                   </div>
                 </div>
@@ -316,7 +315,7 @@ export default function ActiveJob() {
                       className="w-full bg-primary hover:bg-primary/90 text-on-primary py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider shadow hover:shadow-md transition-all duration-200 active:scale-[0.98] flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-blue-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 border-none"
                     >
                       <span className="material-symbols-outlined text-[18px]">play_arrow</span>
-                      Start Service
+                      {t('activeJob.markStartWork')}
                     </button>
                   )}
 
@@ -326,23 +325,23 @@ export default function ActiveJob() {
                       className="w-full bg-emerald-600 hover:bg-emerald-700 text-on-primary py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider shadow hover:shadow-md transition-all duration-200 active:scale-[0.98] flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 dark:focus-visible:ring-emerald-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 border-none"
                     >
                       <span className="material-symbols-outlined text-[18px]">task_alt</span>
-                      Complete Job
+                      {t('activeJob.markComplete')}
                     </button>
                   )}
 
                   {activeJob.step === 4 && (
                     <div className="w-full bg-amber-50 border border-amber-200 text-amber-700 dark:bg-amber-950/20 dark:border-amber-900/50 dark:text-amber-400 py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 text-center">
                       <div className="w-3.5 h-3.5 border-2 border-amber-600 dark:border-amber-400 border-t-transparent rounded-full animate-spin"></div>
-                      Pending Client Approval
+                      {t('common.pending')}
                     </div>
                   )}
 
                   {activeJob.step !== 4 && (
                     <button 
-                      onClick={() => addNotification("Emergency contact triggered. Support coordinator notified.", "warning")}
-                      className="w-full py-2.5 text-secondary hover:text-secondary/80 dark:text-orange-400 dark:hover:text-orange-300 transition-colors duration-200 font-bold text-xs active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary dark:focus-visible:ring-orange-400 rounded-lg"
+                      onClick={() => addNotification(t('activeJob.emergencySupport'), "warning")}
+                      className="w-full py-2.5 text-secondary hover:text-secondary/80 dark:text-orange-400 dark:hover:text-orange-300 transition-colors duration-200 font-bold text-xs active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary dark:focus-visible:ring-orange-400 rounded-lg cursor-pointer"
                     >
-                      Can't reach customer?
+                      {t('activeJob.emergencySupport')}
                     </button>
                   )}
                 </div>
@@ -366,10 +365,10 @@ export default function ActiveJob() {
 
                 <div className="flex flex-col items-center space-y-2">
                   <span className="text-[10px] font-bold tracking-widest text-primary bg-primary-container/30 px-3 py-1 rounded-full uppercase">
-                    Companion Terminal
+                    {t('workerDashboard.portalTitle')}
                   </span>
                   <h2 className="font-headline-md text-headline-md text-on-surface font-extrabold">
-                    Active Dispatch Radar
+                    {t('activeJob.title')}
                   </h2>
                 </div>
 
@@ -424,19 +423,19 @@ export default function ActiveJob() {
                     <>
                       <h3 className="font-bold text-sm text-emerald-600 dark:text-emerald-400 flex items-center justify-center gap-1.5">
                         <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-                        Radar Online
+                        {t('workerDashboard.availableNow')}
                       </h3>
                       <p className="font-body-md text-xs text-on-surface-variant leading-relaxed">
-                        Listening for dispatch signals. Keep this page open or stay active. When a client books you, a booking alert with a 1m 45s accept timer will slide in here automatically.
+                        {t('workerDashboard.noJobRequestsSubtitle')}
                       </p>
                     </>
                   ) : (
                     <>
                       <h3 className="font-bold text-sm text-on-surface-variant/70">
-                        Radar Offline
+                        {t('common.offline')}
                       </h3>
                       <p className="font-body-md text-xs text-on-surface-variant leading-relaxed">
-                        You are currently offline. Switch your status below to **Available** to start receiving real-time booking alerts from clients.
+                        {t('workerDashboard.noJobRequestsSubtitle')}
                       </p>
                     </>
                   )}
@@ -445,8 +444,8 @@ export default function ActiveJob() {
                 {/* Availability Toggle */}
                 <div className="bg-surface-container-low border border-outline-variant/30 px-5 py-3 rounded-2xl shadow-sm w-full flex items-center justify-between text-left transition-colors duration-250">
                   <div>
-                    <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Your Status</p>
-                    <p className="font-extrabold text-xs text-on-surface mt-0.5">{user?.availability || 'Offline'}</p>
+                    <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">{t('workerDashboard.onlineToggle')}</p>
+                    <p className="font-extrabold text-xs text-on-surface mt-0.5">{tAvailability(user?.availability || 'Offline')}</p>
                   </div>
                   <label className="relative inline-flex items-center cursor-pointer scale-95 rounded-full focus-within:ring-2 focus-within:ring-primary">
                     <input

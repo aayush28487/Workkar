@@ -4,22 +4,25 @@ import Footer from '../components/Footer';
 import { NotificationToastList } from '../components/Modals';
 import PageTransition from '../components/PageTransition';
 import { useWorkkar } from '../context/WorkkarContext';
+import { useLanguage } from '../context/LanguageContext';
+import LanguageSelector from '../components/LanguageSelector';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function AdminLayout() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showPortalMenu, setShowPortalMenu] = useState(false);
   const { user, logout } = useWorkkar();
+  const { t } = useLanguage();
   const location = useLocation();
 
   const sidebarLinks = user?.role === 'supreme-admin'
     ? [
-        { name: 'Dashboard', path: '/supreme-admin/dashboard', icon: 'admin_panel_settings', fill: true },
-        { name: 'Client Website', path: '/', icon: 'storefront' }
+        { name: t('admin.supremeTitle'), path: '/supreme-admin/dashboard', icon: 'admin_panel_settings', fill: true },
+        { name: t('nav.clientSite'), path: '/', icon: 'storefront' }
       ]
     : [
-        { name: 'Dashboard', path: '/admin/dashboard', icon: 'dashboard', fill: true },
-        { name: 'Client Website', path: '/', icon: 'storefront' }
+        { name: t('nav.dashboard'), path: '/admin/dashboard', icon: 'dashboard', fill: true },
+        { name: t('nav.clientSite'), path: '/', icon: 'storefront' }
       ];
 
   return (
@@ -61,7 +64,7 @@ export default function AdminLayout() {
               className="flex items-center gap-3 p-3 rounded-lg font-medium text-xs uppercase tracking-wider text-on-surface-variant hover:bg-surface-container hover:text-primary mt-auto"
             >
               <span className="material-symbols-outlined text-[20px]">exit_to_app</span>
-              Client Site
+              {t('nav.clientSite')}
             </Link>
           </div>
         </aside>
@@ -74,24 +77,19 @@ export default function AdminLayout() {
               <button 
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 className="md:hidden text-on-surface p-1 hover:bg-surface-container rounded-full transition-colors"
+                aria-label="Toggle Menu"
               >
                 <span className="material-symbols-outlined">menu</span>
               </button>
               <h1 className="font-headline-md text-headline-md font-semibold md:hidden">WORKKAR Admin</h1>
-              <h1 className="font-headline-md text-headline-md font-bold hidden md:block text-on-surface text-xl">Overview</h1>
+              <h1 className="font-headline-md text-headline-md font-bold hidden md:block text-on-surface text-xl">{t('nav.overview')}</h1>
             </div>
             
-            <div className="flex items-center gap-stack-md">
-              <div className="hidden md:flex relative border border-outline-variant/50 rounded-lg w-64 items-center px-3 py-1.5 bg-surface">
-                <span className="material-symbols-outlined text-outline text-[18px] mr-2">search</span>
-                <input 
-                  className="bg-transparent border-none outline-none text-xs w-full placeholder:text-outline-variant text-on-surface focus:ring-0 p-0" 
-                  placeholder="Search workers, jobs..." 
-                  type="text"
-                />
-              </div>
-              
-              <button className="relative p-2 text-on-surface-variant hover:bg-surface-container rounded-full transition-colors active:scale-95">
+            <div className="flex items-center gap-2.5">
+              {/* Language Selector */}
+              <LanguageSelector />
+
+              <button className="relative p-2 text-on-surface-variant hover:bg-surface-container rounded-full transition-colors active:scale-95" aria-label="Notifications">
                 <span className="material-symbols-outlined text-[20px]">notifications</span>
                 <span className="absolute top-1 right-1 w-2 h-2 bg-error rounded-full animate-pulse"></span>
               </button>
@@ -105,7 +103,7 @@ export default function AdminLayout() {
                   <div className="w-6 h-6 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold text-[10px]">
                     {user?.textAvatar || (user?.name ? user.name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2) : 'AD')}
                   </div>
-                  <span className="truncate max-w-[100px] hidden sm:inline">{user?.name ? user.name.split(' ')[0] : 'Admin'}</span>
+                  <span className="truncate max-w-[100px] hidden sm:inline">{user?.name ? user.name.split(' ')[0] : t('common.admin')}</span>
                   <span className="material-symbols-outlined text-[16px]">arrow_drop_down</span>
                 </button>
 
@@ -132,7 +130,7 @@ export default function AdminLayout() {
                           className="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-on-surface dark:text-on-surface hover:bg-surface-container-low dark:hover:bg-surface-container-high transition-colors"
                         >
                           <span className="material-symbols-outlined text-[18px]">storefront</span>
-                          Client Website
+                          {t('nav.clientSite')}
                         </Link>
                         {user?.role === 'admin' && (
                           <Link
@@ -141,7 +139,7 @@ export default function AdminLayout() {
                             className="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-on-surface dark:text-on-surface hover:bg-surface-container-low dark:hover:bg-surface-container-high transition-colors"
                           >
                             <span className="material-symbols-outlined text-[18px]">dashboard</span>
-                            Admin Dashboard
+                            {t('admin.opsTitle')}
                           </Link>
                         )}
                         {user?.role === 'supreme-admin' && (
@@ -151,7 +149,7 @@ export default function AdminLayout() {
                             className="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-on-surface dark:text-on-surface hover:bg-surface-container-low dark:hover:bg-surface-container-high transition-colors"
                           >
                             <span className="material-symbols-outlined text-[18px]">local_police</span>
-                            Supreme Command
+                            {t('admin.supremeTitle')}
                           </Link>
                         )}
                         <button
@@ -162,7 +160,7 @@ export default function AdminLayout() {
                           className="w-full flex items-center gap-2 px-4 py-2 text-xs font-bold text-error hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors border-t border-outline-variant/10 mt-1.5 pt-2"
                         >
                           <span className="material-symbols-outlined text-[18px]">logout</span>
-                          Log Out
+                          {t('nav.logout')}
                         </button>
                       </motion.div>
                     </>
@@ -213,7 +211,7 @@ export default function AdminLayout() {
                     className="flex items-center gap-3 p-3 rounded-lg font-medium text-xs uppercase tracking-wider text-on-surface-variant hover:bg-surface-container mt-8"
                   >
                     <span className="material-symbols-outlined text-[20px]">exit_to_app</span>
-                    Client Site
+                    {t('nav.clientSite')}
                   </Link>
                 </div>
               </div>

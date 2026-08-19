@@ -1,13 +1,13 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Clock, ShieldAlert, LogOut, CheckCircle2 } from 'lucide-react';
 import ProgressStepper from '../../components/worker/ProgressStepper';
 import { useWorkkar } from '../../context/WorkkarContext';
+import { useLanguage } from '../../context/LanguageContext';
 
-export default function WorkerVerificationPending({ worker }) {
-  const navigate = useNavigate();
+export default function WorkerVerificationPending() {
   const { logout } = useWorkkar();
+  const { t } = useLanguage();
 
   const handleLogout = () => {
     logout();
@@ -41,10 +41,10 @@ export default function WorkerVerificationPending({ worker }) {
           {/* Heading */}
           <div className="space-y-2">
             <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-              Verification in Progress
+              {t('workerAuth.verificationPendingTitle')}
             </h2>
             <p className="text-slate-500 dark:text-slate-400 font-medium max-w-md mx-auto">
-              Your profile has been submitted successfully and is waiting for admin verification.
+              {t('workerAuth.verificationPendingSubtitle')}
             </p>
           </div>
 
@@ -52,21 +52,17 @@ export default function WorkerVerificationPending({ worker }) {
           <div className="bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800/50 rounded-2xl p-6 text-left text-sm space-y-4 max-w-lg mx-auto">
             <h3 className="font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2">
               <CheckCircle2 size={16} className="text-orange-500" />
-              What happens next?
+              {t('common.verified')}
             </h3>
             
             <ul className="space-y-3 text-slate-600 dark:text-slate-400 font-medium">
               <li className="flex gap-2">
                 <span className="text-orange-500 font-bold">•</span>
-                <span>Our administrators will verify your uploaded Aadhaar and PAN documents against your registration profile.</span>
+                <span>{t('workerAuth.verificationPendingSubtitle')}</span>
               </li>
               <li className="flex gap-2">
                 <span className="text-orange-500 font-bold">•</span>
-                <span>Once approved, your account verification status will change to <strong className="text-emerald-600 dark:text-emerald-400">APPROVED</strong>.</span>
-              </li>
-              <li className="flex gap-2">
-                <span className="text-orange-500 font-bold">•</span>
-                <span>Only after approval will you start receiving nearby job matching requests on your Partner Dashboard.</span>
+                <span>{t('workerDashboard.noJobRequestsSubtitle')}</span>
               </li>
             </ul>
           </div>
@@ -77,7 +73,7 @@ export default function WorkerVerificationPending({ worker }) {
               onClick={handleRefresh}
               className="flex-1 py-3 px-6 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all shadow-md shadow-blue-500/10 cursor-pointer text-sm"
             >
-              Check Review Status
+              {t('common.active')}
             </button>
 
             <button
@@ -85,7 +81,7 @@ export default function WorkerVerificationPending({ worker }) {
               className="py-3 px-6 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 font-bold rounded-xl transition-colors flex items-center justify-center gap-2 cursor-pointer text-sm"
             >
               <LogOut size={16} />
-              Logout
+              {t('nav.logout')}
             </button>
           </div>
 

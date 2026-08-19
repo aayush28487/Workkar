@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useWorkkar } from '../context/WorkkarContext';
+import { useLanguage } from '../context/LanguageContext';
 import { motion } from 'framer-motion';
 
 export default function Login() {
   const { login, loginWithGoogle, register, user, addNotification } = useWorkkar();
+  const { t, tService } = useLanguage();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const defaultRole = searchParams.get('role') === 'worker' ? 'worker' : 'customer';
   const redirect = searchParams.get('redirect') || '/';
 
   const [isLogin, setIsLogin] = useState(true);
@@ -55,10 +56,10 @@ export default function Login() {
             try {
               const success = await loginWithGoogle(response.credential);
               if (success) {
-                addNotification('Welcome to Workkar via Google!', 'success');
+                addNotification(t('auth.loginSuccess'), 'success');
               }
             } catch (err) {
-              addNotification(err.message || 'Google authentication failed', 'error');
+              addNotification(err.message || t('auth.invalidCredentials'), 'error');
             } finally {
               setLoading(false);
             }
@@ -90,7 +91,7 @@ export default function Login() {
         document.body.removeChild(script);
       };
     }
-  }, [googleClientId, isLogin, role]);
+  }, [googleClientId, isLogin, role, t]);
 
   const handleMockGoogleLogin = async () => {
     try {
@@ -101,10 +102,10 @@ export default function Login() {
       
       const success = await loginWithGoogle(mockToken);
       if (success) {
-        addNotification('Logged in with Mock Google Account!', 'success');
+        addNotification(t('auth.loginSuccess'), 'success');
       }
     } catch (error) {
-      addNotification(error.message || 'Mock Google login failed', 'error');
+      addNotification(error.message || t('auth.invalidCredentials'), 'error');
     } finally {
       setLoading(false);
     }
@@ -118,7 +119,7 @@ export default function Login() {
       if (isLogin) {
         const success = await login(email, password);
         if (success) {
-          addNotification('Welcome back to Workkar!', 'success');
+          addNotification(t('auth.loginSuccess'), 'success');
         }
       } else {
         const formData = {
@@ -137,15 +138,15 @@ export default function Login() {
         const success = await register(formData);
         if (success) {
           if (role === 'worker') {
-            addNotification('Registration successful! Profile and documents sent for coordinator verification.', 'success');
+            addNotification(t('auth.registerSuccess'), 'success');
             setIsLogin(true);
           } else {
-            addNotification('Registration successful! Welcome to Workkar.', 'success');
+            addNotification(t('auth.registerSuccess'), 'success');
           }
         }
       }
     } catch (error) {
-      addNotification(error.message || 'Authentication failed. Please check your inputs.', 'error');
+      addNotification(error.message || t('auth.invalidCredentials'), 'error');
     } finally {
       setLoading(false);
     }
@@ -166,10 +167,10 @@ export default function Login() {
             <span className="material-symbols-outlined text-5xl fill">engineering</span>
           </div>
           <h2 className="mt-4 text-center font-headline-md text-headline-md font-extrabold tracking-tight text-on-surface">
-            {isLogin ? 'Sign in to WORKKAR' : 'Create your Account'}
+            {isLogin ? t('auth.customerLoginTitle') : t('auth.customerRegisterTitle')}
           </h2>
           <p className="mt-2 text-center text-body-md text-on-surface-variant">
-            {isLogin ? "Welcome back! Enter details to log in." : "Join our platform and get started today."}
+            {isLogin ? t('auth.customerLoginSubtitle') : t('auth.customerRegisterSubtitle')}
           </p>
         </div>
 
@@ -178,7 +179,7 @@ export default function Login() {
             {!isLogin && (
               <div>
                 <label className="block text-sm font-semibold text-on-surface-variant mb-1" htmlFor="name">
-                  Full Name
+                  {t('auth.nameLabel')}
                 </label>
                 <input
                   id="name"
@@ -187,14 +188,14 @@ export default function Login() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   className="w-full px-4 py-3 rounded-xl border border-outline-variant/40 bg-surface/50 dark:bg-surface-container-low/50 text-on-surface placeholder-outline focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-blue-400 transition-all text-sm"
-                  placeholder="John Doe"
+                  placeholder={t('auth.namePlaceholder')}
                 />
               </div>
             )}
 
             <div>
               <label className="block text-sm font-semibold text-on-surface-variant mb-1" htmlFor="email">
-                Email Address
+                {t('auth.emailLabel')}
               </label>
               <input
                 id="email"
@@ -203,13 +204,13 @@ export default function Login() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-4 py-3 rounded-xl border border-outline-variant/40 bg-surface/50 dark:bg-surface-container-low/50 text-on-surface placeholder-outline focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-blue-400 transition-all text-sm"
-                placeholder="you@example.com"
+                placeholder={t('auth.emailPlaceholder')}
               />
             </div>
 
             <div>
               <label className="block text-sm font-semibold text-on-surface-variant mb-1" htmlFor="password">
-                Password
+                {t('auth.passwordLabel')}
               </label>
               <input
                 id="password"
@@ -218,7 +219,7 @@ export default function Login() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full px-4 py-3 rounded-xl border border-outline-variant/40 bg-surface/50 dark:bg-surface-container-low/50 text-on-surface placeholder-outline focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-blue-400 transition-all text-sm"
-                placeholder="••••••••"
+                placeholder={t('auth.passwordPlaceholder')}
               />
             </div>
 
@@ -227,7 +228,7 @@ export default function Login() {
               <>
                 <div>
                   <label className="block text-sm font-semibold text-on-surface-variant mb-1" htmlFor="address">
-                    Service Address
+                    {t('auth.addressLabel')}
                   </label>
                   <input
                     id="address"
@@ -236,12 +237,12 @@ export default function Login() {
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
                     className="w-full px-4 py-3 rounded-xl border border-outline-variant/40 bg-surface/50 dark:bg-surface-container-low/50 text-on-surface placeholder-outline focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-blue-400 transition-all text-sm"
-                    placeholder="123 Main St, Springfield"
+                    placeholder={t('auth.addressPlaceholder')}
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-on-surface-variant mb-1" htmlFor="phone">
-                    Phone Number
+                    {t('auth.phoneLabel')}
                   </label>
                   <input
                     id="phone"
@@ -250,7 +251,7 @@ export default function Login() {
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     className="w-full px-4 py-3 rounded-xl border border-outline-variant/40 bg-surface/50 dark:bg-surface-container-low/50 text-on-surface placeholder-outline focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-blue-400 transition-all text-sm"
-                    placeholder="555-0199"
+                    placeholder={t('auth.phonePlaceholder')}
                   />
                 </div>
               </>
@@ -260,7 +261,7 @@ export default function Login() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="col-span-2 md:col-span-1">
                   <label className="block text-sm font-semibold text-on-surface-variant mb-1" htmlFor="skill">
-                    Professional Skill
+                    {t('workerAuth.tradeLabel')}
                   </label>
                   <select
                     id="skill"
@@ -269,13 +270,13 @@ export default function Login() {
                     className="w-full px-4 py-3 rounded-xl border border-outline-variant/40 bg-surface/50 dark:bg-surface-container-low/50 text-on-surface focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-blue-400 transition-all text-sm"
                   >
                     {skillsList.map((s) => (
-                      <option key={s} value={s}>{s}</option>
+                      <option key={s} value={s}>{tService(s)}</option>
                     ))}
                   </select>
                 </div>
                 <div className="col-span-2 md:col-span-1">
                   <label className="block text-sm font-semibold text-on-surface-variant mb-1" htmlFor="rate">
-                    Hourly Rate ($)
+                    {t('workerAuth.hourlyRateLabel')}
                   </label>
                   <input
                     id="rate"
@@ -289,7 +290,7 @@ export default function Login() {
                 </div>
                 <div className="col-span-2 md:col-span-1">
                   <label className="block text-sm font-semibold text-on-surface-variant mb-1" htmlFor="experience">
-                    Experience (Years)
+                    {t('workerAuth.experienceLabel')}
                   </label>
                   <input
                     id="experience"
@@ -305,7 +306,7 @@ export default function Login() {
                 {/* Verification Documents Upload Input */}
                 <div className="col-span-2 md:col-span-1">
                   <label className="block text-sm font-semibold text-on-surface-variant mb-1" htmlFor="verification">
-                    Verification Document
+                    {t('workerAuth.uploadDocTitle')}
                   </label>
                   <input
                     id="verification"
@@ -314,20 +315,20 @@ export default function Login() {
                     value={verificationDocument}
                     onChange={(e) => setVerificationDocument(e.target.value)}
                     className="w-full px-4 py-3 rounded-xl border border-outline-variant/40 bg-surface/50 dark:bg-surface-container-low/50 text-on-surface placeholder-outline focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-blue-400 transition-all text-sm"
-                    placeholder="e.g. License ID number, certificate URL"
+                    placeholder="e.g. License ID, Aadhaar"
                   />
                 </div>
 
                 <div className="col-span-2">
                   <label className="block text-sm font-semibold text-on-surface-variant mb-1" htmlFor="description">
-                    Professional Bio
+                    {t('workerDetails.aboutWorker')}
                   </label>
                   <textarea
                     id="description"
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     className="w-full px-4 py-3 rounded-xl border border-outline-variant/40 bg-surface/50 dark:bg-surface-container-low/50 text-on-surface placeholder-outline focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-blue-400 transition-all text-sm h-20 resize-none"
-                    placeholder="Explain your expertise and background..."
+                    placeholder={t('workerAuth.registerSubtitle')}
                   />
                 </div>
               </div>
@@ -343,7 +344,7 @@ export default function Login() {
               {loading ? (
                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
               ) : (
-                isLogin ? 'Sign In' : 'Register'
+                isLogin ? t('auth.loginSubmit') : t('auth.registerSubmit')
               )}
             </button>
           </div>
@@ -354,7 +355,7 @@ export default function Login() {
             <div className="relative flex items-center justify-center my-4">
               <div className="border-t border-outline-variant/30 w-full"></div>
               <span className="absolute bg-surface-container-lowest dark:bg-surface-container-low px-3 text-xs text-on-surface-variant font-medium">
-                Or continue with
+                {t('common.or')}
               </span>
             </div>
             
@@ -385,7 +386,7 @@ export default function Login() {
                     d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
                   />
                 </svg>
-                Sign in with Google (Demo)
+                {t('auth.demoGoogleSignIn')}
               </button>
             )}
           </div>
@@ -396,13 +397,8 @@ export default function Login() {
             onClick={() => setIsLogin(!isLogin)}
             className="text-sm font-semibold text-primary hover:text-primary/80 dark:text-blue-400 dark:hover:text-blue-300 transition-colors"
           >
-            {isLogin ? "Don't have an account? Sign Up" : 'Already have an account? Sign In'}
+            {isLogin ? t('auth.noAccount') + ' ' + t('nav.register') : t('auth.hasAccount') + ' ' + t('nav.signIn')}
           </button>
-          {isLogin && (
-            <p className="text-[11px] text-on-surface-variant mt-2 border-t border-outline-variant/10 pt-3">
-              Admins & Supreme Admins must log in using the Client form.
-            </p>
-          )}
         </div>
       </motion.div>
     </div>

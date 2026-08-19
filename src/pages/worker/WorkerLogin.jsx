@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Eye, EyeOff, Mail, Lock, UserCheck } from 'lucide-react';
 import { loginWorkerApi } from '../../services/workerApi';
 import { useWorkkar } from '../../context/WorkkarContext';
+import { useLanguage } from '../../context/LanguageContext';
 
 export default function WorkerLogin() {
   const [emailOrMobile, setEmailOrMobile] = useState('');
@@ -15,6 +16,7 @@ export default function WorkerLogin() {
 
   const navigate = useNavigate();
   const { setWorkerToken } = useWorkkar();
+  const { t } = useLanguage();
 
   // Load Remember Me data
   useEffect(() => {
@@ -49,7 +51,7 @@ export default function WorkerLogin() {
     } catch (err) {
       console.error(err);
       setError(
-        err.response?.data?.message || 'Login failed. Please check your credentials.'
+        err.response?.data?.message || t('auth.invalidCredentials')
       );
     } finally {
       setLoading(false);
@@ -69,10 +71,10 @@ export default function WorkerLogin() {
             W
           </div>
           <h2 className="text-center text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-            WORKKAR <span className="text-orange-500 font-medium">Partner</span>
+            WORKKAR <span className="text-orange-500 font-medium">{t('nav.workerDashboard')}</span>
           </h2>
           <p className="mt-2 text-center text-sm text-slate-500 dark:text-slate-400">
-            Sign in to start matching with jobs in your area
+            {t('workerAuth.loginSubtitle')}
           </p>
         </motion.div>
       </div>
@@ -98,7 +100,7 @@ export default function WorkerLogin() {
             {/* Email / Mobile */}
             <div>
               <label className="block text-sm font-bold text-slate-700 dark:text-slate-300">
-                Email Address or Mobile Number
+                {t('auth.emailLabel')} / {t('auth.phoneLabel')}
               </label>
               <div className="mt-1.5 relative rounded-xl shadow-sm">
                 <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 dark:text-slate-500">
@@ -107,7 +109,7 @@ export default function WorkerLogin() {
                 <input
                   type="text"
                   required
-                  placeholder="name@example.com or 9876543210"
+                  placeholder="name@example.com / 9876543210"
                   value={emailOrMobile}
                   onChange={(e) => setEmailOrMobile(e.target.value)}
                   className="block w-full pl-10 pr-3 py-3 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent text-sm text-slate-900 dark:text-white transition-all"
@@ -119,14 +121,8 @@ export default function WorkerLogin() {
             <div>
               <div className="flex justify-between items-center">
                 <label className="block text-sm font-bold text-slate-700 dark:text-slate-300">
-                  Password
+                  {t('auth.passwordLabel')}
                 </label>
-                <span
-                  onClick={() => alert("Please contact Workkar admin support to reset your partner password.")}
-                  className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-500 cursor-pointer"
-                >
-                  Forgot password?
-                </span>
               </div>
               <div className="mt-1.5 relative rounded-xl shadow-sm">
                 <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 dark:text-slate-500">
@@ -164,7 +160,7 @@ export default function WorkerLogin() {
                   htmlFor="remember-me"
                   className="ml-2 block text-xs font-semibold text-slate-600 dark:text-slate-400 cursor-pointer"
                 >
-                  Remember Me
+                  {t('common.confirm')}
                 </label>
               </div>
             </div>
@@ -181,12 +177,12 @@ export default function WorkerLogin() {
                 {loading ? (
                   <>
                     <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    Signing in...
+                    {t('common.loading')}
                   </>
                 ) : (
                   <>
                     <UserCheck size={18} />
-                    Sign In
+                    {t('auth.loginSubmit')}
                   </>
                 )}
               </motion.button>
@@ -200,7 +196,7 @@ export default function WorkerLogin() {
               </div>
               <div className="relative flex justify-center text-xs">
                 <span className="px-3 bg-white dark:bg-slate-900 text-slate-500 dark:text-slate-400 font-semibold">
-                  New to Workkar?
+                  {t('auth.noAccount')}
                 </span>
               </div>
             </div>
@@ -210,7 +206,7 @@ export default function WorkerLogin() {
                 to="/worker/register"
                 className="inline-flex items-center justify-center px-4 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors w-full"
               >
-                Create Partner Account
+                {t('workerAuth.registerTitle')}
               </Link>
             </div>
           </div>
