@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Upload, FileText, Check, Trash2 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
+import { getFileUrl } from '../../config/api';
 
 export default function UploadCard({
   title,
@@ -84,7 +85,7 @@ export default function UploadCard({
               <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-blue-100 dark:border-slate-700 shadow-inner group">
                 {previewUrl ? (
                   <img
-                    src={previewUrl.startsWith('data:') || previewUrl.startsWith('blob:') ? previewUrl : `http://localhost:5000${previewUrl}`}
+                    src={getFileUrl(previewUrl)}
                     alt={title}
                     className="w-full h-full object-cover"
                   />
@@ -118,7 +119,7 @@ export default function UploadCard({
               <div className="w-full border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden bg-slate-50 dark:bg-slate-900 p-3 flex flex-col items-center">
                 {isImage && previewUrl && (
                   <img
-                    src={previewUrl.startsWith('data:') || previewUrl.startsWith('blob:') ? previewUrl : `http://localhost:5000${previewUrl}`}
+                    src={getFileUrl(previewUrl)}
                     alt={title}
                     className="w-full h-32 object-contain rounded mb-3 bg-white dark:bg-slate-800"
                   />

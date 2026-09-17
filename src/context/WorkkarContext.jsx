@@ -3,10 +3,9 @@ import {
   INITIAL_SERVICES,
   INITIAL_EARNINGS_TREND,
 } from '../data/mockData';
+import { API_URL, BACKEND_URL, getFileUrl } from '../config/api';
 
 const WorkkarContext = createContext();
-
-const API_URL = 'http://localhost:5000/api';
 
 export const WorkkarProvider = ({ children }) => {
   // Authentication states
@@ -241,7 +240,7 @@ export const WorkkarProvider = ({ children }) => {
     rating: w.rating || 5.0,
     rate: w.rate,
     availability: w.availability,
-    avatar: w.avatar || (w.profilePhoto ? (w.profilePhoto.startsWith('http') ? w.profilePhoto : `http://localhost:5000${w.profilePhoto}`) : null),
+    avatar: w.avatar || (w.profilePhoto ? getFileUrl(w.profilePhoto) : null),
     textAvatar: w.textAvatar,
     verified: w.verified,
     status: w.status,

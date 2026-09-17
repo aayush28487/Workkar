@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useWorkkar } from '../context/WorkkarContext';
 import { useLanguage } from '../context/LanguageContext';
+import { getFileUrl } from '../config/api';
 import DashboardCard from '../components/DashboardCard';
 
 export default function AdminDashboard() {
@@ -354,7 +355,7 @@ export default function AdminDashboard() {
                 <div className="w-14 h-14 rounded-full overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-800 shrink-0">
                   {selectedWorker.profilePhoto ? (
                     <img
-                      src={selectedWorker.profilePhoto.startsWith('http') ? selectedWorker.profilePhoto : `http://localhost:5000${selectedWorker.profilePhoto}`}
+                      src={getFileUrl(selectedWorker.profilePhoto)}
                       alt={selectedWorker.name}
                       className="w-full h-full object-cover"
                     />
