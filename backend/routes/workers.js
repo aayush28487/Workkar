@@ -14,6 +14,14 @@ router.get('/', async (req, res) => {
     const legacyWorkers = await User.find({ role: 'worker' }).select('-password');
     const newWorkers = await Worker.find({}).select('-password');
 
+    const mappedLegacyWorkers = legacyWorkers.map(w => {
+      const wObj = w.toObject ? w.toObject() : w;
+      return {
+        ...wObj,
+        availability: (wObj.activeJob && wObj.activeJob.status !== 'Alert') ? 'On Job' : (wObj.availability || 'Offline')
+      };
+    });
+
     // Map new workers to legacy format for UI compatibility
     const mappedNewWorkers = newWorkers.map(w => {
       const wObj = w.toObject();
@@ -25,13 +33,13 @@ router.get('/', async (req, res) => {
         skill: wObj.profession,
         status: isApproved ? 'active' : wObj.verificationStatus,
         verified: isApproved,
-        availability: wObj.availability ? 'Available' : 'Offline',
+        availability: (wObj.activeJob && wObj.activeJob.status !== 'Alert') ? 'On Job' : (wObj.availability ? 'Available' : 'Offline'),
         textAvatar: initials,
         rating: wObj.rating || 5.0
       };
     });
 
-    res.json([...legacyWorkers, ...mappedNewWorkers]);
+    res.json([...mappedLegacyWorkers, ...mappedNewWorkers]);
   } catch (error) {
     res.status(500).json({ message: 'Server error retrieving workers', error: error.message });
   }

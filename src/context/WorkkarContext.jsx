@@ -269,9 +269,10 @@ export const WorkkarProvider = ({ children }) => {
     description: w.description || ''
   }));
 
-  // Computed state for active job & incoming alert
-  const activeJob = user?.activeJob && user.activeJob.status !== 'Alert' ? user.activeJob : null;
-  const incomingAlert = user?.activeJob && user.activeJob.status === 'Alert' ? user.activeJob : null;
+  // Computed state for active job, incoming alert & pending requests
+  const pendingRequests = user?.pendingRequests || [];
+  const incomingAlert = pendingRequests.length > 0 ? pendingRequests[0] : (user?.activeJob && (user.activeJob.status === 'Alert' || user.activeJob.status === 'Pending') ? user.activeJob : null);
+  const activeJob = user?.activeJob && user.activeJob.status !== 'Alert' && user.activeJob.status !== 'Pending' ? user.activeJob : null;
 
   // Computed wallet
   const wallet = user?.wallet || {
@@ -415,32 +416,57 @@ export const WorkkarProvider = ({ children }) => {
   };
 
   // Worker companion operations
-  const acceptJobOffer = async () => {
+  const acceptJobOffer = async (jobId) => {
     try {
       const res = await fetch(`${API_URL}/jobs/accept`, {
         method: 'PUT',
-        headers: getAuthHeaders()
+        headers: getAuthHeaders(),
+        body: JSON.stringify({ jobId })
       });
       if (res.ok) {
         const updated = await res.json();
-        setUser(prev => ({ ...prev, activeJob: updated.activeJob }));
+        setUser(prev => ({
+          ...prev,
+          activeJob: updated.activeJob,
+          availability: 'On Job',
+          pendingRequests: []
+        }));
         addNotification("Job offer accepted! Fetching routing GPS...", "success");
+        fetchWorkers();
+        fetchUser();
+        return true;
+      } else {
+        const data = await res.json();
+        addNotification(data.message || "Failed to accept job", "error");
+        fetchUser();
+        return false;
       }
     } catch (err) {
       console.error(err);
+      addNotification("Error accepting job offer", "error");
+      return false;
     }
   };
 
-  const declineJobOffer = async () => {
+  const declineJobOffer = async (jobId) => {
     try {
       const res = await fetch(`${API_URL}/jobs/decline`, {
         method: 'PUT',
-        headers: getAuthHeaders()
+        headers: getAuthHeaders(),
+        body: JSON.stringify({ jobId })
       });
       if (res.ok) {
-        setUser(prev => ({ ...prev, activeJob: undefined }));
+        const data = await res.json();
+        setUser(prev => ({
+          ...prev,
+          pendingRequests: data.pendingRequests || (prev?.pendingRequests ? prev.pendingRequests.filter(r => r.id !== jobId) : [])
+        }));
         addNotification("Job offer declined.", "warning");
         fetchWorkers();
+        fetchUser();
+      } else {
+        const data = await res.json();
+        addNotification(data.message || "Failed to decline job", "error");
       }
     } catch (err) {
       console.error(err);
@@ -901,6 +927,7 @@ export const WorkkarProvider = ({ children }) => {
       activeJob,
       notifications,
       incomingAlert,
+      pendingRequests,
       darkMode,
       toggleDarkMode,
       login,

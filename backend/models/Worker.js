@@ -146,7 +146,20 @@ const WorkerSchema = new mongoose.Schema({
     status: { type: String },
     workerId: { type: String },
     customerId: { type: String }
-  }
+  },
+  pendingRequests: [{
+    id: { type: String, required: true },
+    customerName: { type: String, required: true },
+    address: { type: String },
+    skill: { type: String },
+    total: { type: Number },
+    base: { type: Number },
+    tax: { type: Number },
+    status: { type: String, default: 'Pending' },
+    workerId: { type: String },
+    customerId: { type: String },
+    createdAt: { type: Date, default: Date.now }
+  }]
 }, {
   timestamps: true
 });

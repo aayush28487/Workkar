@@ -1,6 +1,6 @@
-# Workkar - On-Demand Handyman & Service Freelancer Portal
+# WORKKAR – Daily Wage Worker Providing System
 
-Workkar is a comprehensive MERN-stack platform designed to connect local freelance technicians and handymen (Carpenters, Plumbers, Electricians, etc.) with customers needing immediate, on-demand services. It features real-time job pipelines, location-based matching, worker document verification onboarding, and role-based administration dashboards.
+Workkar is a comprehensive MERN-stack platform designed to connect daily wage workers, local freelance technicians, and handymen (Carpenters, Plumbers, Electricians, etc.) with customers needing immediate, on-demand services. It features real-time job pipelines, location-based matching, worker document verification onboarding, and role-based administration dashboards.
 
 ---
 
@@ -133,7 +133,14 @@ Ensure you have Node.js and MongoDB installed and running locally:
 mongodb://127.0.0.1:27017
 ```
 
-### 2. Setup and Run with Unified Commands
+### 2. Environment Configuration
+Copy the `.env.example` template to `.env` in the root directory:
+```bash
+cp .env.example .env
+```
+Update any required environment variables (e.g., `VITE_GOOGLE_CLIENT_ID`). Safe development defaults are automatically provided for the local MongoDB database and JWT secrets.
+
+### 3. Setup and Run with Unified Commands
 You can set up and run both the frontend and backend simultaneously using these root npm scripts:
 
 **Step A: Install all dependencies (Frontend & Backend)**

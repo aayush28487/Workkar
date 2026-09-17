@@ -176,15 +176,15 @@ export default function ActiveJob() {
                 {/* Footer Buttons */}
                 <div className="p-4 border-t border-outline-variant/30 flex gap-3 bg-surface-container-low/40">
                   <button
-                    onClick={declineJobOffer}
-                    className="flex-1 py-3 border border-outline text-on-surface hover:bg-surface-container-low font-bold text-xs rounded-lg flex items-center justify-center gap-1 active:scale-98 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-blue-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900"
+                    onClick={() => declineJobOffer(incomingAlert.id)}
+                    className="flex-1 py-3 border border-outline text-on-surface hover:bg-surface-container-low font-bold text-xs rounded-lg flex items-center justify-center gap-1 active:scale-98 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-blue-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 cursor-pointer"
                   >
                     <span className="material-symbols-outlined text-[18px]">close</span>
                     {t('workerDashboard.declineBtn')}
                   </button>
                   <button
-                    onClick={acceptJobOffer}
-                    className="flex-1 py-3 bg-primary text-on-primary font-bold text-xs rounded-lg flex items-center justify-center gap-1 shadow hover:bg-primary/90 active:scale-98 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-blue-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 border-none"
+                    onClick={() => acceptJobOffer(incomingAlert.id)}
+                    className="flex-1 py-3 bg-primary text-on-primary font-bold text-xs rounded-lg flex items-center justify-center gap-1 shadow hover:bg-primary/90 active:scale-98 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-blue-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 border-none cursor-pointer"
                   >
                     <span className="material-symbols-outlined text-[18px] fill">check</span>
                     {t('workerDashboard.acceptBtn')}

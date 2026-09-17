@@ -89,6 +89,21 @@ const UserSchema = new mongoose.Schema({
   phone: { type: String },
   bookings: [BookingSchema],
   notifications: [NotificationSchema],
+  
+  // Pending Booking Requests (for worker)
+  pendingRequests: [{
+    id: { type: String, required: true },
+    customerName: { type: String, required: true },
+    address: { type: String },
+    skill: { type: String },
+    total: { type: Number },
+    base: { type: Number },
+    tax: { type: Number },
+    status: { type: String, default: 'Pending' },
+    workerId: { type: String },
+    customerId: { type: String },
+    createdAt: { type: Date, default: Date.now }
+  }],
 }, { timestamps: true });
 
 // Hash password before saving

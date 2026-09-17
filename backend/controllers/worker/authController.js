@@ -21,10 +21,11 @@ const mapWorkerToUser = (worker) => {
     name: workerObj.fullName || '',
     skill: workerObj.profession || '',
     status: workerObj.status || (workerObj.verificationStatus === 'APPROVED' ? 'active' : workerObj.verificationStatus.toLowerCase()),
-    availability: workerObj.activeJob ? 'On Job' : (workerObj.availability === true || workerObj.availability === 'Available' ? 'Available' : 'Offline'),
+    availability: (workerObj.activeJob && workerObj.activeJob.status !== 'Alert') ? 'On Job' : (workerObj.availability === true || workerObj.availability === 'Available' ? 'Available' : 'Offline'),
     textAvatar: initials,
     verificationDocument: workerObj.aadhaarCard ? workerObj.aadhaarCard.split('/').pop() : '',
     activeJob: workerObj.activeJob || null,
+    pendingRequests: workerObj.pendingRequests || [],
     // Mock wallet for compatibility with dashboard views if not present
     wallet: workerObj.wallet || {
       balance: workerObj.earnings || 0,

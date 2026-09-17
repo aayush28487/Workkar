@@ -54,12 +54,15 @@ router.post('/book', protect, async (req, res) => {
       return res.status(404).json({ message: 'Worker not found' });
     }
 
-    const isAvailable = isNew ? worker.availability === true : worker.availability === 'Available';
+    const hasActiveJob = !!(worker.activeJob && worker.activeJob.id);
+    const isAvailable = isNew 
+      ? (worker.availability === true && !hasActiveJob) 
+      : (worker.availability === 'Available' && !hasActiveJob && worker.availability !== 'On Job');
     if (!isAvailable) {
       return res.status(400).json({ message: 'Worker is currently unavailable or on another job' });
     }
 
-    // Set worker's active job as an Alert/Offer
+    // Set pending job request
     const jobOffer = {
       id: `#${Math.floor(100 + Math.random() * 900)}-WK`,
       customerName: customerName || req.user.name,
@@ -68,14 +71,19 @@ router.post('/book', protect, async (req, res) => {
       total: total || ((isNew ? 25 : worker.rate) * 3 + 10),
       base: base || ((isNew ? 25 : worker.rate) * 3),
       tax: tax || 10,
-      step: 1, // Alert / Pending Accept
-      status: 'Alert',
+      step: 1, // Pending
+      status: 'Pending',
       workerId: worker._id.toString(),
-      customerId: req.user._id.toString()
+      customerId: req.user._id.toString(),
+      createdAt: new Date()
     };
 
-    worker.activeJob = jobOffer;
-    worker.availability = isNew ? false : 'On Job';
+    if (!worker.pendingRequests) {
+      worker.pendingRequests = [];
+    }
+    worker.pendingRequests.push(jobOffer);
+    worker.markModified('pendingRequests');
+    // WORKER REMAINS AVAILABLE until they accept!
     await worker.save();
 
     // Update customer bookings and notifications
@@ -101,20 +109,23 @@ router.post('/book', protect, async (req, res) => {
       await req.user.save();
     }
 
-    res.status(200).json({ message: 'Booking request sent to worker', activeJob: jobOffer });
+    res.status(200).json({ message: 'Booking request sent to worker', activeJob: jobOffer, pendingRequests: worker.pendingRequests });
   } catch (error) {
     res.status(500).json({ message: 'Server error booking worker', error: error.message });
   }
 });
 
-// @desc    Get active job for worker
+// @desc    Get active job and pending requests for worker
 // @route   GET /api/jobs/active
 router.get('/active', protect, authorize('worker'), async (req, res) => {
   try {
     const { worker, isNew } = await findWorkerById(req.user._id);
     if (!worker) return res.status(404).json({ message: 'Worker not found' });
 
-    res.json(worker.activeJob || null);
+    res.json({
+      activeJob: worker.activeJob || null,
+      pendingRequests: worker.pendingRequests || []
+    });
   } catch (error) {
     res.status(500).json({ message: 'Server error retrieving active job', error: error.message });
   }
@@ -126,22 +137,78 @@ router.put('/accept', protect, authorize('worker'), async (req, res) => {
   try {
     const { worker, isNew } = await findWorkerById(req.user._id);
     if (!worker) return res.status(404).json({ message: 'Worker not found' });
-    if (!worker.activeJob || worker.activeJob.status !== 'Alert') {
+
+    // Race condition check: Ensure worker is not already on job
+    if ((worker.activeJob && worker.activeJob.id) || worker.availability === 'On Job' || (isNew && worker.availability === false)) {
+      return res.status(400).json({ message: 'Worker is already on an active job' });
+    }
+
+    const { jobId } = req.body;
+    let chosenJob = null;
+
+    if (worker.pendingRequests && worker.pendingRequests.length > 0) {
+      if (jobId) {
+        chosenJob = worker.pendingRequests.find(r => r.id === jobId);
+      } else {
+        chosenJob = worker.pendingRequests[0];
+      }
+    } else if (worker.activeJob && worker.activeJob.status === 'Alert') {
+      chosenJob = worker.activeJob;
+    }
+
+    if (!chosenJob) {
       return res.status(400).json({ message: 'No active job offer to accept' });
     }
 
-    const customerId = worker.activeJob.customerId;
-    const jobId = worker.activeJob.id;
+    const customerId = chosenJob.customerId;
+    const acceptedJobId = chosenJob.id;
     const workerName = isNew ? worker.fullName : worker.name;
 
-    worker.activeJob.step = 2;
-    worker.activeJob.status = 'En Route';
-    // Mark modified for nested subdocuments
+    // Set worker's activeJob and change status to 'On Job'
+    worker.activeJob = {
+      id: chosenJob.id,
+      customerName: chosenJob.customerName,
+      address: chosenJob.address,
+      skill: chosenJob.skill,
+      total: chosenJob.total,
+      base: chosenJob.base,
+      tax: chosenJob.tax,
+      step: 2,
+      status: 'En Route',
+      workerId: chosenJob.workerId,
+      customerId: chosenJob.customerId
+    };
+    worker.availability = isNew ? false : 'On Job';
     worker.markModified('activeJob');
+
+    // Get all other pending requests to cancel them
+    const otherRequests = (worker.pendingRequests || []).filter(r => r.id !== acceptedJobId);
+    worker.pendingRequests = [];
+    worker.markModified('pendingRequests');
     await worker.save();
 
+    // 1. Update accepted customer booking
     if (customerId) {
-      await updateCustomerBooking(customerId, jobId, 'Accepted', `Worker ${workerName} has accepted your booking #${jobId} and is en route.`, 'success');
+      await updateCustomerBooking(
+        customerId,
+        acceptedJobId,
+        'Accepted',
+        `Worker ${workerName} has accepted your booking #${acceptedJobId} and is en route.`,
+        'success'
+      );
+    }
+
+    // 2. Auto-cancel all other pending requests with explanation notification
+    for (const otherReq of otherRequests) {
+      if (otherReq.customerId) {
+        await updateCustomerBooking(
+          otherReq.customerId,
+          otherReq.id,
+          'Cancelled',
+          'Worker is no longer available because another booking was accepted.',
+          'warning'
+        );
+      }
     }
 
     res.json({ message: 'Job accepted. En route to client.', activeJob: worker.activeJob });
@@ -156,23 +223,52 @@ router.put('/decline', protect, authorize('worker'), async (req, res) => {
   try {
     const { worker, isNew } = await findWorkerById(req.user._id);
     if (!worker) return res.status(404).json({ message: 'Worker not found' });
-    if (!worker.activeJob || worker.activeJob.status !== 'Alert') {
-      return res.status(400).json({ message: 'No active job offer to decline' });
+
+    const { jobId } = req.body;
+    let declinedJob = null;
+
+    if (worker.pendingRequests && worker.pendingRequests.length > 0) {
+      if (jobId) {
+        const idx = worker.pendingRequests.findIndex(r => r.id === jobId);
+        if (idx !== -1) {
+          declinedJob = worker.pendingRequests[idx];
+          worker.pendingRequests.splice(idx, 1);
+          worker.markModified('pendingRequests');
+        }
+      } else {
+        declinedJob = worker.pendingRequests.shift();
+        worker.markModified('pendingRequests');
+      }
+    } else if (worker.activeJob && worker.activeJob.status === 'Alert') {
+      declinedJob = worker.activeJob;
+      worker.activeJob = undefined;
     }
 
-    const customerId = worker.activeJob.customerId;
-    const jobId = worker.activeJob.id;
-    const workerName = isNew ? worker.fullName : worker.name;
+    if (!declinedJob) {
+      return res.status(400).json({ message: 'No job offer to decline' });
+    }
 
-    worker.activeJob = undefined;
-    worker.availability = isNew ? true : 'Available';
+    // Worker remains available if no ongoing active job
+    if (!worker.activeJob) {
+      worker.availability = isNew ? true : 'Available';
+    }
     await worker.save();
 
+    const customerId = declinedJob.customerId;
+    const declinedJobId = declinedJob.id;
+    const workerName = isNew ? worker.fullName : worker.name;
+
     if (customerId) {
-      await updateCustomerBooking(customerId, jobId, 'Declined', `Worker ${workerName} has declined your booking request #${jobId}.`, 'warning');
+      await updateCustomerBooking(
+        customerId,
+        declinedJobId,
+        'Declined',
+        `Worker ${workerName} has declined your booking request #${declinedJobId}.`,
+        'warning'
+      );
     }
 
-    res.json({ message: 'Job offer declined.' });
+    res.json({ message: 'Job offer declined.', pendingRequests: worker.pendingRequests || [] });
   } catch (error) {
     res.status(500).json({ message: 'Server error declining job', error: error.message });
   }
@@ -437,9 +533,15 @@ router.put('/cancel/:jobId', protect, async (req, res) => {
 
     // Find worker to release them
     const { worker, isNew } = await findWorkerById(booking.workerId);
-    if (worker && worker.activeJob && worker.activeJob.id === req.params.jobId) {
-      worker.activeJob = undefined;
-      worker.availability = isNew ? true : 'Available';
+    if (worker) {
+      if (worker.pendingRequests) {
+        worker.pendingRequests = worker.pendingRequests.filter(r => r.id !== req.params.jobId);
+        worker.markModified('pendingRequests');
+      }
+      if (worker.activeJob && worker.activeJob.id === req.params.jobId) {
+        worker.activeJob = undefined;
+        worker.availability = isNew ? true : 'Available';
+      }
       await worker.save();
     }
 

@@ -1,4 +1,4 @@
-# Logs
+# Logs & Dumps
 logs
 *.log
 npm-debug.log*
@@ -6,25 +6,43 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
+*.stackdump
 
-node_modules
-dist
-dist-ssr
+# Environment Variables & Secrets
+.env
+.env.*
+!.env.example
+backend/.env
+backend/.env.*
+
+# Dependencies
+node_modules/
+backend/node_modules/
+
+# Production Builds
+dist/
+dist-ssr/
+build/
+
+# Uploads & User Generated Content
+backend/uploads/
+uploads/
+
+# Local & Temporary Files
 *.local
+.DS_Store
+Thumbs.db
 
-# Editor directories and files
+# Editor & IDE settings
 .vscode/*
 !.vscode/extensions.json
-.idea
-.DS_Store
+.idea/
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
 
-# Backend exclusions
-backend/node_modules/
-backend/.env
-backend/uploads/
+# Miscellaneous
 graphify-out/
+coverage/

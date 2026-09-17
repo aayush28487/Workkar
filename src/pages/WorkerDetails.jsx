@@ -210,6 +210,13 @@ export default function WorkerDetails() {
                   {t('modals.bookWorkerTitle', { name: worker.name })}
                 </h3>
 
+                {worker.availability === 'On Job' && (
+                  <div className="mb-4 p-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-500/30 rounded-xl text-amber-800 dark:text-amber-300 text-xs flex items-center gap-2">
+                    <span className="material-symbols-outlined text-[18px]">engineering</span>
+                    <p className="font-semibold">Worker is currently on an active job and cannot accept new bookings.</p>
+                  </div>
+                )}
+
                 <form onSubmit={handleBookingSubmit} className="flex flex-col gap-4">
                   <div className="flex flex-col gap-1">
                     <label className="font-semibold text-xs text-on-surface-variant">{t('modals.serviceDate')}</label>
@@ -259,12 +266,14 @@ export default function WorkerDetails() {
 
                   <button
                     type="submit"
-                    disabled={worker.availability === 'Offline'}
+                    disabled={worker.availability !== 'Available'}
                     className={`w-full py-3 bg-primary text-on-primary rounded-lg transition-all font-bold text-xs text-center mt-2 shadow hover:shadow-md active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-blue-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900 border-none ${
-                      worker.availability === 'Offline' ? 'opacity-40 cursor-not-allowed' : 'hover:bg-primary/90'
+                      worker.availability !== 'Available' ? 'opacity-40 cursor-not-allowed bg-slate-400 dark:bg-slate-700' : 'hover:bg-primary/90 cursor-pointer'
                     }`}
                   >
-                    {worker.availability === 'Offline' ? t('common.offline') : t('modals.confirmBookingBtn')}
+                    {worker.availability === 'On Job'
+                      ? t('common.onJob')
+                      : (worker.availability === 'Offline' ? t('common.offline') : t('modals.confirmBookingBtn'))}
                   </button>
                 </form>
               </>
