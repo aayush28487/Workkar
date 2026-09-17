@@ -9,11 +9,24 @@ const connectDB = async (retryCount = 0) => {
   isConnecting = true;
 
   try {
-    let uri = process.env.MONGODB_URI;
-    if (uri) {
-      uri = uri.trim().replace(/^["']|["']$/g, '');
-      // Automatically clean accidental angle brackets around the password: :<password>@ -> :password@
-      uri = uri.replace(/:<([^>]+)>@/, ':$1@');
+    let uri = process.env.MONGODB_URI || '';
+    
+    // Robustly extract the mongodb:// or mongodb+srv:// connection string from any pasted text/wrapper
+    const match = uri.match(/mongodb(?:\+srv)?:\/\/[^\s"'`]+/);
+    if (match) {
+      uri = match[0];
+    } else {
+      uri = uri.trim().replace(/^["'`]|["'`]$/g, '');
+    }
+
+    // Automatically clean accidental angle brackets around the password: :<password>@ -> :password@
+    uri = uri.replace(/:<([^>]+)>@/, ':$1@');
+
+    if (!uri || (!uri.startsWith('mongodb://') && !uri.startsWith('mongodb+srv://'))) {
+      console.error('[DB Config Error] MONGODB_URI environment variable is missing or does not start with mongodb:// or mongodb+srv://');
+      console.error('[DB Config Error] Current value received:', JSON.stringify(uri.substring(0, 20) + '...'));
+      isConnecting = false;
+      return;
     }
 
     // Configure reliable DNS servers for MongoDB Atlas SRV record resolution
