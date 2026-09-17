@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import mongoose from 'mongoose';
 import connectDB from './config/db.js';
 import authRoutes from './routes/auth.js';
 import workerRoutes from './routes/workers.js';
@@ -66,9 +67,23 @@ app.use('/api/auth/worker', workerAuthRoutes);
 app.use('/api/worker', workerPermissionRoutes);
 app.use('/api/worker', workerProfileRoutes);
 
-// Health check endpoint
+// Health check endpoints
 app.get('/', (req, res) => {
-  res.send('Workkar API is running...');
+  const isConnected = mongoose.connection.readyState === 1;
+  res.json({
+    message: 'Workkar API is running...',
+    database: isConnected ? 'connected' : 'connecting',
+    status: 'ok',
+  });
+});
+
+app.get(['/health', '/api/health'], (req, res) => {
+  const isConnected = mongoose.connection.readyState === 1;
+  res.status(isConnected ? 200 : 200).json({
+    status: isConnected ? 'healthy' : 'connecting',
+    database: isConnected ? 'connected' : 'connecting',
+    uptime: process.uptime(),
+  });
 });
 
 // Database Seeding function
@@ -222,5 +237,11 @@ const seedDatabase = async () => {
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-  seedDatabase();
+  if (mongoose.connection.readyState === 1) {
+    seedDatabase();
+  } else {
+    mongoose.connection.once('open', () => {
+      seedDatabase();
+    });
+  }
 });
