@@ -13,3 +13,5 @@ services:
         sync: false
       - key: JWT_SECRET
         sync: false
+      - key: CLIENT_URL
+        value: https://workkar-jdv7.vercel.app

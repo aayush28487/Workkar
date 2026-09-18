@@ -123,7 +123,7 @@ router.post('/login', async (req, res) => {
 // @route   GET /api/auth/me
 router.get('/me', protect, async (req, res) => {
   try {
-    const user = await User.findById(req.user._id);
+    const user = await User.findById(req.user._id).select('-password');
     if (user) {
       res.json(user);
     } else {

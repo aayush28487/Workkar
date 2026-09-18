@@ -27,33 +27,49 @@ Workkar is a comprehensive MERN-stack platform designed to connect daily wage wo
 ## 📂 Project Directory Structure
 
 ```text
-Workkar-Main/
-├── backend/                  # Backend Node.js / Express Server
-│   ├── config/               # Database connection setup (db.js)
-│   ├── controllers/          # Onboarding handlers (auth, permissions, profile uploads)
-│   ├── middleware/           # Request verification guards (protect, authorize)
-│   ├── models/               # MongoDB Schemas (User.js, Worker.js, AuditLog.js)
-│   ├── routes/               # API endpoints (admin, auth, jobs, workers, worker/)
-│   └── server.js             # Main server bootstrap & database seeding
+Workkar/
+├── frontend/                    # Frontend React + Vite Application
+│   ├── public/                  # Public assets (icons, static graphics)
+│   ├── src/                     # Frontend React codebase
+│   │   ├── assets/              # UI components assets and SVGs
+│   │   ├── components/          # Shared widgets (Navbar, Footer, ServiceCard, WorkerCard, Charts)
+│   │   │   └── worker/          # Worker UI elements (Stepper, PermissionCard, UploadCard)
+│   │   ├── config/              # API URL configuration (api.js)
+│   │   ├── context/             # WorkkarContext state (Auth state, API booking handlers, notifications)
+│   │   ├── data/                # Client mockData
+│   │   ├── layouts/             # Theme wrappers (ClientLayout, WorkerLayout, AdminLayout)
+│   │   ├── locales/             # Internationalization (en.js, hi.js)
+│   │   ├── pages/               # App pages (Home, Services, Login, Dashboards)
+│   │   │   └── worker/          # Onboarding states (Register, Login, Permissions, ProfileSetup, Pending)
+│   │   ├── routes/              # Custom routes config (workerRoutes.jsx)
+│   │   ├── services/            # API client utilities (workerApi.js)
+│   │   ├── App.css              # Core custom styles
+│   │   ├── App.jsx              # Main React entry router & ProtectedRoute guard
+│   │   └── index.css            # Tailwind CSS entry imports
+│   ├── .env.example             # Frontend environment template
+│   ├── index.html               # Vite entry HTML
+│   ├── package.json             # Frontend dependencies
+│   ├── vite.config.js           # Vite configuration
+│   ├── tailwind.config.js       # Tailwind CSS configuration
+│   ├── postcss.config.js        # PostCSS configuration
+│   ├── eslint.config.js         # ESLint configuration
+│   └── vercel.json              # Vercel deployment config
 │
-├── public/                   # Public assets (icons, static graphics)
-├── src/                      # Frontend React codebase
-│   ├── assets/               # UI components assets and SVGs
-│   ├── components/           # Shared widgets (Navbar, Footer, ServiceCard, WorkerCard, Charts)
-│   │   └── worker/           # Worker UI elements (Stepper, PermissionCard, UploadCard)
-│   ├── context/              # WorkkarContext state (Auth state, API booking handlers, notifications)
-│   ├── data/                 # Client mockData
-│   ├── layouts/              # Theme wrappers (ClientLayout, WorkerLayout, AdminLayout)
-│   ├── pages/                # App pages (Home, Services, Login, Dashboards)
-│   │   └── worker/           # Onboarding states (Register, Login, Permissions, ProfileSetup, Pending)
-│   ├── routes/               # Custom routes config (workerRoutes.jsx)
-│   ├── services/             # API client utilities (workerApi.js)
-│   ├── App.css               # Core custom styles
-│   ├── App.jsx               # Main React entry router & ProtectedRoute guard
-│   └── index.css             # Tailwind CSS entry imports
+├── backend/                     # Backend Node.js / Express Server
+│   ├── config/                  # Database connection setup (db.js)
+│   ├── controllers/             # Onboarding handlers (auth, permissions, profile uploads)
+│   ├── middleware/              # Request verification guards (protect, authorize)
+│   ├── models/                  # MongoDB Schemas (User.js, Worker.js, AuditLog.js, Message.js)
+│   ├── routes/                  # API endpoints (admin, auth, jobs, workers, worker/)
+│   ├── uploads/                 # Uploaded documents (aadhaar, pan, profile)
+│   ├── .env.example             # Backend environment template
+│   ├── server.js                # Main server bootstrap & database seeding
+│   └── package.json             # Backend dependencies
 │
-├── .env                      # Frontend environment configs (Google Auth Client ID)
-└── package.json              # Frontend dependencies and npm scripts
+├── package.json                 # Root orchestration scripts
+├── render.yaml                  # Render deployment config (backend)
+├── README.md                    # This file
+└── .gitignore                   # Git ignore rules
 ```
 
 ---
@@ -128,29 +144,40 @@ The backend server automatically seeds default records if the database is empty 
 ## 🚀 Running the Project Locally
 
 ### 1. Prerequisites
-Ensure you have Node.js and MongoDB installed and running locally:
+Ensure you have Node.js (>=18) and MongoDB installed and running locally:
 ```bash
 mongodb://127.0.0.1:27017
 ```
 
 ### 2. Environment Configuration
-Copy the `.env.example` template to `.env` in the root directory:
+
+Copy the `.env.example` templates in each folder:
 ```bash
-cp .env.example .env
+# Frontend
+cp frontend/.env.example frontend/.env
+
+# Backend
+cp backend/.env.example backend/.env
 ```
-Update any required environment variables (e.g., `VITE_GOOGLE_CLIENT_ID`). Safe development defaults are automatically provided for the local MongoDB database and JWT secrets.
+Update any required environment variables (e.g., `VITE_GOOGLE_CLIENT_ID` in frontend, `MONGODB_URI` in backend). Safe development defaults are automatically provided for the local MongoDB database and JWT secrets.
 
-### 3. Setup and Run with Unified Commands
-You can set up and run both the frontend and backend simultaneously using these root npm scripts:
+### 3. Setup and Run
 
-**Step A: Install all dependencies (Frontend & Backend)**
+**Step A: Install all dependencies (Root, Frontend & Backend)**
 ```bash
-npm run install-all
+npm install          # Install root orchestration deps (concurrently)
+npm run install-all  # Install frontend & backend deps
 ```
 
 **Step B: Start both Frontend and Backend concurrently**
 ```bash
-npm run start
+npm run dev
+```
+
+Or run them individually:
+```bash
+npm run dev:frontend   # Frontend only (http://localhost:5173)
+npm run dev:backend    # Backend only (http://localhost:5000)
 ```
 
 This starts:

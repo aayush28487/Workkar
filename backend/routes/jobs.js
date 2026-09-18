@@ -481,7 +481,7 @@ router.post('/withdraw', protect, authorize('worker'), async (req, res) => {
 
 // @desc    Get all active assignments (Admin)
 // @route   GET /api/jobs/assignments
-router.get('/assignments', protect, authorize('admin'), async (req, res) => {
+router.get('/assignments', protect, authorize('admin', 'supreme-admin'), async (req, res) => {
   try {
     // Find all workers that have an activeJob defined
     const activeLegacyWorkers = await User.find({ role: 'worker', 'activeJob.id': { $exists: true } });
