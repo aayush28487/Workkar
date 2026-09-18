@@ -223,10 +223,10 @@ export default function Home() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="lg:col-span-5 relative flex justify-center items-center"
+              className="lg:col-span-5 relative flex justify-center items-center px-1 sm:px-0"
             >
               {/* Outer Decorative Ring */}
-              <div className="relative w-full max-w-[420px] aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl border-4 border-white/80 dark:border-slate-800/80">
+              <div className="relative w-full max-w-[340px] sm:max-w-[420px] aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl border-4 border-white/80 dark:border-slate-800/80">
                 <img
                   src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=85"
                   alt="Verified Professional Tradesperson"
@@ -234,15 +234,15 @@ export default function Home() {
                 />
 
                 {/* Bottom Gradient Overlay with CTA */}
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent flex flex-col justify-end p-6 text-white">
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent flex flex-col justify-end p-5 sm:p-6 text-white">
                   <div className="flex items-center gap-2 mb-2">
                     <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
-                    <span className="text-xs font-extrabold uppercase tracking-wider text-emerald-300">Live Available Now</span>
+                    <span className="text-[11px] sm:text-xs font-extrabold uppercase tracking-wider text-emerald-300">Live Available Now</span>
                   </div>
-                  <h3 className="font-display-lg text-2xl font-extrabold text-white leading-tight">
+                  <h3 className="font-display-lg text-xl sm:text-2xl font-extrabold text-white leading-tight">
                     Reliable Hands for Every Job
                   </h3>
-                  <p className="text-xs text-slate-200 mt-1">
+                  <p className="text-[11px] sm:text-xs text-slate-200 mt-1">
                     Direct hourly booking with immediate dispatch & GPS arrival.
                   </p>
                 </div>
@@ -252,17 +252,17 @@ export default function Home() {
               <motion.div
                 animate={{ y: [0, -6, 0] }}
                 transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-                className="absolute -top-4 -left-6 sm:-left-8 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-3.5 rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-800 flex items-center gap-3 z-20 max-w-[230px]"
+                className="absolute -top-3 left-2 sm:-top-4 sm:-left-6 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-2.5 sm:p-3.5 rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-800 flex items-center gap-2.5 sm:gap-3 z-20 max-w-[200px] sm:max-w-[230px]"
               >
-                <div className="w-10 h-10 rounded-full bg-blue-500/10 dark:bg-blue-500/20 flex items-center justify-center text-primary dark:text-blue-400 shrink-0">
-                  <Zap size={20} className="fill-primary" />
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-blue-500/10 dark:bg-blue-500/20 flex items-center justify-center text-primary dark:text-blue-400 shrink-0">
+                  <Zap size={18} className="fill-primary" />
                 </div>
                 <div className="text-left text-xs">
-                  <p className="font-extrabold text-slate-900 dark:text-white flex items-center gap-1">
+                  <p className="font-extrabold text-slate-900 dark:text-white flex items-center gap-1 text-[11px] sm:text-xs">
                     Live Dispatch
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
                   </p>
-                  <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium mt-0.5">
+                  <p className="text-[9px] sm:text-[10px] text-slate-500 dark:text-slate-400 font-medium mt-0.5">
                     Worker arriving in <span className="font-bold text-emerald-600 dark:text-emerald-400">12 mins</span>
                   </p>
                 </div>
@@ -272,16 +272,16 @@ export default function Home() {
               <motion.div
                 animate={{ y: [0, 6, 0] }}
                 transition={{ repeat: Infinity, duration: 4.5, ease: "easeInOut", delay: 1 }}
-                className="absolute -bottom-6 -right-4 sm:-right-6 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-3.5 rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-800 flex items-center gap-3 z-20 max-w-[240px]"
+                className="absolute -bottom-4 right-2 sm:-bottom-6 sm:-right-4 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md p-2.5 sm:p-3.5 rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-800 flex items-center gap-2.5 sm:gap-3 z-20 max-w-[200px] sm:max-w-[240px]"
               >
-                <div className="w-10 h-10 rounded-full bg-emerald-500/10 dark:bg-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shrink-0">
-                  <BadgeCheck size={22} />
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-emerald-500/10 dark:bg-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shrink-0">
+                  <BadgeCheck size={20} />
                 </div>
                 <div className="text-left text-xs">
-                  <p className="font-extrabold text-slate-900 dark:text-white">
+                  <p className="font-extrabold text-slate-900 dark:text-white text-[11px] sm:text-xs">
                     Escrow Protection
                   </p>
-                  <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium mt-0.5">
+                  <p className="text-[9px] sm:text-[10px] text-slate-500 dark:text-slate-400 font-medium mt-0.5">
                     Pay only after job approval
                   </p>
                 </div>
@@ -304,22 +304,22 @@ export default function Home() {
       </section>
 
       {/* 3. Live Trust & Quality Metrics Bar */}
-      <section className="py-10 bg-surface border-b border-outline-variant/15">
+      <section className="py-8 sm:py-10 bg-surface border-b border-outline-variant/15">
         <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6">
             {TRUST_METRICS.map((metric) => (
               <div
                 key={metric.id}
-                className="flex items-center gap-3.5 p-4 rounded-2xl bg-surface-container-lowest border border-outline-variant/20 shadow-sm"
+                className="flex items-center gap-2.5 sm:gap-3.5 p-3 sm:p-4 rounded-2xl bg-surface-container-lowest border border-outline-variant/20 shadow-sm"
               >
-                <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
-                  <span className="material-symbols-outlined text-2xl">{metric.icon}</span>
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                  <span className="material-symbols-outlined text-xl sm:text-2xl">{metric.icon}</span>
                 </div>
                 <div className="text-left">
-                  <h4 className="font-display-lg text-lg sm:text-xl font-extrabold text-on-surface">
+                  <h4 className="font-display-lg text-base sm:text-xl font-extrabold text-on-surface">
                     {metric.value}
                   </h4>
-                  <p className="font-label-md text-xs font-bold text-on-surface-variant">
+                  <p className="font-label-md text-[11px] sm:text-xs font-bold text-on-surface-variant">
                     {metric.label}
                   </p>
                 </div>
@@ -471,9 +471,9 @@ export default function Home() {
       </section>
 
       {/* 7. High-Impact Worker Partner Call-to-Action Banner */}
-      <section className="py-16 bg-surface">
+      <section className="py-12 sm:py-16 bg-surface">
         <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
-          <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white p-8 md:p-14 shadow-2xl">
+          <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white p-6 sm:p-10 md:p-14 shadow-2xl">
             {/* Background Texture & Glow */}
             <div className="absolute -right-16 -top-16 w-80 h-80 bg-blue-500/20 rounded-full blur-3xl pointer-events-none"></div>
             
@@ -482,24 +482,24 @@ export default function Home() {
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-extrabold bg-white/10 text-emerald-300 border border-white/10 uppercase tracking-wider">
                   👷 Worker Partner Onboarding
                 </span>
-                <h2 className="font-display-lg text-3xl md:text-4xl font-extrabold text-white leading-tight">
+                <h2 className="font-display-lg text-2xl sm:text-3xl md:text-4xl font-extrabold text-white leading-tight">
                   Are You a Skilled Tradesperson? Earn Daily Wage on Your Terms.
                 </h2>
-                <p className="font-body-md text-sm text-slate-300 max-w-xl leading-relaxed">
+                <p className="font-body-md text-xs sm:text-sm text-slate-300 max-w-xl leading-relaxed">
                   Join 5,000+ verified electricians, plumbers, carpenters, and painters. Get direct job alerts in your area, guaranteed instant daily payouts, and zero registration fees.
                 </p>
 
-                <div className="flex flex-wrap gap-4 pt-2">
+                <div className="flex flex-col sm:flex-row gap-3 pt-2">
                   <button
                     onClick={() => navigate('/worker/register')}
-                    className="bg-primary-container text-white px-8 py-3.5 rounded-xl font-bold text-sm hover:bg-blue-600 transition-all shadow-lg active:scale-95 flex items-center gap-2 cursor-pointer border-none"
+                    className="w-full sm:w-auto bg-primary-container text-white px-6 sm:px-8 py-3.5 rounded-xl font-bold text-sm hover:bg-blue-600 transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2 cursor-pointer border-none"
                   >
                     <span>Register as Worker Partner</span>
                     <ArrowRight size={16} />
                   </button>
                   <button
                     onClick={() => navigate('/worker/login')}
-                    className="bg-white/10 hover:bg-white/20 text-white px-6 py-3.5 rounded-xl font-bold text-sm transition-all border border-white/20 active:scale-95 cursor-pointer"
+                    className="w-full sm:w-auto bg-white/10 hover:bg-white/20 text-white px-6 py-3.5 rounded-xl font-bold text-sm transition-all border border-white/20 active:scale-95 cursor-pointer text-center"
                   >
                     Partner Login
                   </button>
@@ -507,7 +507,7 @@ export default function Home() {
               </div>
 
               <div className="md:col-span-4 flex justify-center">
-                <div className="w-44 h-44 rounded-full border-4 border-white/20 overflow-hidden shadow-2xl relative">
+                <div className="w-36 h-36 sm:w-44 sm:h-44 rounded-full border-4 border-white/20 overflow-hidden shadow-2xl relative">
                   <img
                     src="https://images.unsplash.com/photo-1540569014015-19a7be504e3a?auto=format&fit=crop&w=400&q=80"
                     alt="Happy Partner Worker"

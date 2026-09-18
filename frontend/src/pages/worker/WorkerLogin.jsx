@@ -59,7 +59,7 @@ export default function WorkerLogin() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col justify-center py-12 sm:px-6 lg:px-8 transition-colors">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col justify-center py-6 sm:py-12 px-3 sm:px-6 lg:px-8 transition-colors">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -67,24 +67,43 @@ export default function WorkerLogin() {
           className="flex flex-col items-center justify-center"
         >
           {/* Logo Icon */}
-          <div className="w-14 h-14 bg-blue-600 dark:bg-blue-500 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/30 text-white font-extrabold text-2xl tracking-tight mb-4">
+          <div className="w-12 h-12 sm:w-14 sm:h-14 bg-blue-600 dark:bg-blue-500 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/30 text-white font-extrabold text-xl sm:text-2xl tracking-tight mb-3">
             W
           </div>
-          <h2 className="text-center text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+          <h2 className="text-center text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
             WORKKAR <span className="text-orange-500 font-medium">{t('nav.workerDashboard')}</span>
           </h2>
-          <p className="mt-2 text-center text-sm text-slate-500 dark:text-slate-400">
+          <p className="mt-1 text-center text-xs sm:text-sm text-slate-500 dark:text-slate-400">
             {t('workerAuth.loginSubtitle')}
           </p>
+
+          {/* Role switcher toggle */}
+          <div className="mt-4 w-full p-1 bg-slate-200/80 dark:bg-slate-800/80 rounded-2xl flex items-center gap-1 border border-slate-300/40 dark:border-slate-700">
+            <button
+              type="button"
+              onClick={() => navigate('/login')}
+              className="flex-1 py-2 px-3 rounded-xl font-bold text-xs transition-all text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
+            >
+              <span className="material-symbols-outlined text-[16px]">person</span>
+              <span>Customer</span>
+            </button>
+            <button
+              type="button"
+              className="flex-1 py-2 px-3 rounded-xl font-bold text-xs transition-all bg-white dark:bg-slate-900 text-orange-600 dark:text-orange-400 shadow-sm flex items-center justify-center gap-1.5 cursor-default"
+            >
+              <span className="material-symbols-outlined text-[16px]">handyman</span>
+              <span>Worker Partner</span>
+            </button>
+          </div>
         </motion.div>
       </div>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+      <div className="mt-6 sm:mx-auto sm:w-full sm:max-w-md">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.1 }}
-          className="bg-white dark:bg-slate-900 py-8 px-4 shadow-xl shadow-slate-100 dark:shadow-none sm:rounded-2xl sm:px-10 border border-slate-100 dark:border-slate-800"
+          className="bg-white dark:bg-slate-900 py-6 px-4 sm:py-8 sm:px-10 shadow-xl shadow-slate-100 dark:shadow-none rounded-2xl border border-slate-100 dark:border-slate-800"
         >
           <form className="space-y-6" onSubmit={handleSubmit}>
             {error && (
@@ -201,13 +220,22 @@ export default function WorkerLogin() {
               </div>
             </div>
 
-            <div className="mt-6 text-center">
+            <div className="mt-6 text-center flex flex-col gap-2">
               <Link
                 to="/worker/register"
-                className="inline-flex items-center justify-center px-4 py-2 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors w-full"
+                className="inline-flex items-center justify-center px-4 py-2.5 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors w-full"
               >
                 {t('workerAuth.registerTitle')}
               </Link>
+              
+              <div className="pt-2 border-t border-slate-100 dark:border-slate-800/80">
+                <Link
+                  to="/login"
+                  className="text-xs text-blue-600 dark:text-blue-400 font-semibold hover:underline inline-flex items-center gap-1"
+                >
+                  <span>Looking for customer login? Sign in here</span>
+                </Link>
+              </div>
             </div>
           </div>
         </motion.div>

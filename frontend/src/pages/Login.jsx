@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useWorkkar } from '../context/WorkkarContext';
 import { useLanguage } from '../context/LanguageContext';
 import { motion } from 'framer-motion';
+import { Eye, EyeOff } from 'lucide-react';
 
 export default function Login() {
   const { login, loginWithGoogle, register, user, addNotification } = useWorkkar();
@@ -14,6 +15,7 @@ export default function Login() {
   const [isLogin, setIsLogin] = useState(true);
   const [role, setRole] = useState('customer'); // Locked to customer, workers use partner portal
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   // Form states
   const [name, setName] = useState('');
@@ -155,30 +157,50 @@ export default function Login() {
   const skillsList = ['Electrician', 'Plumber', 'Mason', 'Painter', 'Carpenter', 'Cleaner', 'Welder', 'Gardener'];
 
   return (
-    <div className="min-h-[85vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-tr from-surface-container-lowest via-surface-container-low to-surface-container-high transition-colors duration-200">
+    <div className="min-h-[85vh] flex items-center justify-center py-6 sm:py-12 px-3 sm:px-6 lg:px-8 bg-gradient-to-tr from-surface-container-lowest via-surface-container-low to-surface-container-high transition-colors duration-200">
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="max-w-md w-full space-y-8 p-8 bg-surface-container-lowest/80 dark:bg-surface-container-low/60 backdrop-blur-xl border border-outline-variant/30 rounded-3xl shadow-2xl"
+        className="max-w-md w-full space-y-6 p-5 sm:p-8 bg-surface-container-lowest/90 dark:bg-surface-container-low/80 backdrop-blur-xl border border-outline-variant/30 rounded-2xl sm:rounded-3xl shadow-2xl"
       >
         <div>
           <div className="flex justify-center text-primary">
-            <span className="material-symbols-outlined text-5xl fill">engineering</span>
+            <span className="material-symbols-outlined text-4xl sm:text-5xl fill">engineering</span>
           </div>
-          <h2 className="mt-4 text-center font-headline-md text-headline-md font-extrabold tracking-tight text-on-surface">
+
+          {/* Quick Segmented Role Selector: Customer vs Worker Portal */}
+          <div className="mt-4 p-1 bg-surface-container-low dark:bg-slate-800/80 rounded-2xl flex items-center gap-1 border border-outline-variant/30">
+            <button
+              type="button"
+              className="flex-1 py-2 px-3 rounded-xl font-bold text-xs transition-all bg-surface-container-lowest dark:bg-slate-900 text-primary dark:text-white shadow-sm flex items-center justify-center gap-1.5 cursor-default"
+            >
+              <span className="material-symbols-outlined text-[16px]">person</span>
+              <span>Customer</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => navigate(isLogin ? '/worker/login' : '/worker/register')}
+              className="flex-1 py-2 px-3 rounded-xl font-bold text-xs transition-all text-on-surface-variant hover:text-on-surface flex items-center justify-center gap-1.5 cursor-pointer active:scale-95"
+            >
+              <span className="material-symbols-outlined text-[16px] text-orange-500">handyman</span>
+              <span>Worker Partner</span>
+            </button>
+          </div>
+
+          <h2 className="mt-4 text-center font-headline-md text-xl sm:text-headline-md font-extrabold tracking-tight text-on-surface">
             {isLogin ? t('auth.customerLoginTitle') : t('auth.customerRegisterTitle')}
           </h2>
-          <p className="mt-2 text-center text-body-md text-on-surface-variant">
+          <p className="mt-1 text-center text-xs sm:text-sm text-on-surface-variant">
             {isLogin ? t('auth.customerLoginSubtitle') : t('auth.customerRegisterSubtitle')}
           </p>
         </div>
 
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+        <form className="mt-6 space-y-5" onSubmit={handleSubmit}>
           <div className="space-y-4">
             {!isLogin && (
               <div>
-                <label className="block text-sm font-semibold text-on-surface-variant mb-1" htmlFor="name">
+                <label className="block text-xs sm:text-sm font-semibold text-on-surface-variant mb-1" htmlFor="name">
                   {t('auth.nameLabel')}
                 </label>
                 <input
@@ -194,7 +216,7 @@ export default function Login() {
             )}
 
             <div>
-              <label className="block text-sm font-semibold text-on-surface-variant mb-1" htmlFor="email">
+              <label className="block text-xs sm:text-sm font-semibold text-on-surface-variant mb-1" htmlFor="email">
                 {t('auth.emailLabel')}
               </label>
               <input
@@ -209,18 +231,28 @@ export default function Login() {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-on-surface-variant mb-1" htmlFor="password">
+              <label className="block text-xs sm:text-sm font-semibold text-on-surface-variant mb-1" htmlFor="password">
                 {t('auth.passwordLabel')}
               </label>
-              <input
-                id="password"
-                type="password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl border border-outline-variant/40 bg-surface/50 dark:bg-surface-container-low/50 text-on-surface placeholder-outline focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-blue-400 transition-all text-sm"
-                placeholder={t('auth.passwordPlaceholder')}
-              />
+              <div className="relative">
+                <input
+                  id="password"
+                  type={showPassword ? 'text' : 'password'}
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full px-4 py-3 pr-11 rounded-xl border border-outline-variant/40 bg-surface/50 dark:bg-surface-container-low/50 text-on-surface placeholder-outline focus:outline-none focus:ring-2 focus:ring-primary dark:focus:ring-blue-400 transition-all text-sm"
+                  placeholder={t('auth.passwordPlaceholder')}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer"
+                  aria-label="Toggle password visibility"
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
             </div>
 
             {/* Custom fields based on role & register status */}
@@ -392,13 +424,24 @@ export default function Login() {
           </div>
         )}
 
-        <div className="text-center mt-4">
+        <div className="text-center mt-4 flex flex-col gap-3">
           <button
+            type="button"
             onClick={() => setIsLogin(!isLogin)}
-            className="text-sm font-semibold text-primary hover:text-primary/80 dark:text-blue-400 dark:hover:text-blue-300 transition-colors"
+            className="text-sm font-semibold text-primary hover:text-primary/80 dark:text-blue-400 dark:hover:text-blue-300 transition-colors cursor-pointer py-1"
           >
             {isLogin ? t('auth.noAccount') + ' ' + t('nav.register') : t('auth.hasAccount') + ' ' + t('nav.signIn')}
           </button>
+
+          <div className="pt-3 border-t border-outline-variant/20">
+            <button
+              type="button"
+              onClick={() => navigate(isLogin ? '/worker/login' : '/worker/register')}
+              className="text-xs font-semibold text-orange-600 dark:text-orange-400 hover:underline flex items-center justify-center gap-1 mx-auto cursor-pointer"
+            >
+              <span>👷 {isLogin ? 'Are you a worker? Sign in to Worker Portal' : 'Want to offer services? Register as Worker Partner'}</span>
+            </button>
+          </div>
         </div>
       </motion.div>
     </div>

@@ -65,7 +65,7 @@ export function WithdrawModal({ isOpen, onClose }) {
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.9, y: 20 }}
-          className="relative bg-surface-container-lowest border border-outline-variant/30 rounded-2xl p-6 shadow-2xl max-w-md w-full overflow-hidden"
+          className="relative bg-surface-container-lowest border border-outline-variant/30 rounded-2xl p-5 sm:p-6 shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto"
         >
           {status === 'idle' && (
             <>
@@ -196,10 +196,10 @@ export function ServiceModal({ service, isOpen, onClose }) {
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.9, y: 20 }}
-          className="relative bg-surface-container-lowest border border-outline-variant/30 rounded-2xl p-6 shadow-2xl max-w-lg w-full overflow-hidden"
+          className="relative bg-surface-container-lowest border border-outline-variant/30 rounded-2xl p-4 sm:p-6 shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto"
         >
           <div className="flex justify-between items-center border-b border-outline-variant/20 pb-4 mb-4">
-            <h3 className="font-headline-md text-headline-md text-on-surface font-bold flex items-center gap-2">
+            <h3 className="font-headline-md text-lg sm:text-headline-md text-on-surface font-bold flex items-center gap-2">
               <span className={`material-symbols-outlined text-primary text-2xl`}>{service.icon}</span>
               {t('modals.serviceModalTitle', { service: serviceName })}
             </h3>
@@ -210,7 +210,7 @@ export function ServiceModal({ service, isOpen, onClose }) {
 
           <div className="mb-6">
             <h4 className="font-semibold text-xs text-on-surface-variant uppercase tracking-wider mb-1">{t('workerDetails.aboutWorker')}</h4>
-            <p className="font-body-md text-sm text-on-surface-variant leading-relaxed">
+            <p className="font-body-md text-xs sm:text-sm text-on-surface-variant leading-relaxed">
               {t('modals.serviceModalDesc', { service: serviceName })}
             </p>
           </div>
@@ -265,7 +265,7 @@ export function NotificationToastList() {
   const { notifications } = useWorkkar();
 
   return (
-    <div id="toast-container" className="fixed top-24 right-6 z-[99999] flex flex-col gap-2 max-w-sm w-full pointer-events-none">
+    <div id="toast-container" className="fixed top-16 sm:top-24 left-3 right-3 sm:left-auto sm:right-6 z-[99999] flex flex-col gap-2 sm:max-w-sm pointer-events-none">
       <AnimatePresence>
         {notifications.map((n) => {
           let icon = 'info';

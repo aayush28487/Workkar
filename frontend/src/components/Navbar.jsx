@@ -60,18 +60,19 @@ export default function Navbar() {
           {/* Theme Toggle Button */}
           <button
             onClick={toggleDarkMode}
-            className="hidden md:flex items-center justify-center w-10 h-10 rounded-full bg-surface-container-low dark:bg-surface-container-high text-on-surface-variant hover:text-primary dark:text-on-surface-variant dark:hover:text-white border border-outline-variant/30 hover:shadow-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-blue-400"
+            className="flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-surface-container-low dark:bg-surface-container-high text-on-surface-variant hover:text-primary dark:text-on-surface-variant dark:hover:text-white border border-outline-variant/30 hover:shadow-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-blue-400"
             aria-label={t('nav.toggleTheme')}
             title={t('nav.toggleTheme')}
           >
-            <span className="material-symbols-outlined text-[20px] font-bold">
+            <span className="material-symbols-outlined text-[18px] sm:text-[20px] font-bold">
               {darkMode ? 'light_mode' : 'dark_mode'}
             </span>
           </button>
 
           {/* User Auth Section */}
           {user ? (
-            <div className="relative">
+            <div className="relative flex items-center">
+              {/* Desktop User Dropdown Button */}
               <button
                 onClick={() => setShowPortalMenu(!showPortalMenu)}
                 className="hidden md:flex items-center gap-2 bg-surface-container-low dark:bg-surface-container-high hover:bg-surface-container-high dark:hover:bg-surface-container border border-outline-variant/30 px-3.5 py-2 rounded-full transition-all duration-200 active:scale-95 text-xs font-bold uppercase tracking-wider text-on-surface-variant hover:text-on-surface relative"
@@ -88,6 +89,21 @@ export default function Navbar() {
                   </span>
                 )}
               </button>
+
+              {/* Mobile Quick User Profile Avatar */}
+              <Link
+                to={user.role === 'worker' ? '/worker/dashboard' : (user.role === 'admin' ? '/admin/dashboard' : (user.role === 'supreme-admin' ? '/supreme-admin/dashboard' : '/dashboard'))}
+                className="md:hidden flex items-center justify-center w-8 h-8 rounded-full bg-primary text-on-primary font-bold text-[11px] shadow-sm relative active:scale-95 transition-transform"
+                aria-label="User profile"
+              >
+                {user.textAvatar || (user.name ? user.name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2) : 'WK')}
+                {user.notifications && user.notifications.some(n => !n.read) && (
+                  <span className="absolute -top-0.5 -right-0.5 flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-error opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-error"></span>
+                  </span>
+                )}
+              </Link>
 
               {incomingAlert && (
                 <span className="absolute -top-1 -right-1 flex h-3 w-3">
@@ -193,7 +209,7 @@ export default function Navbar() {
               </AnimatePresence>
             </div>
           ) : (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 sm:gap-2">
               <Link
                 to="/worker/login"
                 className="hidden md:flex items-center gap-1.5 font-bold text-xs tracking-wider uppercase border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 px-4 py-2.5 rounded-full transition-all active:scale-95 duration-200"
@@ -206,6 +222,15 @@ export default function Navbar() {
               >
                 <span className="material-symbols-outlined text-[16px]">login</span>
                 {t('nav.signIn')}
+              </Link>
+
+              {/* Mobile Quick Sign-In Button */}
+              <Link
+                to="/login"
+                className="md:hidden flex items-center gap-1 font-bold text-xs bg-primary text-on-primary px-3 py-1.5 rounded-full shadow-sm active:scale-95 transition-all"
+              >
+                <span className="material-symbols-outlined text-[14px]">login</span>
+                <span>{t('nav.signIn')}</span>
               </Link>
             </div>
           )}
@@ -263,8 +288,25 @@ export default function Navbar() {
               </div>
 
               {/* Mobile Language Selector */}
-              <div className="mb-6">
+              <div className="mb-4">
                 <LanguageSelector isMobile={true} />
+              </div>
+
+              {/* Mobile Theme Switcher */}
+              <div className="flex items-center justify-between py-2.5 px-3 bg-surface-container-low dark:bg-slate-800/60 rounded-xl mb-6 border border-outline-variant/30">
+                <span className="text-xs font-bold text-on-surface-variant flex items-center gap-2">
+                  <span className="material-symbols-outlined text-[18px] text-primary">
+                    {darkMode ? 'dark_mode' : 'light_mode'}
+                  </span>
+                  <span>{t('nav.toggleTheme') || 'Appearance'}</span>
+                </span>
+                <button
+                  type="button"
+                  onClick={toggleDarkMode}
+                  className="px-3 py-1 rounded-lg bg-surface-container-lowest dark:bg-slate-900 font-bold text-xs text-primary dark:text-blue-400 border border-outline-variant/40 shadow-sm active:scale-95 cursor-pointer"
+                >
+                  {darkMode ? 'Dark' : 'Light'}
+                </button>
               </div>
 
               <nav className="flex flex-col gap-4 mb-6">

@@ -35,34 +35,34 @@ export default function ScrollThumbnailCarousel({ services = [], onSelectService
 
   return (
     <div className="relative w-full group/carousel">
-      {/* Scroll Controls (Desktop & Tablet) */}
-      <div className="flex items-center justify-between mb-4">
-        <div>
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider bg-primary/10 text-primary mb-2">
-            <Clock size={13} className="text-primary animate-pulse" />
+      {/* Scroll Controls (Desktop & Mobile) */}
+      <div className="flex items-end justify-between mb-4 gap-2">
+        <div className="flex-1 min-w-0">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] sm:text-xs font-extrabold uppercase tracking-wider bg-primary/10 text-primary mb-1 sm:mb-2">
+            <Clock size={12} className="text-primary animate-pulse" />
             Instant Dispatch Trades
           </span>
-          <h2 className="font-display-lg text-2xl md:text-3xl font-extrabold text-on-surface tracking-tight">
+          <h2 className="font-display-lg text-xl sm:text-2xl md:text-3xl font-extrabold text-on-surface tracking-tight truncate">
             Popular Trade Categories
           </h2>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
           <button
             onClick={() => handleScroll('left')}
             disabled={!canScrollLeft}
             aria-label="Previous services"
-            className="w-10 h-10 rounded-full flex items-center justify-center border border-outline-variant/40 bg-surface-container-lowest text-on-surface hover:bg-primary hover:text-on-primary hover:border-primary disabled:opacity-30 disabled:pointer-events-none transition-all duration-200 shadow-sm active:scale-95 cursor-pointer"
+            className="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center border border-outline-variant/40 bg-surface-container-lowest text-on-surface hover:bg-primary hover:text-on-primary hover:border-primary disabled:opacity-25 disabled:pointer-events-none transition-all duration-200 shadow-sm active:scale-95 cursor-pointer"
           >
-            <ChevronLeft size={20} />
+            <ChevronLeft size={18} />
           </button>
           <button
             onClick={() => handleScroll('right')}
             disabled={!canScrollRight}
             aria-label="Next services"
-            className="w-10 h-10 rounded-full flex items-center justify-center border border-outline-variant/40 bg-surface-container-lowest text-on-surface hover:bg-primary hover:text-on-primary hover:border-primary disabled:opacity-30 disabled:pointer-events-none transition-all duration-200 shadow-sm active:scale-95 cursor-pointer"
+            className="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center border border-outline-variant/40 bg-surface-container-lowest text-on-surface hover:bg-primary hover:text-on-primary hover:border-primary disabled:opacity-25 disabled:pointer-events-none transition-all duration-200 shadow-sm active:scale-95 cursor-pointer"
           >
-            <ChevronRight size={20} />
+            <ChevronRight size={18} />
           </button>
         </div>
       </div>
@@ -71,7 +71,7 @@ export default function ScrollThumbnailCarousel({ services = [], onSelectService
       <div
         ref={scrollContainerRef}
         onScroll={checkScrollPosition}
-        className="flex gap-5 overflow-x-auto no-scrollbar scroll-smooth pb-4 pt-1 px-1 -mx-1 snap-x snap-mandatory"
+        className="flex gap-4 sm:gap-5 overflow-x-auto no-scrollbar scroll-smooth pb-4 pt-1 px-1 -mx-1 snap-x snap-mandatory"
       >
         {services.map((service, index) => {
           const serviceName = tService(service.name);
@@ -84,7 +84,7 @@ export default function ScrollThumbnailCarousel({ services = [], onSelectService
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.05, duration: 0.3 }}
-              className="min-w-[270px] sm:min-w-[300px] max-w-[310px] snap-start shrink-0 group rounded-2xl overflow-hidden bg-surface-container-lowest border border-outline-variant/30 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between cursor-pointer hover:-translate-y-1.5"
+              className="min-w-[240px] sm:min-w-[290px] max-w-[310px] snap-start shrink-0 group rounded-2xl overflow-hidden bg-surface-container-lowest border border-outline-variant/30 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between cursor-pointer hover:-translate-y-1.5"
               onClick={() => onSelectService && onSelectService(service)}
             >
               {/* Photo Thumbnail Area */}
