@@ -10,7 +10,8 @@ export default function ChatBox({ jobId, currentUserId, title = "Live Chat" }) {
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
   const [loading, setLoading] = useState(true);
-  const messagesEndRef = useRef(null);
+  const chatContainerRef = useRef(null);
+  const prevCountRef = useRef(0);
 
   // Poll messages every 3 seconds
   useEffect(() => {
@@ -18,8 +19,15 @@ export default function ChatBox({ jobId, currentUserId, title = "Live Chat" }) {
 
     const fetchMsgs = async () => {
       const msgs = await getMessages(jobId);
-      if (active) {
-        setMessages(msgs);
+      if (active && Array.isArray(msgs)) {
+        setMessages(prev => {
+          if (prev.length === msgs.length) {
+            const prevLast = prev[prev.length - 1]?._id || prev[prev.length - 1]?.id;
+            const newLast = msgs[msgs.length - 1]?._id || msgs[msgs.length - 1]?.id;
+            if (prevLast === newLast) return prev;
+          }
+          return msgs;
+        });
         setLoading(false);
       }
     };
@@ -34,9 +42,14 @@ export default function ChatBox({ jobId, currentUserId, title = "Live Chat" }) {
     };
   }, [jobId]);
 
-  // Scroll to bottom on new messages
+  // Scroll to bottom ONLY inside chat container when new messages arrive
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (messages.length > prevCountRef.current) {
+      if (chatContainerRef.current) {
+        chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+      }
+      prevCountRef.current = messages.length;
+    }
   }, [messages]);
 
   const handleSend = async (e) => {
@@ -72,7 +85,7 @@ export default function ChatBox({ jobId, currentUserId, title = "Live Chat" }) {
       </div>
 
       {/* Messages area */}
-      <div className="flex-1 p-4 overflow-y-auto space-y-4 bg-slate-50/20 dark:bg-slate-950/10">
+      <div ref={chatContainerRef} className="flex-1 p-4 overflow-y-auto space-y-4 bg-slate-50/20 dark:bg-slate-950/10">
         {loading ? (
           <div className="h-full flex items-center justify-center">
             <div className="w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
@@ -118,7 +131,6 @@ export default function ChatBox({ jobId, currentUserId, title = "Live Chat" }) {
             </AnimatePresence>
           </div>
         )}
-        <div ref={messagesEndRef} />
       </div>
 
       {/* Input area */}

@@ -58,8 +58,21 @@ export const LanguageProvider = ({ children }) => {
       }
     }
 
-    // 3. Fallback to path itself if not found
+    // 3. Fallback to clean human-readable text if not found
     if (current === null || current === undefined) {
+      if (typeof path === 'string' && path.includes('.')) {
+        const lastPart = path.split('.').pop();
+        const readable = lastPart
+          .replace(/([A-Z])/g, ' $1')
+          .replace(/_/g, ' ')
+          .replace(/^\w/, c => c.toUpperCase())
+          .trim();
+        return readable
+          .replace(/^Gender\s+/, '')
+          .replace(/\s+Btn$/, '')
+          .replace(/^Tab\s+/, '')
+          .trim() || readable;
+      }
       return path;
     }
 

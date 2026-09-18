@@ -56,6 +56,9 @@ export const en = {
     noData: "No data available",
     optional: "Optional",
     required: "Required",
+    new: "New",
+    confirmed: "Confirmed",
+    online: "Online",
   },
 
   // Language switcher
@@ -70,7 +73,9 @@ export const en = {
     home: "Home",
     services: "Services",
     workers: "Workers",
+    findWorkers: "Find Workers",
     dashboard: "Dashboard",
+    workerDashboard: "Worker Dashboard",
     earnings: "Earnings",
     applications: "Applications",
     overview: "Overview",
@@ -299,6 +304,7 @@ export const en = {
     upcomingSchedule: "Upcoming Schedule",
     earningsSummary: "Earnings Overview",
     withdrawFundsBtn: "Withdraw to Bank",
+    hoursWorked: "Hours Worked",
   },
 
   // Active Job Page
@@ -343,9 +349,13 @@ export const en = {
     accountNumber: "Account Number",
     ifscCode: "IFSC / Routing Code",
     editBankDetails: "Edit Bank Details",
+    acceptanceRate: "Acceptance Rate",
+    basePay: "Base Earnings",
+    incentives: "Incentives",
+    tips: "Tips",
   },
 
-  // Admin & Supreme Admin Dashboards
+  // Admin & Supreme Admin Dashboards (Legacy and modern namespace)
   admin: {
     opsTitle: "Workkar Operations Dashboard",
     supremeTitle: "Supreme Admin Platform Control",
@@ -364,6 +374,34 @@ export const en = {
     userManagement: "User Management",
     systemAuditLogs: "System Audit Logs",
     platformSettings: "Platform Settings",
+  },
+
+  adminDashboard: {
+    welcome: "Workkar Operations Dashboard",
+    subtitle: "Real-time dispatch overview, verification queue, and platform oversight.",
+    statsTotalRevenue: "Platform GMV / Volume",
+    statsActiveBookings: "Active Bookings",
+    statsTotalWorkers: "Total Registered Workers",
+    tabVerifications: "Worker Verifications",
+    tabDispatches: "Live Dispatches",
+    tabUsers: "User Directory",
+    viewDetails: "View Details",
+    approveBtn: "Approve",
+    rejectBtn: "Reject",
+  },
+
+  supremeAdmin: {
+    welcome: "Supreme Control Console",
+    subtitle: "Full platform governance, administrative roles, and system audit logs.",
+    tabAdmins: "Platform Admins",
+    tabCustomers: "Customer Accounts",
+    tabWorkers: "Worker Accounts",
+    tabSystemAudit: "System Audit Logs",
+    promoteToAdmin: "Promote to Admin",
+    demoteToCustomer: "Demote to Customer",
+    suspendUser: "Suspend User",
+    restoreUser: "Restore User",
+    banUser: "Ban User",
   },
 
   // Worker Auth & Onboarding
@@ -390,12 +428,25 @@ export const en = {
     permissionsSubtitle: "To receive nearby jobs and coordinate with customers, please grant the following permissions:",
     locationPermission: "Location Access (GPS)",
     locationPermissionDesc: "Required for matching jobs near your current location.",
+    locationPermTitle: "Location Access (GPS)",
+    locationPermDesc: "Required for matching jobs near your current location and navigation.",
+    allowLocationBtn: "Allow Location",
     cameraPermission: "Camera & Storage",
     cameraPermissionDesc: "Required for uploading trade license and ID verification documents.",
     notificationsPermission: "Push Notifications",
     notificationsDesc: "Instant alerts for new job offers and customer messages.",
+    notifPermTitle: "Push Notifications",
+    notifPermDesc: "Instant alerts for new bookings, offers, and customer messages.",
+    allowNotifBtn: "Allow Notifications",
+    allowAllPerms: "Grant All Permissions",
     grantPermissionsBtn: "Grant & Continue",
     profileSetupTitle: "Complete Worker Profile",
+    genderLabel: "Gender",
+    genderMale: "Male",
+    genderFemale: "Female",
+    genderOther: "Other",
+    ageLabel: "Age",
+    submitForVerificationBtn: "Submit Profile for Verification",
     uploadDocTitle: "Upload Government ID / Skill Certificate",
     dragDropText: "Click or drag & drop ID document (Aadhaar, Voter ID, Trade Certificate)",
     verificationPendingTitle: "Verification Under Review",

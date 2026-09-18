@@ -60,13 +60,16 @@ const UserSchema = new mongoose.Schema({
   description: { type: String },
   verificationDocument: { type: String }, // path/URL/name of uploaded document
   
+  jobsCompleted: { type: Number, default: 0 },
+  
   // Wallet state (for worker)
   wallet: {
     balance: { type: Number, default: 0 },
     weekly: { type: Number, default: 0 },
     jobEarnings: { type: Number, default: 0 },
     incentives: { type: Number, default: 0 },
-    tips: { type: Number, default: 0 }
+    tips: { type: Number, default: 0 },
+    completedCount: { type: Number, default: 0 }
   },
 
   // Active Job (for worker)

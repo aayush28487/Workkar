@@ -56,6 +56,9 @@ export const hi = {
     noData: "कोई डेटा उपलब्ध नहीं है",
     optional: "वैकल्पिक",
     required: "आवश्यक",
+    new: "नया",
+    confirmed: "पुष्टि की गई",
+    online: "ऑनलाइन",
   },
 
   // Language switcher
@@ -70,7 +73,9 @@ export const hi = {
     home: "होम",
     services: "सेवाएं",
     workers: "श्रमिक",
+    findWorkers: "कारीगर खोजें",
     dashboard: "डैशबोर्ड",
+    workerDashboard: "कारीगर डैशबोर्ड",
     earnings: "कमाई",
     applications: "आवेदन",
     overview: "अवलोकन",
@@ -299,6 +304,7 @@ export const hi = {
     upcomingSchedule: "आगामी कार्यक्रम",
     earningsSummary: "कमाई का अवलोकन",
     withdrawFundsBtn: "बैंक में निकालें",
+    hoursWorked: "कार्य के घंटे",
   },
 
   // Active Job Page
@@ -343,9 +349,13 @@ export const hi = {
     accountNumber: "खाता संख्या",
     ifscCode: "IFSC / रूटिंग कोड",
     editBankDetails: "बैंक विवरण संपादित करें",
+    acceptanceRate: "स्वीकृति दर",
+    basePay: "मूल आय",
+    incentives: "प्रोत्साहन",
+    tips: "टिप्स",
   },
 
-  // Admin & Supreme Admin Dashboards
+  // Admin & Supreme Admin Dashboards (Legacy & modern namespace)
   admin: {
     opsTitle: "वर्ककार ऑपरेशन्स डैशबोर्ड",
     supremeTitle: "सुप्रीम एडमिन नियंत्रण केंद्र",
@@ -364,6 +374,34 @@ export const hi = {
     userManagement: "उपयोगकर्ता प्रबंधन",
     systemAuditLogs: "सिस्टम ऑडिट लॉग",
     platformSettings: "प्लेटफ़ॉर्म सेटिंग्स",
+  },
+
+  adminDashboard: {
+    welcome: "वर्ककार ऑपरेशन्स डैशबोर्ड",
+    subtitle: "वास्तविक समय प्रेषण अवलोकन, सत्यापन कतार, और प्लेटफ़ॉर्म निरीक्षण।",
+    statsTotalRevenue: "कुल राजस्व / वॉल्यूम",
+    statsActiveBookings: "सक्रिय बुकिंग्स",
+    statsTotalWorkers: "कुल पंजीकृत कारीगर",
+    tabVerifications: "कारीगर सत्यापन",
+    tabDispatches: "लाइव प्रेषण (डिस्पैच)",
+    tabUsers: "उपयोगकर्ता निर्देशिका",
+    viewDetails: "विवरण देखें",
+    approveBtn: "स्वीकृत करें",
+    rejectBtn: "अस्वीकार करें",
+  },
+
+  supremeAdmin: {
+    welcome: "सर्वोच्च नियंत्रण कंसोल",
+    subtitle: "संपूर्ण प्लेटफ़ॉर्म शासन, प्रशासनिक भूमिकाएं, और सिस्टम ऑडिट लॉग।",
+    tabAdmins: "प्लेटफ़ॉर्म व्यवस्थापक (एडमिन)",
+    tabCustomers: "ग्राहक खाते",
+    tabWorkers: "कारीगर खाते",
+    tabSystemAudit: "सिस्टम ऑडिट लॉग",
+    promoteToAdmin: "एडमिन बनाएं",
+    demoteToCustomer: "ग्राहक में बदलें",
+    suspendUser: "खाता निलंबित करें",
+    restoreUser: "खाता बहाल करें",
+    banUser: "खाता प्रतिबंधित करें",
   },
 
   // Worker Auth & Onboarding
@@ -390,12 +428,25 @@ export const hi = {
     permissionsSubtitle: "आस-पास के काम प्राप्त करने और ग्राहकों से जुड़ने के लिए कृपया निम्न अनुमतियां दें:",
     locationPermission: "स्थान पहुंच (GPS)",
     locationPermissionDesc: "आपके वर्तमान स्थान के पास के कार्यों को मिलाने के लिए आवश्यक है।",
+    locationPermTitle: "स्थान की अनुमति (GPS)",
+    locationPermDesc: "निकटतम ग्राहकों से काम प्राप्त करने हेतु स्थान अनुमति प्रदान करें।",
+    allowLocationBtn: "स्थान अनुमति दें",
     cameraPermission: "कैमरा और स्टोरेज",
     cameraPermissionDesc: "व्यापार लाइसेंस और पहचान सत्यापन दस्तावेज़ अपलोड करने के लिए आवश्यक।",
     notificationsPermission: "पुश सूचनाएं",
     notificationsDesc: "नए कार्य प्रस्तावों और ग्राहक संदेशों के लिए त्वरित अलर्ट।",
+    notifPermTitle: "पुश सूचनाएं",
+    notifPermDesc: "नए काम, ऑफर्स और ग्राहकों के संदेशों के तुरंत अलर्ट पाएं।",
+    allowNotifBtn: "सूचनाएं अनुमति दें",
+    allowAllPerms: "सभी अनुमतियाँ दें",
     grantPermissionsBtn: "अनुमति दें और आगे बढ़ें",
     profileSetupTitle: "श्रमिक प्रोफ़ाइल पूर्ण करें",
+    genderLabel: "लिंग",
+    genderMale: "पुरुष",
+    genderFemale: "महिला",
+    genderOther: "अन्य",
+    ageLabel: "आयु",
+    submitForVerificationBtn: "सत्यापन हेतु प्रोफ़ाइल सबमिट करें",
     uploadDocTitle: "सरकारी आईडी / कौशल प्रमाण पत्र अपलोड करें",
     dragDropText: "पहचान पत्र (आधार, वोटर आईडी, ट्रेड सर्टिफिकेट) अपलोड करने के लिए क्लिक करें या खींचें",
     verificationPendingTitle: "सत्यापन समीक्षाधीन है",

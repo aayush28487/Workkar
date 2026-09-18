@@ -375,10 +375,16 @@ router.put('/approve-complete', protect, async (req, res) => {
     const tipEarn = earnAmount - baseEarn;
 
     // Credit worker's earnings
-    worker.wallet.balance += earnAmount;
-    worker.wallet.weekly += earnAmount;
-    worker.wallet.jobEarnings += baseEarn;
-    worker.wallet.tips += tipEarn;
+    if (!worker.wallet) {
+      worker.wallet = { balance: 0, weekly: 0, jobEarnings: 0, incentives: 0, tips: 0, completedCount: 0 };
+    }
+    worker.wallet.balance = (worker.wallet.balance || 0) + earnAmount;
+    worker.wallet.weekly = (worker.wallet.weekly || 0) + earnAmount;
+    worker.wallet.jobEarnings = (worker.wallet.jobEarnings || 0) + baseEarn;
+    worker.wallet.tips = (worker.wallet.tips || 0) + tipEarn;
+    worker.wallet.completedCount = (worker.wallet.completedCount || 0) + 1;
+    worker.jobsCompleted = (worker.jobsCompleted || 0) + 1;
+    worker.earnings = (worker.earnings || 0) + earnAmount;
 
     // Reset status & release worker back to pool
     worker.activeJob = undefined;

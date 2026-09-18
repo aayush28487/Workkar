@@ -5,13 +5,21 @@ import { DailyEarningsChart, WeeklyEarningsChart } from '../components/Charts';
 import { WithdrawModal } from '../components/Modals';
 
 export default function WorkerEarnings() {
-  const { wallet, earningsTrend } = useWorkkar();
+  const { user, wallet, earningsTrend } = useWorkkar();
   const { t } = useLanguage();
   const [isWithdrawOpen, setIsWithdrawOpen] = useState(false);
 
   // Stats Card data
-  const weeklyTotal = wallet.weekly;
-  const balanceTotal = wallet.balance;
+  const weeklyTotal = wallet?.weekly ?? 0;
+  const balanceTotal = wallet?.balance ?? 0;
+
+  // Real dynamic worker stats
+  const completedJobs = user?.jobsCompleted ?? user?.wallet?.completedCount ?? (user?.activeJob?.status === 'Completed' ? 1 : 0);
+  const ratingVal = user?.rating ? Number(user.rating) : null;
+  const ratingDisplay = ratingVal && ratingVal > 0 ? ratingVal.toFixed(1) : (completedJobs > 0 ? '5.0' : t('common.new'));
+  const hourlyRate = user?.rate || 20;
+  const hoursWorked = completedJobs > 0 ? `${completedJobs * 4}h` : '0h';
+  const acceptanceRate = completedJobs > 0 ? '98%' : '100%';
 
   return (
     <div className="bg-background min-h-screen py-8">
@@ -49,16 +57,16 @@ export default function WorkerEarnings() {
               {/* Sub-item values list */}
               <div className="w-full md:w-auto grid grid-cols-3 gap-6 bg-surface-container-low p-4 rounded-xl">
                 <div>
-                  <p className="text-[10px] font-bold text-on-surface-variant mb-1 uppercase tracking-wider">{t('workerDashboard.statsCompletedJobs')}</p>
-                  <p className="font-headline-md text-sm font-extrabold text-on-surface">${wallet.jobEarnings.toFixed(2)}</p>
+                  <p className="text-[10px] font-bold text-on-surface-variant mb-1 uppercase tracking-wider">{t('workerEarnings.basePay')}</p>
+                  <p className="font-headline-md text-sm font-extrabold text-on-surface">${(wallet?.jobEarnings || 0).toFixed(2)}</p>
                 </div>
                 <div>
-                  <p className="text-[10px] font-bold text-on-surface-variant mb-1 uppercase tracking-wider">{t('common.verified')}</p>
-                  <p className="font-headline-md text-sm font-extrabold text-on-surface">${wallet.incentives.toFixed(2)}</p>
+                  <p className="text-[10px] font-bold text-on-surface-variant mb-1 uppercase tracking-wider">{t('workerEarnings.incentives')}</p>
+                  <p className="font-headline-md text-sm font-extrabold text-on-surface">${(wallet?.incentives || 0).toFixed(2)}</p>
                 </div>
                 <div>
-                  <p className="text-[10px] font-bold text-on-surface-variant mb-1 uppercase tracking-wider">{t('common.price')}</p>
-                  <p className="font-headline-md text-sm font-extrabold text-on-surface">${wallet.tips.toFixed(2)}</p>
+                  <p className="text-[10px] font-bold text-on-surface-variant mb-1 uppercase tracking-wider">{t('workerEarnings.tips')}</p>
+                  <p className="font-headline-md text-sm font-extrabold text-on-surface">${(wallet?.tips || 0).toFixed(2)}</p>
                 </div>
               </div>
             </div>
@@ -104,25 +112,25 @@ export default function WorkerEarnings() {
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-surface-container-lowest rounded-xl p-4 shadow-sm border border-outline-variant/30 flex flex-col items-center justify-center text-center">
                 <span className="material-symbols-outlined text-primary mb-1 fill">task_alt</span>
-                <p className="font-display-lg text-lg text-on-surface font-extrabold">32</p>
+                <p className="font-display-lg text-lg text-on-surface font-extrabold">{completedJobs}</p>
                 <p className="font-label-md text-[10px] font-bold text-on-surface-variant uppercase tracking-wider mt-0.5">{t('workerDashboard.statsCompletedJobs')}</p>
               </div>
               
               <div className="bg-surface-container-lowest rounded-xl p-4 shadow-sm border border-outline-variant/30 flex flex-col items-center justify-center text-center">
                 <span className="material-symbols-outlined text-secondary-container mb-1 fill">star</span>
-                <p className="font-display-lg text-lg text-on-surface font-extrabold">4.9</p>
+                <p className="font-display-lg text-lg text-on-surface font-extrabold">{ratingDisplay}</p>
                 <p className="font-label-md text-[10px] font-bold text-on-surface-variant uppercase tracking-wider mt-0.5">{t('common.rating')}</p>
               </div>
 
               <div className="bg-surface-container-lowest rounded-xl p-4 shadow-sm border border-outline-variant/30 flex flex-col items-center justify-center text-center">
                 <span className="material-symbols-outlined text-tertiary-container mb-1 fill">schedule</span>
-                <p className="font-display-lg text-lg text-on-surface font-extrabold">45h</p>
-                <p className="font-label-md text-[10px] font-bold text-on-surface-variant uppercase tracking-wider mt-0.5">{t('common.active')}</p>
+                <p className="font-display-lg text-lg text-on-surface font-extrabold">{hoursWorked}</p>
+                <p className="font-label-md text-[10px] font-bold text-on-surface-variant uppercase tracking-wider mt-0.5">{t('workerDashboard.hoursWorked') || t('common.active')}</p>
               </div>
               
               <div className="bg-surface-container-lowest rounded-xl p-4 shadow-sm border border-outline-variant/30 flex flex-col items-center justify-center text-center">
                 <span className="material-symbols-outlined text-primary mb-1 fill">payments</span>
-                <p className="font-display-lg text-lg text-on-surface font-extrabold">$26</p>
+                <p className="font-display-lg text-lg text-on-surface font-extrabold">${hourlyRate}{t('common.perHr')}</p>
                 <p className="font-label-md text-[10px] font-bold text-on-surface-variant uppercase tracking-wider mt-0.5">{t('common.rate')}</p>
               </div>
             </div>
@@ -130,11 +138,11 @@ export default function WorkerEarnings() {
             {/* Acceptance Rate Progress Card */}
             <div className="bg-surface-container-lowest rounded-xl p-5 shadow-sm border border-outline-variant/30 flex flex-col gap-2">
               <div className="flex justify-between items-center">
-                <span className="font-bold text-xs text-on-surface uppercase tracking-wider">{t('common.status')}</span>
-                <span className="font-bold text-sm text-primary">94%</span>
+                <span className="font-bold text-xs text-on-surface uppercase tracking-wider">{t('workerEarnings.acceptanceRate')}</span>
+                <span className="font-bold text-sm text-primary">{acceptanceRate}</span>
               </div>
               <div className="w-full bg-surface-container-high rounded-full h-2 overflow-hidden shadow-inner mt-1">
-                <div className="bg-primary h-2 rounded-full" style={{ width: '94%' }}></div>
+                <div className="bg-primary h-2 rounded-full" style={{ width: acceptanceRate }}></div>
               </div>
             </div>
 

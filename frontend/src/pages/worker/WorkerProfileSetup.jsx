@@ -98,19 +98,19 @@ export default function WorkerProfileSetup({ worker, refetchWorker }) {
 
   const validate = () => {
     const errs = {};
-    if (!fullName || !fullName.trim()) errs.fullName = t('auth.nameLabel') + ' ' + t('common.loading');
+    if (!fullName || !fullName.trim()) errs.fullName = `${t('auth.nameLabel')} is ${t('common.required').toLowerCase()}`;
     if (!age) {
-      errs.age = t('workerAuth.ageLabel') + ' ' + t('common.loading');
+      errs.age = `${t('workerAuth.ageLabel')} is ${t('common.required').toLowerCase()}`;
     } else {
       const parsedAge = parseInt(age, 10);
       if (isNaN(parsedAge) || parsedAge < 18) {
         errs.age = '18+';
       }
     }
-    if (!profession) errs.profession = t('workerAuth.tradeLabel');
+    if (!profession) errs.profession = `${t('workerAuth.tradeLabel')} is ${t('common.required').toLowerCase()}`;
 
     if (!experience) {
-      errs.experience = t('workerAuth.experienceLabel');
+      errs.experience = `${t('workerAuth.experienceLabel')} is ${t('common.required').toLowerCase()}`;
     }
 
     const expYearsVal = parseInt(experience, 10) || 0;
@@ -124,7 +124,7 @@ export default function WorkerProfileSetup({ worker, refetchWorker }) {
     }
 
     if (!rate) {
-      errs.rate = t('workerAuth.hourlyRateLabel');
+      errs.rate = `${t('workerAuth.hourlyRateLabel')} is ${t('common.required').toLowerCase()}`;
     } else {
       const parsedRate = parseFloat(rate);
       if (isNaN(parsedRate) || parsedRate < minRateVal || parsedRate > maxRateVal) {
@@ -133,15 +133,15 @@ export default function WorkerProfileSetup({ worker, refetchWorker }) {
     }
 
     if (!description || !description.trim()) {
-      errs.description = t('workerAuth.registerSubtitle');
+      errs.description = `${t('common.required')}`;
     }
 
     if (locationStatus !== 'granted' || latitude === null || longitude === null) {
-      errs.location = t('workerAuth.locationPermTitle');
+      errs.location = `${t('workerAuth.locationPermTitle')} is ${t('common.required').toLowerCase()}`;
     }
 
     if (!profilePhoto && !profilePhotoPreview) {
-      errs.profilePhoto = t('workerAuth.uploadDocTitle');
+      errs.profilePhoto = `${t('workerAuth.uploadDocTitle')} is ${t('common.required').toLowerCase()}`;
     }
     if (!aadhaarCard && !aadhaarCardPreview) {
       errs.aadhaarCard = 'Aadhaar / ID Card';
@@ -319,9 +319,9 @@ export default function WorkerProfileSetup({ worker, refetchWorker }) {
                     onChange={(e) => setGender(e.target.value)}
                     className="mt-1.5 block w-full px-4 py-3 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 text-sm text-slate-900 dark:text-white transition-all cursor-pointer"
                   >
-                    <option value="Male">{t('workerAuth.genderMale')}</option>
-                    <option value="Female">{t('workerAuth.genderFemale')}</option>
-                    <option value="Other">{t('workerAuth.genderOther')}</option>
+                    <option value="Male">{t('workerAuth.genderMale') || 'Male'}</option>
+                    <option value="Female">{t('workerAuth.genderFemale') || 'Female'}</option>
+                    <option value="Other">{t('workerAuth.genderOther') || 'Other'}</option>
                   </select>
                 </div>
               </div>

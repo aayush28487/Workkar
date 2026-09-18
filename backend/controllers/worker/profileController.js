@@ -17,12 +17,16 @@ const mapWorkerToUser = (worker) => {
     availability: workerObj.activeJob ? 'On Job' : (workerObj.availability === true || workerObj.availability === 'Available' ? 'Available' : 'Offline'),
     textAvatar: initials,
     verificationDocument: workerObj.aadhaarCard ? workerObj.aadhaarCard.split('/').pop() : '',
-    wallet: workerObj.wallet || {
-      balance: workerObj.earnings || 0,
-      weekly: workerObj.earnings || 0,
-      jobEarnings: workerObj.earnings || 0,
-      incentives: 0,
-      tips: 0
+    jobsCompleted: workerObj.jobsCompleted || 0,
+    rating: workerObj.rating || 0,
+    rate: workerObj.rate || 20,
+    wallet: {
+      balance: workerObj.wallet?.balance ?? workerObj.earnings ?? 0,
+      weekly: workerObj.wallet?.weekly ?? workerObj.earnings ?? 0,
+      jobEarnings: workerObj.wallet?.jobEarnings ?? workerObj.earnings ?? 0,
+      incentives: workerObj.wallet?.incentives ?? 0,
+      tips: workerObj.wallet?.tips ?? 0,
+      completedCount: workerObj.jobsCompleted ?? workerObj.wallet?.completedCount ?? 0
     }
   };
 };

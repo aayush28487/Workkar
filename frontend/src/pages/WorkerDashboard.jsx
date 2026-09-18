@@ -92,6 +92,10 @@ export default function WorkerDashboard() {
   }
 
   // 3. Active approved worker state
+  const completedJobs = user?.jobsCompleted ?? user?.wallet?.completedCount ?? (user?.activeJob?.status === 'Completed' ? 1 : 0);
+  const ratingValue = user?.rating ? Number(user.rating) : null;
+  const ratingDisplay = ratingValue && ratingValue > 0 ? ratingValue.toFixed(1) : (completedJobs > 0 ? '5.0' : t('common.new'));
+
   return (
     <div className="bg-background min-h-screen py-8">
       <div className="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop flex flex-col gap-8">
@@ -151,8 +155,8 @@ export default function WorkerDashboard() {
           <DashboardCard
             icon="work_outline"
             title={t('workerDashboard.statsCompletedJobs')}
-            value={user.wallet?.completedCount || 12}
-            trend={t('common.completed')}
+            value={completedJobs}
+            trend={completedJobs > 0 ? t('common.completed') : t('common.new')}
             trendType="neutral"
             footerLabel={t('workerDashboard.portalTitle')}
             largeIcon="work_outline"
@@ -160,8 +164,8 @@ export default function WorkerDashboard() {
           <DashboardCard
             icon="monetization_on"
             title={t('workerDashboard.statsRating')}
-            value={user.rating ? user.rating.toFixed(1) : '5.0'}
-            trend="⭐ 5.0"
+            value={ratingDisplay}
+            trend={ratingValue && ratingValue > 0 ? `⭐ ${ratingValue.toFixed(1)}` : (completedJobs > 0 ? '⭐ 5.0' : t('common.new'))}
             trendType="positive"
             footerLabel={t('common.verified')}
             largeIcon="monetization_on"

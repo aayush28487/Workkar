@@ -132,7 +132,8 @@ const WorkerSchema = new mongoose.Schema({
     weekly: { type: Number, default: 0 },
     jobEarnings: { type: Number, default: 0 },
     incentives: { type: Number, default: 0 },
-    tips: { type: Number, default: 0 }
+    tips: { type: Number, default: 0 },
+    completedCount: { type: Number, default: 0 }
   },
   activeJob: {
     id: { type: String },
