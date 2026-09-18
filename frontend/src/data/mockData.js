@@ -1,12 +1,116 @@
 export const INITIAL_SERVICES = [
-  { id: "electrician", name: "Electrician", description: "Wiring, repairs, lighting installations", icon: "electrical_services", color: "primary", bg: "bg-primary-fixed" },
-  { id: "plumber", name: "Plumber", description: "Pipes, leaks, drainage solutions", icon: "plumbing", color: "secondary", bg: "bg-secondary-fixed" },
-  { id: "mason", name: "Mason", description: "Brickwork, concrete, stone paving", icon: "architecture", color: "tertiary", bg: "bg-tertiary-fixed" },
-  { id: "painter", name: "Painter", description: "Interior, exterior wall painting", icon: "format_paint", color: "primary", bg: "bg-primary-fixed" },
-  { id: "carpenter", name: "Carpenter", description: "Woodwork, furniture repair, cabinets", icon: "handyman", color: "secondary", bg: "bg-secondary-fixed" },
-  { id: "cleaner", name: "Cleaner", description: "House cleaning, deep sanitization", icon: "cleaning_services", color: "tertiary", bg: "bg-tertiary-fixed" },
-  { id: "welder", name: "Welder", description: "Metal fabrication, welding repair", icon: "hardware", color: "primary", bg: "bg-primary-fixed" },
-  { id: "gardener", name: "Gardener", description: "Lawn care, tree pruning, landscaping", icon: "grass", color: "secondary", bg: "bg-secondary-fixed" }
+  {
+    id: "electrician",
+    name: "Electrician",
+    description: "Wiring, short circuits, switchboards, MCB, appliance & lighting installations",
+    icon: "electrical_services",
+    color: "primary",
+    bg: "bg-blue-500/10",
+    image: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=800&q=80",
+    price: "$20/hr",
+    startingRate: 20,
+    availableWorkers: "24+ Available",
+    rating: 4.9,
+    badge: "Popular"
+  },
+  {
+    id: "plumber",
+    name: "Plumber",
+    description: "Pipes, faucet leaks, water tank, motor repair & drainage solutions",
+    icon: "plumbing",
+    color: "secondary",
+    bg: "bg-orange-500/10",
+    image: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80",
+    price: "$22/hr",
+    startingRate: 22,
+    availableWorkers: "19+ Available",
+    rating: 4.8,
+    badge: "Fast Dispatch"
+  },
+  {
+    id: "carpenter",
+    name: "Carpenter",
+    description: "Furniture repair, modular fittings, doors, locks, custom wood crafts",
+    icon: "handyman",
+    color: "secondary",
+    bg: "bg-amber-500/10",
+    image: "https://images.unsplash.com/photo-1538688525198-9b88f6f53126?auto=format&fit=crop&w=800&q=80",
+    price: "$25/hr",
+    startingRate: 25,
+    availableWorkers: "15+ Available",
+    rating: 4.9,
+    badge: "Master Craft"
+  },
+  {
+    id: "painter",
+    name: "Painter",
+    description: "Full interior & exterior wall painting, waterproof coating, touch-ups",
+    icon: "format_paint",
+    color: "primary",
+    bg: "bg-indigo-500/10",
+    image: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=800&q=80",
+    price: "$18/hr",
+    startingRate: 18,
+    availableWorkers: "28+ Available",
+    rating: 4.8,
+    badge: "Top Rated"
+  },
+  {
+    id: "mason",
+    name: "Mason",
+    description: "Brickwork, tile setting, concrete repair, plastering, stone paving",
+    icon: "architecture",
+    color: "tertiary",
+    bg: "bg-rose-500/10",
+    image: "https://images.unsplash.com/photo-1541888946425-d0fbb186156a?auto=format&fit=crop&w=800&q=80",
+    price: "$24/hr",
+    startingRate: 24,
+    availableWorkers: "12+ Available",
+    rating: 4.7,
+    badge: "Heavy Duty"
+  },
+  {
+    id: "cleaner",
+    name: "Cleaner",
+    description: "Deep home cleaning, bathroom disinfection, sofa & floor scrubbing",
+    icon: "cleaning_services",
+    color: "tertiary",
+    bg: "bg-teal-500/10",
+    image: "https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?auto=format&fit=crop&w=800&q=80",
+    price: "$16/hr",
+    startingRate: 16,
+    availableWorkers: "35+ Available",
+    rating: 4.9,
+    badge: "Eco-Friendly"
+  },
+  {
+    id: "welder",
+    name: "Welder",
+    description: "Iron gates, grill repair, steel fabrication, heavy metal joint welding",
+    icon: "hardware",
+    color: "primary",
+    bg: "bg-blue-500/10",
+    image: "https://images.unsplash.com/photo-1504917599217-d4dc5ebe6122?auto=format&fit=crop&w=800&q=80",
+    price: "$26/hr",
+    startingRate: 26,
+    availableWorkers: "8+ Available",
+    rating: 4.8,
+    badge: "Specialist"
+  },
+  {
+    id: "gardener",
+    name: "Gardener",
+    description: "Lawn trimming, plant maintenance, landscape design, weed treatment",
+    icon: "grass",
+    color: "secondary",
+    bg: "bg-emerald-500/10",
+    image: "https://images.unsplash.com/photo-1592417817098-8f3d69104a47?auto=format&fit=crop&w=800&q=80",
+    price: "$17/hr",
+    startingRate: 17,
+    availableWorkers: "14+ Available",
+    rating: 4.9,
+    badge: "Green Thumb"
+  }
 ];
 
 export const INITIAL_WORKERS = [
@@ -19,7 +123,7 @@ export const INITIAL_WORKERS = [
     rating: 4.9,
     rate: 28,
     availability: "Available",
-    avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuCR8cl_nJ_jKN5lGqYhv_Kksvll5ZjyQHLZxai281yM2GGn6aqAlZE6O5HSUuY_v-ALq1FNoT_3vy-vpW9hw87tEfAsbSnbXKfnV4iJOe8jxpJZmZqMUDApeD9eQSI7uuyCzhkq6qY0Pahi5GZLgpXnOwVpYQu2IqUCblgtCpG791lqEQqrntIC4f8fQ3PKYecYlQO049Q8lUHt8oVftZxbwFpgex7WX5nvkEUUXo4lhGOanpvspUCVfxk6vBkkoZ6u6_onz6wcG7_i",
+    avatar: "https://images.unsplash.com/photo-1540569014015-19a7be504e3a?auto=format&fit=crop&w=400&q=80",
     verified: true,
     reviews: [
       { id: 1, user: "Elena P.", rating: 5, date: "2 days ago", comment: "Marcus did an excellent job building our bookshelf. Fast, neat, and highly professional!" },
@@ -35,8 +139,8 @@ export const INITIAL_WORKERS = [
     experience: 12,
     rating: 4.8,
     rate: 32,
-    availability: "On Job",
-    textAvatar: "SD",
+    availability: "Available",
+    avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80",
     verified: true,
     reviews: [
       { id: 1, user: "David K.", rating: 5, date: "3 days ago", comment: "Resolved a complex bathroom leak that others couldn't diagnose. Worth every penny." },
@@ -152,3 +256,68 @@ export const INITIAL_ASSIGNMENTS = [
   { id: "job-2", title: "Wiring Installation", worker: "Sarah M.", type: "Electrical", status: "Pending", icon: "electrical_services" },
   { id: "job-3", title: "Deep Cleaning", worker: "Lisa R.", type: "Cleaning", status: "Completed", icon: "cleaning_services" }
 ];
+
+export const TESTIMONIALS = [
+  {
+    id: 1,
+    name: "Pooja Sharma",
+    location: "Green Park, Delhi",
+    avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80",
+    service: "Master Electrician",
+    rating: 5,
+    date: "Yesterday",
+    review: "Had an emergency short circuit in the evening. Booked through Workkar and the electrician arrived in 18 minutes with professional testing equipment. Zero hassle and transparent billing!"
+  },
+  {
+    id: 2,
+    name: "Vikram Malhotra",
+    location: "Indiranagar, Bengaluru",
+    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80",
+    service: "Emergency Plumbing",
+    rating: 5,
+    date: "3 days ago",
+    review: "Best platform for daily wage and trade hires. No bargaining headaches, the plumber was Aadhaar verified, and payment was released only after I verified the repair was 100% complete."
+  },
+  {
+    id: 3,
+    name: "Aman Gupta",
+    location: "Bandra West, Mumbai",
+    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80",
+    service: "Custom Carpentry",
+    rating: 5,
+    date: "1 week ago",
+    review: "Marcus repaired our modular kitchen racks and built a custom bookshelf. Flawless finishing. The live tracking on the map gave complete peace of mind."
+  }
+];
+
+export const TRUST_METRICS = [
+  {
+    id: "dispatch",
+    icon: "bolt",
+    value: "15 Mins",
+    label: "Average Arrival Time",
+    description: "Instant dispatch from verified workers nearest to your doorstep."
+  },
+  {
+    id: "verified",
+    icon: "verified_user",
+    value: "5,000+",
+    label: "Background Verified",
+    description: "Strict Aadhaar, PAN and criminal background checks for safety."
+  },
+  {
+    id: "rating",
+    icon: "star",
+    value: "4.9 / 5.0",
+    label: "Customer Rating",
+    description: "Rated highly across 10,000+ completed daily wage requests."
+  },
+  {
+    id: "escrow",
+    icon: "shield",
+    value: "100%",
+    label: "Escrow Payment Safe",
+    description: "Payment is held securely and only released when you approve."
+  }
+];
+

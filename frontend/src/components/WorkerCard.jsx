@@ -64,26 +64,32 @@ export default function WorkerCard({ worker }) {
           </div>
         </div>
 
-        <div className="flex justify-between items-center mb-4 text-xs">
-          <span className="font-body-md text-body-md text-on-surface-variant flex items-center gap-1">
-            <span className="material-symbols-outlined text-outline text-[16px]">work</span>
+        <div className="flex items-center justify-between py-2.5 px-3 bg-surface-container-low/60 rounded-xl mb-3 text-xs">
+          <span className="font-body-md text-on-surface-variant flex items-center gap-1.5 font-medium">
+            <span className="material-symbols-outlined text-outline text-[15px]">work</span>
             {experience} {t('common.yrsExp')}
           </span>
-          <span className="font-title-md text-title-md text-primary font-bold">
-            ${rate}{t('common.perHr')}
+          <span className="font-title-md text-sm text-primary font-extrabold flex items-center gap-0.5">
+            ${rate}<span className="text-[10px] font-medium text-on-surface-variant">{t('common.perHr')}</span>
           </span>
+        </div>
+
+        <div className="flex items-center gap-1.5 text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold mb-3">
+          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span>Fast arrival • Approx 15 mins</span>
         </div>
       </div>
 
-      <div className="flex items-center gap-2 mt-2">
-        <span className={`${statusClass} text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider`}>
+      <div className="flex items-center gap-2 pt-2 border-t border-outline-variant/15">
+        <span className={`${statusClass} text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider`}>
           {tAvailability(availability)}
         </span>
         <Link
           to={`/worker-details/${id}`}
-          className="flex-grow bg-primary-container hover:bg-primary hover:text-on-primary text-on-primary-container font-bold text-xs py-2.5 rounded-lg text-center transition-all duration-200 hover-lift active:scale-98 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-blue-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900"
+          className="flex-grow bg-primary text-on-primary hover:bg-primary/90 font-extrabold text-xs py-2.5 rounded-xl text-center transition-all duration-200 shadow-md hover:shadow-lg active:scale-98 flex items-center justify-center gap-1"
         >
           {t('workersPage.bookNow')}
+          <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
         </Link>
       </div>
     </motion.div>
