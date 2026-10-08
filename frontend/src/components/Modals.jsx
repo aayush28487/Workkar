@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useWorkkar } from '../context/WorkkarContext';
 import { useLanguage } from '../context/LanguageContext';
+import WorkerAvatar from './WorkerAvatar';
 
 // 1. Withdraw Funds Modal Component
 export function WithdrawModal({ isOpen, onClose }) {
@@ -81,7 +82,7 @@ export function WithdrawModal({ isOpen, onClose }) {
 
               <div className="bg-surface-container-low p-4 rounded-xl mb-4 text-center border border-outline-variant/30">
                 <span className="text-[11px] font-bold text-on-surface-variant uppercase tracking-widest block mb-1">{t('modals.availableBalance')}</span>
-                <span className="font-display-lg text-display-lg text-primary font-bold">${wallet.balance.toFixed(2)}</span>
+                <span className="font-display-lg text-display-lg text-primary font-bold">₹{wallet.balance.toFixed(2)}</span>
               </div>
 
               <form onSubmit={handleWithdraw} className="flex flex-col gap-4">
@@ -227,20 +228,21 @@ export function ServiceModal({ service, isOpen, onClose }) {
                 {activeWorkers.map(worker => (
                   <div key={worker.id} className="p-3 border border-outline-variant/35 rounded-xl flex items-center justify-between hover:bg-surface-container-low dark:hover:bg-surface-container-high transition-all duration-200">
                     <div className="flex items-center gap-3">
-                      {worker.avatar ? (
-                        <img src={worker.avatar} alt={worker.name} className="w-10 h-10 rounded-full object-cover" />
-                      ) : (
-                        <div className="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center font-bold text-sm text-primary">
-                          {worker.textAvatar || worker.name.substring(0,2)}
-                        </div>
-                      )}
+                      <WorkerAvatar
+                        worker={worker}
+                        alt={worker.name}
+                        size="w-10 h-10"
+                        rounded="rounded-full"
+                        border="border border-outline-variant/30 shadow-sm"
+                        textClassName="text-primary font-bold text-xs"
+                      />
                       <div>
                         <span className="font-bold text-sm block text-on-surface">{worker.name}</span>
                         <span className="text-[11px] text-on-surface-variant">{worker.experience} {t('common.yrsExp')} • ⭐ {worker.rating}</span>
                       </div>
                     </div>
                     <div className="text-right flex items-center gap-3">
-                      <span className="font-bold text-primary text-sm">${worker.rate}{t('common.perHr')}</span>
+                      <span className="font-bold text-primary text-sm">₹{worker.rate}{t('common.perHr')}</span>
                       <Link
                         to={`/worker-details/${worker.id}`}
                         onClick={onClose}

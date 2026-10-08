@@ -5,6 +5,7 @@ import { useWorkkar } from '../context/WorkkarContext';
 import { useLanguage } from '../context/LanguageContext';
 import DashboardCard from '../components/DashboardCard';
 import ChatBox from '../components/ChatBox';
+import WorkerAvatar from '../components/WorkerAvatar';
 
 export default function CustomerDashboard() {
   const {
@@ -201,7 +202,7 @@ export default function CustomerDashboard() {
           <DashboardCard
             icon="payments"
             title={t('customerDashboard.statsSpent')}
-            value={`$${totalSpent.toFixed(2)}`}
+            value={`₹${totalSpent.toFixed(2)}`}
             trend={t('common.verified')}
             trendType="neutral"
             footerLabel={t('activeJob.paymentSummary')}
@@ -254,7 +255,7 @@ export default function CustomerDashboard() {
                             <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full ${getStatusBadge(booking.status)}`}>
                               {tStatus(booking.status)}
                             </span>
-                            <span className="font-bold text-sm text-on-surface">${booking.total.toFixed(2)}</span>
+                            <span className="font-bold text-sm text-on-surface">₹{booking.total.toFixed(2)}</span>
                           </div>
                         </div>
 
@@ -263,7 +264,7 @@ export default function CustomerDashboard() {
                           const wName = workerDetail?.name || booking.workerName || 'Worker Partner';
                           const wSkill = workerDetail?.skillTitle ? tSkill(workerDetail.skillTitle) : (booking.skill ? tSkill(booking.skill) : 'Service Professional');
                           const wExp = workerDetail?.experience !== undefined ? `${workerDetail.experience} ${t('common.yrsExp')}` : t('common.verified');
-                          const wRate = workerDetail?.rate !== undefined ? `$${workerDetail.rate}${t('common.perHr')}` : 'Custom rate';
+                          const wRate = workerDetail?.rate !== undefined ? `₹${workerDetail.rate}${t('common.perHr')}` : 'Custom rate';
                           const wRating = workerDetail?.rating ? workerDetail.rating.toFixed(1) : '5.0';
                           const hasAvatar = !!workerDetail?.avatar;
                           const wAvatar = workerDetail?.avatar;
@@ -273,17 +274,16 @@ export default function CustomerDashboard() {
                           return (
                             <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 bg-surface-container-lowest/80 rounded-xl border border-outline-variant/20 shadow-sm transition-all duration-200">
                               <div className="flex items-center gap-3">
-                                {hasAvatar ? (
-                                  <img
-                                    src={wAvatar}
-                                    alt={wName}
-                                    className="w-12 h-12 rounded-xl object-cover border border-outline-variant/30 shadow-sm"
-                                  />
-                                ) : (
-                                  <div className="w-12 h-12 rounded-xl bg-primary-fixed flex items-center justify-center text-primary font-bold text-lg border border-outline-variant/30 shadow-sm">
-                                    {wTextAvatar}
-                                  </div>
-                                )}
+                                <WorkerAvatar
+                                  worker={workerDetail}
+                                  src={wAvatar}
+                                  name={wName}
+                                  textAvatar={wTextAvatar}
+                                  size="w-12 h-12"
+                                  rounded="rounded-xl"
+                                  border="border border-outline-variant/30 shadow-sm"
+                                  textClassName="text-primary font-bold text-lg"
+                                />
                                 <div>
                                   <div className="flex items-center gap-1.5">
                                     <h4 className="font-bold text-on-surface text-sm">{wName}</h4>
@@ -389,7 +389,7 @@ export default function CustomerDashboard() {
                                 {t('common.confirm')}
                               </h4>
                               <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                                {t('activeJob.paymentSummary')}: <span className="font-bold text-on-surface">${booking.total.toFixed(2)}</span>
+                                {t('activeJob.paymentSummary')}: <span className="font-bold text-on-surface">₹{booking.total.toFixed(2)}</span>
                               </p>
                             </div>
                             <button
@@ -453,7 +453,7 @@ export default function CustomerDashboard() {
                             <td className="py-3.5 pr-2 text-on-surface-variant font-medium font-mono">
                               {new Date(booking.date).toLocaleDateString()}
                             </td>
-                            <td className="py-3.5 pr-2 font-bold">${booking.total.toFixed(2)}</td>
+                            <td className="py-3.5 pr-2 font-bold">₹{booking.total.toFixed(2)}</td>
                             <td className="py-3.5 pr-2">
                               <span className={`px-2.5 py-0.5 rounded text-[10px] font-bold ${getStatusBadge(booking.status)}`}>
                                 {tStatus(booking.status)}

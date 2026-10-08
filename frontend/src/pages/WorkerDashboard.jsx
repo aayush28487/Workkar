@@ -137,7 +137,7 @@ export default function WorkerDashboard() {
           <DashboardCard
             icon="payments"
             title={t('workerEarnings.walletBalance')}
-            value={`$${user.wallet?.balance?.toFixed(2) || '0.00'}`}
+            value={`₹${user.wallet?.balance?.toFixed(2) || '0.00'}`}
             trend={t('common.available')}
             trendType="positive"
             footerLabel={t('workerEarnings.withdrawBtn')}
@@ -146,7 +146,7 @@ export default function WorkerDashboard() {
           <DashboardCard
             icon="event"
             title={t('workerDashboard.statsTodayEarnings')}
-            value={`$${user.wallet?.weekly?.toFixed(2) || '0.00'}`}
+            value={`₹${user.wallet?.weekly?.toFixed(2) || '0.00'}`}
             trend={t('common.active')}
             trendType="neutral"
             footerLabel={t('workerDashboard.earningsSummary')}

@@ -128,7 +128,7 @@ export default function WorkerProfileSetup({ worker, refetchWorker }) {
     } else {
       const parsedRate = parseFloat(rate);
       if (isNaN(parsedRate) || parsedRate < minRateVal || parsedRate > maxRateVal) {
-        errs.rate = `$${minRateVal} - $${maxRateVal}`;
+        errs.rate = `₹${minRateVal} - ₹${maxRateVal}`;
       }
     }
 
@@ -409,7 +409,7 @@ export default function WorkerProfileSetup({ worker, refetchWorker }) {
                     } bg-white dark:bg-slate-950 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 text-sm text-slate-900 dark:text-white transition-all`}
                   />
                   <span className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold mt-1 block">
-                    ${minRate} - ${maxRate}/hr
+                    ₹{minRate} - ₹{maxRate}/hr
                   </span>
                   {errors.rate && (
                     <p className="mt-1 text-xs text-red-500 font-semibold">{errors.rate}</p>

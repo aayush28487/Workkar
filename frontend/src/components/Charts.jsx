@@ -27,7 +27,7 @@ const CustomTooltip = ({ active, payload, label }) => {
               {item.name}:
             </span>
             <span className="font-bold">
-              {item.name.toLowerCase().includes('earn') || item.name.toLowerCase().includes('tips') ? `$${item.value}` : item.value}
+              {item.name.toLowerCase().includes('earn') || item.name.toLowerCase().includes('tips') ? `₹${item.value}` : item.value}
             </span>
           </p>
         ))}
@@ -73,7 +73,7 @@ export function JobPerformanceChart({ data }) {
           barSize={24}
         />
         <Line
-          name="Earnings Trend ($)"
+          name="Earnings Trend (₹)"
           type="monotone"
           dataKey="trend"
           stroke="#fd761a"
@@ -115,7 +115,7 @@ export function WeeklyEarningsChart({ data }) {
           wrapperStyle={{ paddingTop: 15, fontSize: 11, fontFamily: 'Inter' }}
         />
         <Bar
-          name="Job Earnings ($)"
+          name="Job Earnings (₹)"
           dataKey="jobs"
           stackId="a"
           fill="#004ac6"
@@ -123,7 +123,7 @@ export function WeeklyEarningsChart({ data }) {
           barSize={20}
         />
         <Bar
-          name="Tips & Incentives ($)"
+          name="Tips & Incentives (₹)"
           dataKey="tips"
           stackId="a"
           fill="#fd761a"
@@ -163,7 +163,7 @@ export function DailyEarningsChart({ data }) {
         />
         <Tooltip content={<CustomTooltip />} />
         <Area
-          name="Revenue Trend ($)"
+          name="Revenue Trend (₹)"
           type="monotone"
           dataKey="trend"
           stroke="#004ac6"

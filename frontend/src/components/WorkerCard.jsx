@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
+import WorkerAvatar from './WorkerAvatar';
 
 export default function WorkerCard({ worker }) {
   const { id, name, skill, skillTitle, experience, rating, rate, availability, avatar, textAvatar, verified } = worker;
@@ -30,17 +31,13 @@ export default function WorkerCard({ worker }) {
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center gap-4">
             <div className="relative">
-              {avatar ? (
-                <img
-                  alt={name}
-                  className="w-16 h-16 rounded-full object-cover border-2 border-surface shadow-sm"
-                  src={avatar}
-                />
-              ) : (
-                <div className="w-16 h-16 rounded-full bg-primary-fixed flex items-center justify-center text-primary font-bold text-xl border-2 border-surface shadow-sm">
-                  {textAvatar || name.split(' ').map(n => n[0]).join('').substring(0, 2)}
-                </div>
-              )}
+              <WorkerAvatar
+                worker={worker}
+                alt={name}
+                size="w-16 h-16"
+                rounded="rounded-full"
+                border="border-2 border-surface shadow-sm"
+              />
               {/* Online status indicator dot */}
               <span className={`absolute bottom-0 right-0 w-3.5 h-3.5 ${dotColor} border-2 border-surface rounded-full shadow`}></span>
             </div>
@@ -70,7 +67,7 @@ export default function WorkerCard({ worker }) {
             {experience} {t('common.yrsExp')}
           </span>
           <span className="font-title-md text-sm text-primary font-extrabold flex items-center gap-0.5">
-            ${rate}<span className="text-[10px] font-medium text-on-surface-variant">{t('common.perHr')}</span>
+            ₹{rate}<span className="text-[10px] font-medium text-on-surface-variant">{t('common.perHr')}</span>
           </span>
         </div>
 

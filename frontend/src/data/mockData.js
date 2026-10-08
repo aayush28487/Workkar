@@ -7,7 +7,7 @@ export const INITIAL_SERVICES = [
     color: "primary",
     bg: "bg-blue-500/10",
     image: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=800&q=80",
-    price: "$20/hr",
+    price: "₹20/hr",
     startingRate: 20,
     availableWorkers: "24+ Available",
     rating: 4.9,
@@ -21,7 +21,7 @@ export const INITIAL_SERVICES = [
     color: "secondary",
     bg: "bg-orange-500/10",
     image: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80",
-    price: "$22/hr",
+    price: "₹22/hr",
     startingRate: 22,
     availableWorkers: "19+ Available",
     rating: 4.8,
@@ -35,7 +35,7 @@ export const INITIAL_SERVICES = [
     color: "secondary",
     bg: "bg-amber-500/10",
     image: "https://images.unsplash.com/photo-1538688525198-9b88f6f53126?auto=format&fit=crop&w=800&q=80",
-    price: "$25/hr",
+    price: "₹25/hr",
     startingRate: 25,
     availableWorkers: "15+ Available",
     rating: 4.9,
@@ -49,7 +49,7 @@ export const INITIAL_SERVICES = [
     color: "primary",
     bg: "bg-indigo-500/10",
     image: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=800&q=80",
-    price: "$18/hr",
+    price: "₹18/hr",
     startingRate: 18,
     availableWorkers: "28+ Available",
     rating: 4.8,
@@ -63,7 +63,7 @@ export const INITIAL_SERVICES = [
     color: "tertiary",
     bg: "bg-rose-500/10",
     image: "https://images.unsplash.com/photo-1541888946425-d0fbb186156a?auto=format&fit=crop&w=800&q=80",
-    price: "$24/hr",
+    price: "₹24/hr",
     startingRate: 24,
     availableWorkers: "12+ Available",
     rating: 4.7,
@@ -77,7 +77,7 @@ export const INITIAL_SERVICES = [
     color: "tertiary",
     bg: "bg-teal-500/10",
     image: "https://images.unsplash.com/photo-1584820927498-cfe5211fd8bf?auto=format&fit=crop&w=800&q=80",
-    price: "$16/hr",
+    price: "₹16/hr",
     startingRate: 16,
     availableWorkers: "35+ Available",
     rating: 4.9,
@@ -91,7 +91,7 @@ export const INITIAL_SERVICES = [
     color: "primary",
     bg: "bg-blue-500/10",
     image: "https://images.unsplash.com/photo-1504917599217-d4dc5ebe6122?auto=format&fit=crop&w=800&q=80",
-    price: "$26/hr",
+    price: "₹26/hr",
     startingRate: 26,
     availableWorkers: "8+ Available",
     rating: 4.8,
@@ -105,7 +105,7 @@ export const INITIAL_SERVICES = [
     color: "secondary",
     bg: "bg-emerald-500/10",
     image: "https://images.unsplash.com/photo-1592417817098-8f3d69104a47?auto=format&fit=crop&w=800&q=80",
-    price: "$17/hr",
+    price: "₹17/hr",
     startingRate: 17,
     availableWorkers: "14+ Available",
     rating: 4.9,
@@ -123,7 +123,7 @@ export const INITIAL_WORKERS = [
     rating: 4.9,
     rate: 28,
     availability: "Available",
-    avatar: "https://images.unsplash.com/photo-1540569014015-19a7be504e3a?auto=format&fit=crop&w=400&q=80",
+    avatar: "/images/workers/carpenter.jpg",
     verified: true,
     reviews: [
       { id: 1, user: "Elena P.", rating: 5, date: "2 days ago", comment: "Marcus did an excellent job building our bookshelf. Fast, neat, and highly professional!" },
@@ -140,7 +140,7 @@ export const INITIAL_WORKERS = [
     rating: 4.8,
     rate: 32,
     availability: "Available",
-    avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80",
+    avatar: "/images/workers/plumber.jpg",
     verified: true,
     reviews: [
       { id: 1, user: "David K.", rating: 5, date: "3 days ago", comment: "Resolved a complex bathroom leak that others couldn't diagnose. Worth every penny." },
@@ -157,7 +157,7 @@ export const INITIAL_WORKERS = [
     rating: 4.7,
     rate: 25,
     availability: "Offline",
-    avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuAaZxGhoyoXOE3BFe-KVneP0ehPXoJqnYUb0X8tpOETpLqHCX2TSWaGBZpBwYrWx7MQNnP8M_d-yiJejLrIfzAAjkHwGJz38auU8Z5ngqwC7KyFHRNzpkwoumHbWhn7IwGZsCp_u1JKfVg08IE1674eZdj3Gce2Q4NF04FxWnXmDLl6sPz1HFjDdlpSywF3mLAlyxwx4Nzj54bGYkmTQeH6KRpMMs14XT_0b_WF8a2LMVlPgALT6fy-cAe6b8b-ZLMnsx6eBIDYjOhz",
+    avatar: "/images/workers/electrician.jpg",
     verified: true,
     reviews: [
       { id: 1, user: "Thomas L.", rating: 4.5, date: "1 month ago", comment: "Rewired our kitchen safely. Very professional approach." }
@@ -173,7 +173,7 @@ export const INITIAL_WORKERS = [
     rating: 4.9,
     rate: 25,
     availability: "Available",
-    avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuAyn73H76ZJdgf-yj3fNGxZfN8Yv-MwnQvLCa_Wp1YS1iT6I-vuqHzLgIw2dyq32whs2h6T8P3wzoMOjSPPcf7jYKwIeXjPDf_cvSokBpfXJ-nQGdRVgJmzahT_J3heHCJoxOMGYaXEcEIjxNp_nzXe8e3zc0SVtywWlde9Ijuq0rD8FVXHAYfugHJslXgLdZ5-Wh8rLBG0LNa0bgwIX5M8uuf84AKZEuuMUMmpOPu-L6l1874CjJLCrKFDPApeC-bCOYPAD6KFLT5B",
+    avatar: "/images/workers/worker-1.jpg",
     verified: true,
     reviews: [
       { id: 1, user: "Jane W.", rating: 5, date: "5 days ago", comment: "Outstanding service. John fixed our short circuit issue in less than an hour!" }
@@ -189,7 +189,7 @@ export const INITIAL_WORKERS = [
     rating: 4.8,
     rate: 18,
     availability: "Available",
-    avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuB5pLhzRNr-IsNCpifIhzKh9hoLcfNP2f2W1M3N6YwZNEPlDfuegsAqgUDjqlTJZA30vHABl9E-icKEy1ST-wcWQZERN9Bc0H5Lmt4U7nIwUyFHpmZhCZK8ieoooH9QV_XJYJYch-w4zHuTn1aAYWV6mFHgIA38KTCnV0qwbzM04OHJ4G23MnF14Z-XSJZ67PF0l7A8Qb_ARXZG8OCUQjlYAi4RRNWgQQtUdSreHEyzdxSDgIJW6yZc5C2g0pMueMJRIRvBBX1kxrtl",
+    avatar: "/images/workers/cleaner.jpg",
     verified: true,
     reviews: [
       { id: 1, user: "Arthur M.", rating: 4.8, date: "2 weeks ago", comment: "Very thorough deep cleaning. The apartment was spotless." }
@@ -205,7 +205,7 @@ export const INITIAL_WORKERS = [
     rating: 5.0,
     rate: 30,
     availability: "Available",
-    avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuBZEYKUl9uuIAKpxiR691eEOWU9TzPKfxs5sx9vwlkdw7jazKOeHHSuF3soFZSkN8twHfxzGqy2vt7v7dnX9pKQ62Va5oOwn-l-yb0Aocne2H6mwc3PvMFcn4PydkdcbEi7kh1XbWFjNGrtNmY7TlYQ8Lev5Ro6s9GwPxDpxKtamXMeFAc8Bc2mEOqmvfegYLwy2WJ_g2hsq2ayNEVNreZpHLHm8ssyVuJ4uxL2yKJp_nintMIkUiuh12mRpZSvO0Ctn3KNwZqMG3qz",
+    avatar: "/images/workers/mason.jpg",
     verified: true,
     reviews: [
       { id: 1, user: "Gary T.", rating: 5, date: "4 days ago", comment: "Flawless paving of our front driveway. Strong structural build!" }
@@ -221,6 +221,7 @@ export const INITIAL_WORKERS = [
     rating: 4.5,
     rate: 15,
     availability: "Available",
+    avatar: "/images/workers/gardener.jpg",
     textAvatar: "KT",
     verified: false,
     reviews: [

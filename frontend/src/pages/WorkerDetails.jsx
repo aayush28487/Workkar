@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useWorkkar } from '../context/WorkkarContext';
 import { useLanguage } from '../context/LanguageContext';
+import WorkerAvatar from '../components/WorkerAvatar';
 
 export default function WorkerDetails() {
   const { id } = useParams();
@@ -73,17 +74,14 @@ export default function WorkerDetails() {
           {/* Profile Card details */}
           <section className="bg-surface-container-lowest rounded-xl border border-outline-variant/30 ambient-shadow-base p-6">
             <div className="flex flex-col sm:flex-row gap-6 items-start">
-              {worker.avatar ? (
-                <img 
-                  src={worker.avatar} 
-                  alt={worker.name} 
-                  className="w-24 h-24 sm:w-28 sm:h-28 rounded-xl object-cover border border-outline-variant/30 shadow"
-                />
-              ) : (
-                <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-xl bg-primary-fixed flex items-center justify-center text-primary font-bold text-3xl border border-outline-variant/30 shadow">
-                  {worker.textAvatar || worker.name.substring(0, 2)}
-                </div>
-              )}
+              <WorkerAvatar
+                worker={worker}
+                alt={worker.name}
+                size="w-24 h-24 sm:w-28 sm:h-28"
+                rounded="rounded-xl"
+                border="border border-outline-variant/30 shadow"
+                textClassName="text-primary font-bold text-3xl"
+              />
               
               <div className="flex-1 flex flex-col gap-2">
                 <div className="flex items-center gap-2 flex-wrap">
@@ -118,7 +116,7 @@ export default function WorkerDetails() {
                     {t('workerDetails.experienceYears', { count: worker.experience })}
                   </span>
                   <span className="flex items-center gap-1 bg-surface-container-high px-2.5 py-1 rounded-full text-primary font-bold">
-                    ${worker.rate}{t('common.perHr')}
+                    ₹{worker.rate}{t('common.perHr')}
                   </span>
                 </div>
               </div>

@@ -93,6 +93,10 @@ export default function ScrollThumbnailCarousel({ services = [], onSelectService
                   src={service.image || fallbackImage}
                   alt={serviceName}
                   loading="lazy"
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = fallbackImage;
+                  }}
                   className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700 ease-out"
                 />
 
@@ -135,7 +139,7 @@ export default function ScrollThumbnailCarousel({ services = [], onSelectService
 
                   {/* Price Tag */}
                   <span className="bg-emerald-500/90 text-white font-extrabold text-xs px-2.5 py-1 rounded-lg backdrop-blur-md shadow-sm">
-                    {service.price || ('From $' + (service.startingRate || 20) + '/hr')}
+                    {service.price ? service.price.replace('$', '₹') : ('From ₹' + (service.startingRate || 20) + '/hr')}
                   </span>
                 </div>
               </div>

@@ -114,7 +114,7 @@ export default function ActiveJob() {
                   
                   <div className="text-right">
                     <span className="block text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-0.5">{t('activeJob.paymentSummary')}</span>
-                    <span className="font-headline-lg text-headline-lg text-primary font-bold">${incomingAlert.total}</span>
+                    <span className="font-headline-lg text-headline-lg text-primary font-bold">₹{incomingAlert.total}</span>
                   </div>
                 </div>
 
@@ -138,7 +138,11 @@ export default function ActiveJob() {
                     <img
                       alt="Map Grid"
                       className="w-full h-full object-cover"
-                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuAc0ocQNFJeJD-nNBm5OxVLiyZ8Oqqx97W9FUT-2LnpCphRtI9xWcVHdpysbXKEnmaGK3_x4QeqZ1wi25GDKGH0V_qvJqE6N9_7X46ZrvEdmvEJ7hbvMOTHLagkltJqH4_kSueVjr678d1bzsKjTEZzOsvDjVpkYDnuqKgArtPwG-mXYhs9VngwdyBdD6sig_llPnED6wOzfNjcCMq7NJrd9pp8CxXtLS5lZqQmLrCRK361nhf4afM9RaxymKhOm1XTFOIOJJ0NkXt4"
+                      src="https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=800&q=80"
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = 'https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=800&q=80';
+                      }}
                     />
                   </div>
 
@@ -226,7 +230,11 @@ export default function ActiveJob() {
                   <img
                     alt="Map Grid"
                     className="w-full h-full object-cover"
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDFbGu0nTtYNT7O1EBV8pVoEhrjwhgtQYNboOsD8-qANqNIJy-156Ul1LpRDNyYHOeJjXr1xSfCtsIvxnWdW9eaVLPF-w4gbNx47VB67CGyB2cx8xPDapDkgmCSog3jtY_3755_h54-mRrfBcvdS3mbSV5Y7KzcWR9ihRnc9fGDZEiz1rYCDqzCFWwyu0RKtj4NBVTVyGB8fUm0AVudnV9NXmSpbRY8ZIS2sSUHZYRx0aF-6-49qZ4I6YT46cTHL37kqY7-B9C_YI4"
+                    src="https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=800&q=80"
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = 'https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=800&q=80';
+                    }}
                   />
                   
                   {activeJob.step === 2 && (
@@ -248,7 +256,11 @@ export default function ActiveJob() {
                     <img
                       alt="Customer Avatar"
                       className="w-14 h-14 rounded-full object-cover border border-outline-variant/20 shadow-sm"
-                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMLkQEkNAOqmwWe1yJclJp4Asb4IEHwH32A2gjyVYQYtyJWL-nBZvyK-uLD5f26R--aPYyj5zU4LGLNFu1rfHhH-7Mosw7EuAweDfvVUw4qaC4yXLMBE3H1uUWH_vrozhitHpWDJuuEr-kTQz43lokuX4g9SKJj3U64Mnirt5JL9HhgmjJ1dZfNLHq6sNlCBcuDG0AFUSpZJD5k2uv_HZR3VXT7EP2nJcIWENmATqTrZzr6qyW5L20nRU6h36LTi94tWeoTwQitImv"
+                      src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80"
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80';
+                      }}
                     />
                     <div>
                       <h2 className="font-title-md text-on-surface font-bold leading-tight">{activeJob.customerName}</h2>
@@ -298,12 +310,12 @@ export default function ActiveJob() {
                   
                   <div className="flex justify-between items-center text-on-surface-variant font-body-md text-xs">
                     <span>{t('workerAuth.hourlyRateLabel')}</span>
-                    <span>${activeJob.base.toFixed(2)}</span>
+                    <span>₹{activeJob.base.toFixed(2)}</span>
                   </div>
                   
                   <div className="border-t border-outline-variant/20 pt-3 mt-2 flex justify-between items-center">
                     <span className="font-bold text-on-surface text-sm">{t('workerEarnings.walletBalance')}</span>
-                    <span className="font-headline-md text-primary font-extrabold">${activeJob.total.toFixed(2)}</span>
+                    <span className="font-headline-md text-primary font-extrabold">₹{activeJob.total.toFixed(2)}</span>
                   </div>
                 </div>
 

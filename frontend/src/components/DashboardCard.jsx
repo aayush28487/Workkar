@@ -79,9 +79,9 @@ export default function DashboardCard({
         </div>
         <div className="flex items-baseline gap-2">
           <span className="font-display-lg text-display-lg text-on-surface font-bold">
-            {value.toString().startsWith('$') ? (
+            {value.toString().startsWith('₹') || value.toString().startsWith('$') ? (
               <>
-                $
+                ₹
                 <CountUp end={value.toString().substring(1)} />
               </>
             ) : (

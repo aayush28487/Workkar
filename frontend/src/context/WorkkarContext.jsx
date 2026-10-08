@@ -2,8 +2,10 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import {
   INITIAL_SERVICES,
   INITIAL_EARNINGS_TREND,
+  INITIAL_WORKERS,
 } from '../data/mockData';
 import { API_URL, BACKEND_URL, getFileUrl } from '../config/api';
+import { resolveWorkerAvatar } from '../utils/avatarUtils';
 
 const WorkkarContext = createContext();
 
@@ -14,8 +16,8 @@ export const WorkkarProvider = ({ children }) => {
   const [workerToken, setWorkerToken] = useState(() => localStorage.getItem('worker_token'));
   const [authLoading, setAuthLoading] = useState(true);
 
-  // App data states
-  const [dbWorkers, setDbWorkers] = useState([]);
+  // App data states (initialized with guaranteed seed workers for instant render)
+  const [dbWorkers, setDbWorkers] = useState(() => INITIAL_WORKERS);
   const [dbUsers, setDbUsers] = useState([]);
   const [auditLogs, setAuditLogs] = useState([]);
   const [analytics, setAnalytics] = useState(null);
@@ -231,21 +233,23 @@ export const WorkkarProvider = ({ children }) => {
 
   // Computed state for workers
   // Client UI sees verified, active workers only
-  const workers = dbWorkers.filter(w => w.verified && w.status === 'active').map(w => ({
-    id: w._id,
-    name: w.name,
-    skill: w.skill,
-    skillTitle: w.skillTitle || `Professional ${w.skill}`,
-    experience: w.experience,
+  const effectiveDbWorkers = (dbWorkers && dbWorkers.length > 0) ? dbWorkers : INITIAL_WORKERS;
+  const workers = effectiveDbWorkers.filter(w => (w.verified !== false) && (w.status === 'active' || !w.status)).map(w => ({
+    id: w._id || w.id,
+    name: w.name || w.fullName || 'Service Pro',
+    skill: w.skill || w.profession || 'Tradesperson',
+    skillTitle: w.skillTitle || `Professional ${w.skill || w.profession || 'Tradesperson'}`,
+    experience: w.experience || 1,
     rating: w.rating || 5.0,
-    rate: w.rate,
-    availability: w.availability,
-    avatar: w.avatar || (w.profilePhoto ? getFileUrl(w.profilePhoto) : null),
+    rate: w.rate || 20,
+    availability: w.availability || 'Available',
+    avatar: resolveWorkerAvatar(w),
+    profilePhoto: w.profilePhoto,
     textAvatar: w.textAvatar,
-    verified: w.verified,
-    status: w.status,
+    verified: w.verified !== false,
+    status: w.status || 'active',
     reviews: w.reviews || [],
-    description: w.description
+    description: w.description || ''
   }));
 
   // Coordinator UI sees unverified/pending workers in the queue
@@ -253,8 +257,9 @@ export const WorkkarProvider = ({ children }) => {
     id: w.id || w._id,
     name: w.name || w.fullName || 'Partner',
     skill: w.skill || w.profession || 'Technician',
-    time: new Date(w.createdAt).toLocaleDateString(),
+    time: w.createdAt ? new Date(w.createdAt).toLocaleDateString() : 'Recent',
     avatarInitials: w.textAvatar || (w.name || w.fullName || 'WK').split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2),
+    avatar: resolveWorkerAvatar(w),
     email: w.email,
     mobile: w.mobile,
     age: w.age,
@@ -571,7 +576,7 @@ export const WorkkarProvider = ({ children }) => {
       const data = await res.json();
       if (res.ok) {
         setUser(prev => ({ ...prev, wallet: data.wallet }));
-        addNotification(`Withdrawal of $${amount.toFixed(2)} processed successfully!`, "success");
+        addNotification(`Withdrawal of ₹${amount.toFixed(2)} processed successfully!`, "success");
         return true;
       } else {
         addNotification(data.message || "Withdrawal failed", "error");

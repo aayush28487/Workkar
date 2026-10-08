@@ -25,6 +25,10 @@ export default function ServiceCard({ service, onClick }) {
             src={image}
             alt={tService(name)}
             loading="lazy"
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              e.currentTarget.src = 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80';
+            }}
             className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500 ease-out"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent"></div>
@@ -48,7 +52,7 @@ export default function ServiceCard({ service, onClick }) {
             </div>
 
             <span className="bg-emerald-500/90 text-white font-extrabold text-[11px] px-2 py-0.5 rounded-md backdrop-blur-md shadow-sm">
-              {price || `From $${startingRate || 20}/hr`}
+              {price ? price.replace('$', '₹') : `From ₹${startingRate || 20}/hr`}
             </span>
           </div>
         </div>

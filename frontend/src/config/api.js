@@ -28,6 +28,9 @@ export const getFileUrl = (path) => {
   ) {
     return path;
   }
+  if (path.startsWith('/images/') || path.startsWith('images/')) {
+    return path.startsWith('/') ? path : `/${path}`;
+  }
   const cleanPath = path.startsWith('/') ? path : `/${path}`;
   return `${BACKEND_URL}${cleanPath}`;
 };

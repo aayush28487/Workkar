@@ -452,6 +452,10 @@ export default function Home() {
                   <img
                     src={item.avatar}
                     alt={item.name}
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80';
+                    }}
                     className="w-10 h-10 rounded-full object-cover border border-surface shadow-sm"
                   />
                   <div className="text-left">
@@ -511,6 +515,10 @@ export default function Home() {
                   <img
                     src="https://images.unsplash.com/photo-1540569014015-19a7be504e3a?auto=format&fit=crop&w=400&q=80"
                     alt="Happy Partner Worker"
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = '/images/workers/default.jpg';
+                    }}
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end justify-center pb-2">

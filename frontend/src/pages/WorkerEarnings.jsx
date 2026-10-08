@@ -47,7 +47,7 @@ export default function WorkerEarnings() {
                 <p className="font-title-md text-xs text-on-surface-variant mb-1 uppercase tracking-wider font-semibold">
                   {t('workerDashboard.statsTodayEarnings')}
                 </p>
-                <h2 className="font-display-lg text-4xl text-primary font-extrabold">${weeklyTotal.toFixed(2)}</h2>
+                <h2 className="font-display-lg text-4xl text-primary font-extrabold">₹{weeklyTotal.toFixed(2)}</h2>
                 <div className="flex items-center gap-1 mt-2 text-secondary-container">
                   <span className="material-symbols-outlined text-[16px] fill">trending_up</span>
                   <span className="font-label-md text-xs font-bold">+12% vs last week</span>
@@ -58,15 +58,15 @@ export default function WorkerEarnings() {
               <div className="w-full md:w-auto grid grid-cols-3 gap-6 bg-surface-container-low p-4 rounded-xl">
                 <div>
                   <p className="text-[10px] font-bold text-on-surface-variant mb-1 uppercase tracking-wider">{t('workerEarnings.basePay')}</p>
-                  <p className="font-headline-md text-sm font-extrabold text-on-surface">${(wallet?.jobEarnings || 0).toFixed(2)}</p>
+                  <p className="font-headline-md text-sm font-extrabold text-on-surface">₹{(wallet?.jobEarnings || 0).toFixed(2)}</p>
                 </div>
                 <div>
                   <p className="text-[10px] font-bold text-on-surface-variant mb-1 uppercase tracking-wider">{t('workerEarnings.incentives')}</p>
-                  <p className="font-headline-md text-sm font-extrabold text-on-surface">${(wallet?.incentives || 0).toFixed(2)}</p>
+                  <p className="font-headline-md text-sm font-extrabold text-on-surface">₹{(wallet?.incentives || 0).toFixed(2)}</p>
                 </div>
                 <div>
                   <p className="text-[10px] font-bold text-on-surface-variant mb-1 uppercase tracking-wider">{t('workerEarnings.tips')}</p>
-                  <p className="font-headline-md text-sm font-extrabold text-on-surface">${(wallet?.tips || 0).toFixed(2)}</p>
+                  <p className="font-headline-md text-sm font-extrabold text-on-surface">₹{(wallet?.tips || 0).toFixed(2)}</p>
                 </div>
               </div>
             </div>
@@ -97,7 +97,7 @@ export default function WorkerEarnings() {
                   <span className="material-symbols-outlined text-on-primary text-2xl">account_balance_wallet</span>
                 </div>
                 
-                <h3 className="font-display-lg text-3xl font-extrabold mb-6">${balanceTotal.toFixed(2)}</h3>
+                <h3 className="font-display-lg text-3xl font-extrabold mb-6">₹{balanceTotal.toFixed(2)}</h3>
                 
                 <button 
                   onClick={() => setIsWithdrawOpen(true)}
@@ -130,7 +130,7 @@ export default function WorkerEarnings() {
               
               <div className="bg-surface-container-lowest rounded-xl p-4 shadow-sm border border-outline-variant/30 flex flex-col items-center justify-center text-center">
                 <span className="material-symbols-outlined text-primary mb-1 fill">payments</span>
-                <p className="font-display-lg text-lg text-on-surface font-extrabold">${hourlyRate}{t('common.perHr')}</p>
+                <p className="font-display-lg text-lg text-on-surface font-extrabold">₹{hourlyRate}{t('common.perHr')}</p>
                 <p className="font-label-md text-[10px] font-bold text-on-surface-variant uppercase tracking-wider mt-0.5">{t('common.rate')}</p>
               </div>
             </div>

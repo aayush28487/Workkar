@@ -4,6 +4,7 @@ import { useWorkkar } from '../context/WorkkarContext';
 import { useLanguage } from '../context/LanguageContext';
 import { getFileUrl } from '../config/api';
 import DashboardCard from '../components/DashboardCard';
+import WorkerAvatar from '../components/WorkerAvatar';
 
 export default function AdminDashboard() {
   const [selectedWorker, setSelectedWorker] = useState(null);
@@ -29,7 +30,7 @@ export default function AdminDashboard() {
   }, []);
 
   // Stats calculation
-  const totalRevenue = analytics ? `$${analytics.revenue.toLocaleString()}` : "$24,500";
+  const totalRevenue = analytics ? `₹${analytics.revenue.toLocaleString()}` : "₹24,500";
   const jobRequests = analytics ? analytics.jobRequests.toString() : "1,284";
   const activeWorkersCount = workers.filter(w => w.availability !== 'Offline').length;
   const pendingApprovalsCount = pendingApprovals.length;
@@ -352,19 +353,16 @@ export default function AdminDashboard() {
             {/* Header */}
             <div className="p-6 bg-slate-50 dark:bg-slate-950 border-b border-slate-100 dark:border-slate-800 flex justify-between items-start">
               <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-full overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-800 shrink-0">
-                  {selectedWorker.profilePhoto ? (
-                    <img
-                      src={getFileUrl(selectedWorker.profilePhoto)}
-                      alt={selectedWorker.name}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center font-extrabold text-lg text-primary bg-blue-50 dark:bg-slate-800">
-                      {selectedWorker.avatarInitials}
-                    </div>
-                  )}
-                </div>
+                <WorkerAvatar
+                  worker={selectedWorker}
+                  src={selectedWorker.profilePhoto ? getFileUrl(selectedWorker.profilePhoto) : null}
+                  alt={selectedWorker.name}
+                  textAvatar={selectedWorker.avatarInitials}
+                  size="w-14 h-14"
+                  rounded="rounded-full"
+                  border="border border-slate-200 dark:border-slate-800 shadow-sm"
+                  textClassName="text-primary font-extrabold text-lg"
+                />
                 <div>
                   <h3 className="text-xl font-black text-slate-800 dark:text-slate-100">
                     {selectedWorker.name}
@@ -401,7 +399,7 @@ export default function AdminDashboard() {
                 </div>
                 <div>
                   <span className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider block font-bold">{t('workerAuth.hourlyRateLabel')}</span>
-                  <span className="font-semibold text-slate-800 dark:text-slate-200 block text-sm mt-0.5">${selectedWorker.rate}{t('common.perHr')}</span>
+                  <span className="font-semibold text-slate-800 dark:text-slate-200 block text-sm mt-0.5">₹{selectedWorker.rate}{t('common.perHr')}</span>
                 </div>
                 <div className="col-span-2">
                   <span className="text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider block font-bold">{t('auth.addressLabel')}</span>
