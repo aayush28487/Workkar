@@ -68,9 +68,9 @@ router.post('/book', protect, async (req, res) => {
       customerName: customerName || req.user.name,
       address: address || 'Client Location',
       skill: skill || (isNew ? worker.profession : worker.skill) || 'Service Provider',
-      total: total || ((isNew ? 25 : worker.rate) * 3 + 10),
-      base: base || ((isNew ? 25 : worker.rate) * 3),
-      tax: tax || 10,
+      total: total || (((isNew ? worker.rate : worker.rate) || 500) * 3 + 50),
+      base: base || (((isNew ? worker.rate : worker.rate) || 500) * 3),
+      tax: tax || 50,
       step: 1, // Pending
       status: 'Pending',
       workerId: worker._id.toString(),
@@ -396,7 +396,7 @@ router.put('/approve-complete', protect, async (req, res) => {
       customerId,
       jobId,
       'Completed',
-      `You approved completion for job #${jobId}. Payout of $${earnAmount.toFixed(2)} sent to ${workerName}. You can now write a review!`,
+      `You approved completion for job #${jobId}. Payout of ₹${earnAmount.toFixed(2)} sent to ${workerName}. You can now write a review!`,
       'success'
     );
 
@@ -479,7 +479,7 @@ router.post('/withdraw', protect, authorize('worker'), async (req, res) => {
     worker.wallet.balance -= amount;
     await worker.save();
 
-    res.json({ message: `Withdrawal of $${amount} successful`, wallet: worker.wallet });
+    res.json({ message: `Withdrawal of ₹${amount} successful`, wallet: worker.wallet });
   } catch (error) {
     res.status(500).json({ message: 'Server error processing withdrawal', error: error.message });
   }

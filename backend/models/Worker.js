@@ -49,7 +49,7 @@ const WorkerSchema = new mongoose.Schema({
   },
   rate: {
     type: Number,
-    default: 20
+    default: 500
   },
   description: {
     type: String,

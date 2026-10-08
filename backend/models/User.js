@@ -51,7 +51,7 @@ const UserSchema = new mongoose.Schema({
   skillTitle: { type: String },
   experience: { type: Number, default: 0 },
   rating: { type: Number, default: null },
-  rate: { type: Number, default: 0 },
+  rate: { type: Number, default: 500 },
   availability: { type: String, enum: ['Available', 'On Job', 'Offline'], default: 'Offline' },
   avatar: { type: String },
   textAvatar: { type: String },

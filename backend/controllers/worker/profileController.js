@@ -19,7 +19,7 @@ const mapWorkerToUser = (worker) => {
     verificationDocument: workerObj.aadhaarCard ? workerObj.aadhaarCard.split('/').pop() : '',
     jobsCompleted: workerObj.jobsCompleted || 0,
     rating: workerObj.rating || 0,
-    rate: workerObj.rate || 20,
+    rate: workerObj.rate || 500,
     wallet: {
       balance: workerObj.wallet?.balance ?? workerObj.earnings ?? 0,
       weekly: workerObj.wallet?.weekly ?? workerObj.earnings ?? 0,
@@ -105,7 +105,7 @@ export const updateWorkerProfile = async (req, res) => {
       }
 
       if (isNaN(parsedRate) || parsedRate < minRateVal || parsedRate > maxRateVal) {
-        errors.rate = `Hourly rate must be between $${minRateVal} and $${maxRateVal} based on your experience level`;
+        errors.rate = `Hourly rate must be between ₹${minRateVal} and ₹${maxRateVal} based on your experience level`;
       }
     }
 

@@ -28,7 +28,7 @@ const mapWorkerToUser = (worker) => {
     pendingRequests: workerObj.pendingRequests || [],
     jobsCompleted: workerObj.jobsCompleted || 0,
     rating: workerObj.rating || 0,
-    rate: workerObj.rate || 20,
+    rate: workerObj.rate || 500,
     wallet: {
       balance: workerObj.wallet?.balance ?? workerObj.earnings ?? 0,
       weekly: workerObj.wallet?.weekly ?? workerObj.earnings ?? 0,

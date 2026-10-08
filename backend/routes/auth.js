@@ -44,7 +44,7 @@ router.post('/register', async (req, res) => {
       }
       userData.skill = skill;
       userData.skillTitle = `Professional ${skill}`;
-      userData.rate = Number(rate) || 20;
+      userData.rate = Number(rate) || 500;
       userData.experience = Number(experience) || 0;
       userData.description = description || `Registered wage professional offering premium ${skill} services.`;
       userData.verificationDocument = verificationDocument;
